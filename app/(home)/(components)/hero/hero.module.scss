@@ -1,17 +1,137 @@
 @use "@/styles/mixins" as *;
 
+$responsive: $responsive;
+
 .hero {
-  text-align: center;
+  padding: calc(40px + 32 * (100vw - 320px) / 1080) 0 300px;
+  overflow: hidden;
+
+  @include min($responsive) {
+    text-align: center;
+  }
+
+  .btn {
+    font-size: 1.25em;
+  }
+
+  .paragraph {
+    width: calc(400px + 80 * (100vw - 320px) / 1080);
+    margin: 0 auto var(--size-10);
+
+    @include max($responsive) {
+      width: 80%;
+      padding-top: var(--size-8);
+      margin: 0 0 var(--size-10);
+    }
+  }
 }
 
 .title {
-  font-size: 48px;
+  @include fs(48px, 36, 128px);
+  margin: var(--size-10) 0 var(--size-7);
+
+  @include max($responsive) {
+    margin-top: 0;
+    transform: none !important;
+    @include fs(60px, 36, 128px);
+  }
 
   h1 {
     font-family: var(--font-heading);
+    line-height: 1.35;
+    padding-top: 0.2em;
+    font-size: 1em;
+
+    @include min($responsive) {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    @include max($responsive) {
+      text-align: left;
+    }
+
+    & > span {
+      @include min($responsive) {
+        margin-top: -0.45em;
+      }
+
+      & > *:not(.line) {
+        @include min($responsive) {
+          padding-inline: 0.1em;
+          margin-inline: -0.1em;
+        }
+
+        @include max($responsive) {
+          display: block !important;
+          margin-bottom: -0.35em;
+        }
+      }
+    }
 
     span {
       display: block;
+      position: relative;
     }
+  }
+}
+
+.line {
+  pointer-events: none;
+  position: absolute;
+  stroke-width: 0.14em;
+  max-width: none;
+  overflow: visible;
+  width: 100%;
+
+  @include max($responsive) {
+    display: none;
+  }
+
+  * {
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 2;
+    stroke-dashoffset: var(--dash-offset, 2);
+  }
+
+  &1 {
+    top: 0;
+    right: 88.24%;
+    transform: translateY(-11.7%);
+
+    @include max($responsive) {
+      display: block;
+      transform: scaleX(-1);
+      left: 3.84em;
+      top: 0.6em;
+      right: 0;
+    }
+  }
+
+  &2 {
+    top: 0;
+    left: 97.2%;
+    transform: translateY(-32%);
+  }
+
+  &3 {
+    top: 0;
+    right: 96.9%;
+    transform: translateY(-35%);
+  }
+
+  &4 {
+    top: 0;
+    left: 88.175%;
+    transform: translateY(9%);
+
+    // @include max($responsive) {
+    //   display: block;
+    //   transform: scaleY(-1) translateY(0);
+    //   left: 3.62em;
+    //   top: 0.25em;
+    // }
   }
 }

@@ -2,11 +2,28 @@
 
 .nav {
   font-size: 0.85em;
+  margin-inline: -0.5em;
 
   ul {
-    gap: 2em;
+    gap: 0.5em;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  @include max($responsiveNav) {
+    display: none;
+  }
+}
+
+.link {
+  transition: background-color var(--transition-link);
+  line-height: 1;
+  padding: 0.65em 1em;
+  border-radius: var(--radius-rounded);
+  display: inline-block;
+
+  &:hover {
+    background-color: oklch(0 0 0 / 0.05);
   }
 }

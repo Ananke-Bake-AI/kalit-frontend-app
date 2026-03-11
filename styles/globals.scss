@@ -6,18 +6,34 @@
 @use "variables";
 @use "mixins" as *;
 
+@font-face {
+  font-family: "Cal Sans";
+  src: url("/fonts/cal-sans/CalSans-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  ascent-override: 105%;
+  descent-override: 15%;
+  line-gap-override: 0%;
+}
+
 html {
   background-color: var(--body);
   color: var(--text);
-  font-size: 1rem;
+  font-size: calc(15px + 1 * (100vw - 320px) / 1080);
   line-height: 1.15;
   @include no-scrollbar;
+  @include selection(oklch(from var(--text) l c h / 0.85), var(--white));
 }
 
 body {
   font-weight: 500;
   font-family: var(--font-main);
   font-feature-settings: "salt" on;
+}
+
+svg {
+  fill: transparent;
 }
 
 img {

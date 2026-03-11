@@ -6,16 +6,24 @@ export const Nav = () => {
     <nav className={s.nav}>
       <ul>
         <li>
-          <Link href="/">How it works</Link>
+          <Link href="/" className={s.link}>
+            Suites
+          </Link>
         </li>
         <li>
-          <Link href="/">Suites</Link>
+          <Link href="/" className={s.link}>
+            How it works
+          </Link>
         </li>
         <li>
-          <Link href="/">Try now</Link>
+          <Link href="/" className={s.link}>
+            Try now
+          </Link>
         </li>
         <li>
-          <Link href="/">Why Kalit?</Link>
+          <Link href="/" className={s.link}>
+            Why Kalit?
+          </Link>
         </li>
       </ul>
     </nav>

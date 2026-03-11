@@ -1,3 +1,6 @@
+$responsive: 600px;
+$responsiveNav: 800px;
+
 // Responsive
 @mixin max($width) {
   @media screen and (max-width: $width) {
@@ -112,7 +115,7 @@
   -webkit-text-fill-color: transparent;
 }
 
-// Effects
+// *
 @mixin mask($gradient) {
   mask: $gradient;
   -webkit-mask: $gradient;
@@ -129,6 +132,10 @@
   border-radius: $radius;
 }
 
+@mixin fs($min, $size, $max) {
+  font-size: clamp($min, calc($min + $size * (100vw - 320px) / 1080), $max);
+}
+
 @mixin selection($bg, $color) {
   ::selection {
     background-color: $bg;
@@ -140,5 +147,15 @@
     background-color: $bg;
     color: $color;
     -webkit-text-fill-color: $color;
+  }
+}
+
+@mixin border-glass() {
+  &::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    @include border-gradient(var(--gradient-border-glass));
+    inset: 0;
   }
 }

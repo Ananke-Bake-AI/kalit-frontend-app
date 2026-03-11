@@ -1,0 +1,13 @@
+.word {
+  transform-origin: bottom;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+  overflow: hidden;
+
+  span {
+    position: relative;
+    display: block;
+  }
+}

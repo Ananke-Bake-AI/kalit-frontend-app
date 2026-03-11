@@ -11,4 +11,13 @@
   --color-2: oklch(0.7494 0.153657 233.6982);
   --color-3: oklch(0.5165 0.269955 268.2377);
   --color-4: oklch(0.5019 0.2667 300.81);
+
+  --gradient-border-glass: linear-gradient(to top, oklch(1 0 0) 0%, oklch(1 0 0 / 0.1) 75%);
+  --gradient-radial-1: radial-gradient(
+    119.57% 119.48% at 8.3% 7.88%,
+    var(--color-1) 0%,
+    var(--color-2) 33%,
+    var(--color-3) 66%,
+    var(--color-4) 100%
+  );
 }
