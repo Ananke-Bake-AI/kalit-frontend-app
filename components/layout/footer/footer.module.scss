@@ -1,8 +1,12 @@
 @use "@/styles/mixins" as *;
 
+$responsiveFooter: 800px;
+
 .footer {
-  --footer-space: var(--spacing-2-5);
+  --footer-space: var(--spacing-2);
   color: var(--text-secondary);
+  margin-top: var(--spacing-2);
+  position: relative;
 
   .container {
     display: flex;
@@ -14,6 +18,16 @@
       padding-top: var(--footer-space);
     }
   }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    top: 70%;
+    z-index: -1;
+    background:
+      linear-gradient(to bottom, var(--body) 0%, oklch(from var(--body) l c h / 0.65) 100%), var(--gradient-linear-3);
+  }
 }
 
 .top {
@@ -21,6 +35,11 @@
   font-size: 0.9em;
   display: flex;
   align-items: stretch;
+
+  @include max($responsiveFooter) {
+    flex-direction: column;
+    gap: var(--footer-space);
+  }
 
   .left {
     flex: 0.65;
@@ -31,6 +50,20 @@
 
     p {
       font-size: 0.875em;
+    }
+
+    @include max($responsiveFooter) {
+      flex-direction: row;
+      text-align: right;
+
+      .logo {
+        margin-bottom: calc(var(--spacing) / 2);
+      }
+    }
+
+    @include max(500px) {
+      flex-direction: column;
+      text-align: left;
     }
   }
 
@@ -47,6 +80,27 @@
     align-items: flex-start;
     justify-content: space-evenly;
     gap: var(--spacing);
+
+    ul {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.5em;
+    }
+
+    a {
+      transition: color var(--transition-link);
+
+      &:hover {
+        color: var(--text);
+      }
+    }
+
+    @include max($responsiveFooter) {
+      justify-content: space-between;
+      flex-wrap: wrap;
+      font-size: 1.05em;
+    }
   }
 
   h3 {
@@ -54,19 +108,94 @@
     font-size: 1em;
     margin-bottom: var(--spacing);
   }
+}
 
-  ul {
-    display: flex;
+.newsletter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--spacing);
+
+  h2 {
+    color: var(--text);
+    margin-bottom: var(--size-4);
+  }
+
+  p {
+    line-height: 1.25;
+    font-weight: 300;
+    font-size: 1em;
+    text-wrap: unset;
+    width: calc(250px + 50 * (100vw - 320px) / 1080);
+  }
+
+  @include max($responsiveFooter) {
     flex-direction: column;
     align-items: flex-start;
-    gap: 1.5em;
+    justify-content: flex-start;
+    gap: var(--spacing-1);
+
+    .form {
+      width: 100%;
+    }
   }
+}
+
+.form {
+  --form-padding: var(--size-2);
+  width: calc(300px + 150 * (100vw - 320px) / 1080);
+  background-color: var(--glass-50);
+  position: relative;
+  border-radius: var(--radius-rounded);
+  @include border-glass(var(--gradient-border-glass-3));
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  padding: var(--form-padding);
+  color: var(--text);
+
+  input {
+    font-weight: 300;
+    flex: 1;
+    padding-left: 1.25em;
+  }
+}
+
+.bottom {
+  font-size: 0.75em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5em;
+  padding-bottom: calc(var(--footer-space) * 3);
 
   a {
     transition: color var(--transition-link);
 
     &:hover {
       color: var(--text);
+    }
+  }
+
+  p {
+    font-weight: 300;
+    margin-left: auto;
+  }
+
+  @include max($responsiveFooter) {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--spacing-1);
+
+    a {
+      font-size: 1em;
+    }
+
+    p {
+      margin-right: auto;
+      margin-left: 0;
     }
   }
 }

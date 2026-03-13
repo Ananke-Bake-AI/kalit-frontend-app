@@ -1,3 +1,4 @@
+import { Button } from "@/components/button"
 import s from "./footer.module.scss"
 
 export const Newsletter = () => {
@@ -5,11 +6,11 @@ export const Newsletter = () => {
     <div className={s.newsletter}>
       <div className={s.left}>
         <h2>Join our newsletter</h2>
-        <p>Subscribe to our newsletter to get the latest news and updates.</p>
+        <p>Get early access, exclusive tips, and build the future before everyone else.</p>
       </div>
-      <form>
-        <input type="email" placeholder="Email" />
-        <button type="submit">Subscribe</button>
+      <form className={s.form}>
+        <input type="email" placeholder="Your email address" />
+        <Button type="submit">Subscribe</Button>
       </form>
     </div>
   )

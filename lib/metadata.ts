@@ -16,7 +16,7 @@ export const MetadataSeo = ({
   title,
   description,
   locale = "fr",
-  image = "/thumbnail.jpg",
+  image = "/img/thumbnail.jpg",
   url,
   type = "website"
 }: MetadataSeoProps): Metadata => {

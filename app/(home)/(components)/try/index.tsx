@@ -169,7 +169,7 @@ export const Try = () => {
         <Heading
           className={s.heading}
           subtitle="Try Kalit Flow"
-          paragraph="Post hoc impie perpetratum quod in aliis quoque iam timebatur, tamquam licentia crudelitati indulta."
+          paragraph="Describe your vision. Our AI builds it. The future of creation starts right here."
         >
           Don't wait{" "}
           <span data-icon="right">
@@ -189,7 +189,7 @@ export const Try = () => {
                 <Icon icon="hugeicons:cloud-download" />
               </button>
               <button className={s.b2}>
-                <span>Fatest</span>
+                <span>Fastest</span>
               </button>
               <button className={s.b2}>
                 <Icon icon="hugeicons:settings-02" />

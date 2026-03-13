@@ -29,15 +29,45 @@
     left: 0;
   }
 
+  &.primary {
+    &::before {
+      transition: opacity var(--btn-transition);
+      content: "";
+      position: absolute;
+      background: var(--gradient-linear-2);
+      background-size: 400% 100%;
+      border-radius: var(--radius-1);
+      z-index: 0;
+      inset: 0;
+      opacity: 0;
+      animation: light 20s linear infinite;
+
+      @keyframes light {
+        0% {
+          background-position: 0% 0%;
+        }
+        100% {
+          background-position: 400% 0%;
+        }
+      }
+    }
+
+    @include is-hover {
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+
   .circleSvg {
     transition: var(--btn-transition);
     position: absolute;
     right: -1.75em;
     width: 4em;
-    animation-play-state: paused;
     stroke-width: 9;
     overflow: visible;
     top: 35%;
+    z-index: 3;
   }
 
   &:active {
@@ -51,11 +81,7 @@
 
     @include is-hover {
       .circleSvg {
-        animation: rotate 2s linear infinite;
-        animation-play-state: running;
-        width: 100%;
-        stroke-width: 80 !important;
-        right: 0;
+        opacity: 0;
       }
 
       span {
@@ -74,15 +100,6 @@
       color: var(--white);
       border-color: var(--text);
     }
-  }
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
   }
 }
 

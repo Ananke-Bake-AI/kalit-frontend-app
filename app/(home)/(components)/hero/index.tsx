@@ -155,7 +155,7 @@ export const Hero = () => {
           <Button className={s.btn} circle>
             Start my project
           </Button>
-          <Button secondary>See it in action</Button>
+          <Button variant="secondary">See it in action</Button>
         </ButtonGroup>
         <div className={s.ai} data-reveal>
           <h2>Powered by the best AI</h2>

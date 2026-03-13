@@ -28,4 +28,17 @@
     var(--color-4) 100%
   );
   --gradient-linear-1: linear-gradient(to bottom, var(--color-1), var(--color-2), var(--color-3), var(--color-4));
+  --gradient-linear-2: linear-gradient(
+    to right,
+    var(--color-1),
+    var(--color-2),
+    var(--color-3),
+    var(--color-4),
+    var(--color-1),
+    var(--color-2),
+    var(--color-3),
+    var(--color-4),
+    var(--color-1)
+  );
+  --gradient-linear-3: linear-gradient(to right, var(--color-1), var(--color-2), var(--color-3), var(--color-4));
 }

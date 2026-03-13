@@ -14,8 +14,9 @@ export interface ButtonProps {
   className?: string
   disabled?: boolean
   onClick?: () => void
-  secondary?: boolean
   circle?: boolean
+  type?: "submit" | "button" | "reset"
+  variant?: "primary" | "secondary" | "tertiary"
 }
 
 export const Button = ({
@@ -26,8 +27,9 @@ export const Button = ({
   className,
   onClick,
   disabled = false,
-  secondary = false,
   circle = false,
+  type,
+  variant = "primary",
   ...props
 }: ButtonProps) => {
   const Content = (
@@ -43,12 +45,13 @@ export const Button = ({
     </>
   )
 
-  const classNames = clsx(s.btn, className, circle && s.circle, secondary && s.secondary)
+  const classNames = clsx(s.btn, className, circle && s.circle, variant && s[variant])
 
   const attrs = {
     className: classNames,
     onClick,
-    disabled
+    disabled,
+    type
   }
 
   if (href) {

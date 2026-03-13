@@ -1,9 +1,14 @@
+"use client"
+
 import { Container } from "@/components/container"
 import { Heading } from "@/components/heading"
 import { Icon } from "@/components/icon"
 import { Logotype } from "@/components/logotype"
+import { useGSAP } from "@gsap/react"
 import clsx from "clsx"
+import gsap from "gsap"
 import Image from "next/image"
+import { useRef } from "react"
 import s from "./choose.module.scss"
 
 const Check = () => {
@@ -31,43 +36,43 @@ export const Choose = () => {
   const rows = [
     {
       label: "No-Code App Builder",
-      description: "Post hoc impie perpetratum in quoque"
+      description: "Build like a pro, code zero lines"
     },
     {
       label: "AI Agents Team",
-      description: "Post hoc impie perpetratum in quoque"
+      description: "Your dream team, always online"
     },
     {
       label: "Multiple Generation",
-      description: "Post hoc impie perpetratum in quoque"
+      description: "Parallel outputs, instant results"
     },
     {
       label: "AI Co-Founder",
-      description: "Post hoc impie perpetratum in quoque"
+      description: "Strategic AI at your side"
     },
     {
       label: "Suitable for Beginners",
-      description: "Post hoc impie perpetratum in quoque"
+      description: "Anyone can ship. Anyone."
     },
     {
       label: "One-click Translated Apps",
-      description: "Post hoc impie perpetratum in quoque"
+      description: "Go global in one click"
     },
     {
       label: "AI Audience Research",
-      description: "Post hoc impie perpetratum in quoque"
+      description: "Know your users, win the market"
     },
     {
       label: "AI Auto Bug Fixing",
-      description: "Post hoc impie perpetratum in quoque"
+      description: "Bugs crushed before you see them"
     },
     {
       label: "Advanced App Analytics",
-      description: "Post hoc impie perpetratum in quoque"
+      description: "Data that drives real growth"
     },
     {
       label: "Build Chrome Extensions",
-      description: "Post hoc impie perpetratum in quoque"
+      description: "Extend your reach everywhere"
     }
   ] as const
 
@@ -114,13 +119,47 @@ export const Choose = () => {
     }
   ] as const
 
+  const line1Ref = useRef<SVGPathElement>(null)
+  const line2Ref = useRef<SVGPathElement>(null)
+
+  useGSAP(() => {
+    gsap.fromTo(
+      line1Ref.current,
+      { "--dash-offset": 2 },
+      {
+        "--dash-offset": 0,
+        duration: 4,
+        ease: "power1.inOut",
+        scrollTrigger: {
+          trigger: line1Ref.current,
+          start: "top bottom",
+          once: true
+        }
+      }
+    )
+    gsap.fromTo(
+      line2Ref.current,
+      { "--dash-offset": 2 },
+      {
+        "--dash-offset": 0,
+        duration: 4,
+        ease: "power1.inOut",
+        scrollTrigger: {
+          trigger: line2Ref.current,
+          start: "top bottom",
+          once: true
+        }
+      }
+    )
+  }, [])
+
   return (
     <section className={s.choose}>
       <Container>
         <Heading
           className={s.heading}
           subtitle="All Features"
-          paragraph="Post hoc impie perpetratum quod in aliis quoque iam timebatur, tamquam licentia crudelitati indulta."
+          paragraph="The only platform that delivers everything. When others fall short, we ship it all."
         >
           Why choose{" "}
           <span data-icon="right">
@@ -131,6 +170,8 @@ export const Choose = () => {
           </span>
           <svg viewBox="0 0 941 241" className={clsx(s.line, s.line1)}>
             <path
+              ref={line1Ref}
+              pathLength={1}
               d="M6.5 240.5V224.501C6.5 202.41 24.4086 184.501 46.5 184.501H361.5C383.591 184.501 401.5 166.592 401.5 144.501V87C401.5 72.3645 389.636 60.5 375 60.5C360.364 60.5 348.5 72.3645 348.5 87C348.5 101.636 360.364 113.5 375 113.5H634.5C656.591 113.5 674.5 95.5914 674.5 73.5V46.5C674.5 24.4086 692.409 6.5 714.5 6.5H1224.19"
               stroke="url(#choose_line)"
             />
@@ -164,7 +205,6 @@ export const Choose = () => {
                       </div>
                     )
                   }
-
                   if (typeof cell === "object") {
                     return (
                       <div key={`${column.key}-${index}`} className={s.row}>
@@ -177,7 +217,6 @@ export const Choose = () => {
                       </div>
                     )
                   }
-
                   return (
                     <div key={`${column.key}-${index}`} className={s.row}>
                       {cell === "check" && <Check />}
@@ -191,6 +230,14 @@ export const Choose = () => {
             <div className={s.tableBg} />
           </div>
         </div>
+        <svg viewBox="0 0 942 189" className={clsx(s.line, s.line2)}>
+          <path
+            ref={line2Ref}
+            pathLength={1}
+            d="M6.5 0V43C6.5 65.0914 24.4086 83 46.5 83H206.5C228.591 83 246.5 100.909 246.5 123V160.5C246.5 172.374 236.874 182 225 182C213.126 182 203.5 172.374 203.5 160.5V160C203.5 147.85 213.35 138 225.5 138H575.5H1321.19"
+            stroke="url(#choose_line)"
+          />
+        </svg>
       </Container>
     </section>
   )

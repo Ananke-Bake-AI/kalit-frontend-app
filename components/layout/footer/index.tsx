@@ -1,6 +1,7 @@
 import { Container } from "@/components/container"
 import { Logotype } from "@/components/logotype"
 import Link from "next/link"
+import { Socials } from "../socials"
 import s from "./footer.module.scss"
 import { Newsletter } from "./newsletter"
 
@@ -74,6 +75,7 @@ export const Footer = () => {
           <div className={s.left}>
             <Logotype className={s.logo} />
             <div>
+              <Socials />
               <p>© 2026. All rights reserved.</p>
             </div>
           </div>
@@ -93,7 +95,11 @@ export const Footer = () => {
           </div>
         </div>
         <Newsletter />
-        <div className={s.bottom}>test</div>
+        <div className={s.bottom}>
+          <Link href="/terms-of-service">Terms and Conditions</Link>
+          <Link href="/privacy-policy">Privacy Policy</Link>
+          <p>All listed company names are trademarks ™ or registered trademarks ® of their respective holders.</p>
+        </div>
       </Container>
     </footer>
   )

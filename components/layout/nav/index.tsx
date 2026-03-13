@@ -1,14 +1,23 @@
+"use client"
+
 import { Link } from "@/components/link"
 import { Logo } from "@/components/logo"
 import { SUITES } from "@/lib/suites"
+import { useAppStore } from "@/stores/app"
+import { Icon } from "@iconify/react"
+import clsx from "clsx"
 import s from "./nav.module.scss"
 
 export const Nav = () => {
+  const { nav } = useAppStore()
+
   return (
-    <nav className={s.nav}>
+    <nav className={clsx(s.nav, nav && s.open)}>
       <ul>
         <li className={s.subnav}>
-          <span className={s.link}>Suites</span>
+          <span className={clsx(s.link, s.sublink)}>
+            Suites <Icon icon="hugeicons:arrow-down-01" />
+          </span>
           <ul className={s.sub}>
             {SUITES.map(({ id, title, color, smallDescription }) => (
               <li key={id} style={{ "--color": color } as React.CSSProperties}>

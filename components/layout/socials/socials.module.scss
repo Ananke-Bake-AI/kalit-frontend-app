@@ -1,0 +1,52 @@
+@use "@/styles/mixins" as *;
+
+.socials {
+  display: flex;
+  align-items: center;
+  color: var(--text);
+  gap: 0.25em;
+  margin-bottom: 1em;
+  margin-left: -0.5em;
+
+  a {
+    transition:
+      color var(--transition-link),
+      transform var(--transition-scale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3em;
+    height: 3em;
+    border-radius: var(--radius-rounded);
+    position: relative;
+
+    svg {
+      font-size: 1.75em;
+      position: relative;
+      z-index: 1;
+    }
+
+    &::before {
+      transition: transform var(--transition-link);
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-rounded);
+      background-color: var(--text);
+      transform: scale(0);
+      z-index: 0;
+    }
+
+    &:active {
+      transform: scale(0.9);
+    }
+
+    @include is-hover {
+      color: var(--white);
+
+      &::before {
+        transform: scale(1);
+      }
+    }
+  }
+}

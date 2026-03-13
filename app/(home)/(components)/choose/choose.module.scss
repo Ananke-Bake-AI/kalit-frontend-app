@@ -18,11 +18,15 @@
     position: relative;
 
     [data-paragraph] {
-      width: calc(400px + 50 * (100vw - 320px) / 1080);
+      width: calc(400px + 100 * (100vw - 320px) / 1080);
     }
 
     @include max(1250px) {
       text-align: center;
+
+      [data-paragraph] {
+        margin-inline: auto;
+      }
     }
   }
 }
@@ -35,6 +39,8 @@
 
   * {
     vector-effect: non-scaling-stroke;
+    stroke-dasharray: 2;
+    stroke-dashoffset: var(--dash-offset, 2);
   }
 
   @include max(1250px) {
@@ -44,6 +50,19 @@
   &.line1 {
     top: 10%;
     width: 1200px;
+    left: calc((var(--width-kalit) / 2) + var(--width-label) + var(--width-icon) - var(--size-4));
+
+    @include min(1900px) {
+      top: 20%;
+    }
+  }
+
+  &.line2 {
+    position: relative;
+    bottom: 0;
+    width: 1200px;
+    margin-top: calc(var(--table-padding) * -1);
+    top: -100px;
     left: calc((var(--width-kalit) / 2) + var(--width-label) + var(--width-icon) - var(--size-4));
   }
 }
@@ -69,13 +88,8 @@
     overflow-y: hidden;
     display: flex;
     @include no-scrollbar;
-    cursor: grab;
     padding: var(--table-padding) 0;
     margin: calc(var(--table-padding) * -1 + var(--spacing-2-5)) 0 calc(var(--table-padding) * -1 + var(--spacing-2-5));
-
-    &:active {
-      cursor: grabbing;
-    }
 
     @include max(1160px) {
       width: 100vw;
