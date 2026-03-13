@@ -1,1 +1,251 @@
 @use "@/styles/mixins" as *;
+
+.choose {
+  --table-space: 200px;
+  --table-padding: 400px;
+  --width-label: calc(200px + 100 * (100vw - 320px) / 1080);
+  --width-icon: calc(100px + 10 * (100vw - 320px) / 1080);
+  --width-kalit: calc(var(--table-space) + 20 * (100vw - 320px) / 1080);
+  margin-top: var(--spacing-4);
+
+  @include max(950px) {
+    --width-label: calc(120px + 10 * (100vw - 320px) / 1080);
+    --width-icon: calc(80px + 10 * (100vw - 320px) / 1080);
+    --width-kalit: calc(130px + 20 * (100vw - 320px) / 1080);
+  }
+
+  .heading {
+    position: relative;
+
+    [data-paragraph] {
+      width: calc(400px + 50 * (100vw - 320px) / 1080);
+    }
+
+    @include max(1250px) {
+      text-align: center;
+    }
+  }
+}
+
+.line {
+  position: absolute;
+  overflow: visible;
+  pointer-events: none;
+  stroke-width: 12;
+
+  * {
+    vector-effect: non-scaling-stroke;
+  }
+
+  @include max(1250px) {
+    display: none;
+  }
+
+  &.line1 {
+    top: 10%;
+    width: 1200px;
+    left: calc((var(--width-kalit) / 2) + var(--width-label) + var(--width-icon) - var(--size-4));
+  }
+}
+
+.table {
+  --row: calc(72px + 8 * (100vw - 320px) / 1080);
+  --heading: calc(64px + 24 * (100vw - 320px) / 1080);
+  position: relative;
+  display: flex;
+  padding: var(--heading) var(--size-4);
+
+  @include min(1160px) {
+    min-width: 100%;
+  }
+
+  @include max(950px) {
+    --row: calc(56px + 8 * (100vw - 320px) / 1080);
+  }
+
+  &Container {
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    display: flex;
+    @include no-scrollbar;
+    cursor: grab;
+    padding: var(--table-padding) 0;
+    margin: calc(var(--table-padding) * -1 + var(--spacing-2-5)) 0 calc(var(--table-padding) * -1 + var(--spacing-2-5));
+
+    &:active {
+      cursor: grabbing;
+    }
+
+    @include max(1160px) {
+      width: 100vw;
+      position: relative;
+      padding: var(--table-padding) var(--container-padding);
+      left: calc(var(--container-padding) * -1);
+    }
+  }
+
+  &Bg {
+    position: absolute;
+    inset: calc(var(--heading) - var(--size-3)) 0 var(--row);
+    background-color: var(--glass-50);
+    @include cornerShape(var(--radius-1));
+    @include border-glass;
+
+    @include max(950px) {
+      bottom: calc(var(--row) + var(--size-1));
+    }
+  }
+}
+
+.check {
+  color: var(--text);
+  font-size: 1.25em;
+  background-color: var(--text);
+  color: var(--white);
+  border-radius: var(--radius-rounded);
+  padding: 0.1em;
+
+  * {
+    stroke-width: 2;
+  }
+}
+
+.cross {
+  color: var(--text-secondary);
+  font-size: 1.25em;
+
+  * {
+    stroke-width: 1.5;
+  }
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--row);
+  z-index: 5;
+}
+
+.col {
+  width: var(--width-icon);
+  position: relative;
+  min-width: 80px;
+
+  &:not(.iconCol):not(.label):not(.kalit) {
+    flex: 1;
+  }
+
+  &.iconCol {
+    position: sticky;
+    left: calc(var(--container-padding) * -1);
+    z-index: 25;
+    width: 50px;
+    @include backdrop(8px);
+    @include cornerShape(var(--radius-1));
+    margin-left: -5px;
+
+    .icon {
+      position: relative;
+      transform: scale(2);
+      min-width: 1em;
+    }
+  }
+
+  &.label {
+    width: var(--width-label);
+
+    .row {
+      justify-content: flex-start;
+    }
+  }
+
+  &.kalit {
+    position: relative;
+    width: var(--width-kalit);
+    height: calc(100% + var(--heading));
+    z-index: 10;
+    margin-inline: var(--size-4);
+
+    .row {
+      z-index: 5;
+
+      svg {
+        transform: scale(1.25);
+      }
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: calc(var(--heading) * -1) -5% var(--size-8);
+      background: var(--gradient-linear-1);
+      border-radius: var(--radius-1);
+      filter: blur(50px);
+      opacity: 0.25;
+      z-index: -10;
+    }
+
+    .bg {
+      z-index: 1;
+      position: absolute;
+      inset: calc(var(--heading) * -1) 0 calc(var(--row) - var(--size-6));
+      z-index: 0;
+      background-color: var(--glass-75);
+      @include cornerShape(var(--radius-1));
+      @include border-glass(var(--gradient-border-glass-3));
+      @include backdrop(16px);
+    }
+  }
+}
+
+.logo {
+  position: absolute;
+  top: calc(var(--size-4) * -1);
+  left: 0;
+  transform: translateY(-140%);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 60%;
+  }
+}
+
+.title {
+  display: flex;
+  gap: var(--size-6);
+  padding-left: 0.5em;
+  width: 100%;
+  color: var(--text);
+
+  @include max(950px) {
+    font-size: 0.9em;
+    padding-left: 0;
+  }
+
+  .description {
+    margin-top: var(--size-1-5);
+    font-size: 0.75em;
+    @include ellipsis;
+    color: var(--text-secondary);
+
+    @include max(950px) {
+      display: none;
+    }
+  }
+}
+
+.logotype {
+  margin-top: 0;
+  z-index: 30;
+  position: absolute;
+  top: calc(var(--heading) * -0.5);
+  left: 50%;
+  font-size: calc(24px + 12 * (100vw - 320px) / 1080);
+  transform: translate(-50%, -50%);
+}

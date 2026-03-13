@@ -9,7 +9,7 @@ interface HeadingProps {
   subtitle?: string
   className?: string
   children: React.ReactNode
-  paragraph?: string
+  paragraph?: string | React.ReactNode
 }
 
 export const Heading = forwardRef<HTMLDivElement, HeadingProps>(({ subtitle, className, children, paragraph }, ref) => {

@@ -12,5 +12,8 @@
     <symbol viewbox="0 0 20 20" id="arrow-top-right">
       <path d="M.293 17.417a1 1 0 1 0 1.414 1.414L1 18.124zM19.123 1a1 1 0 0 0-1-1h-9a1 1 0 0 0 0 2h8v8a1 1 0 1 0 2 0zM1 18.124l.707.707L18.831 1.707 18.124 1l-.707-.707L.293 17.417z"/>
     </symbol> 
+    <symbol viewbox="0 0 121 19" id="underline">
+      <path pathLength="1" d="M1.50049 16.6582C18.5005 10.9915 65.9005 0.0581672 119.5 1.65817" />
+    </symbol>
   </defs>
 </svg>

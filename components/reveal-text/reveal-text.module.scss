@@ -4,10 +4,13 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeSpeed;
-  overflow: hidden;
 
   span {
     position: relative;
     display: block;
+  }
+
+  [data-word] {
+    will-change: transform;
   }
 }

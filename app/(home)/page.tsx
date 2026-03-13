@@ -16,8 +16,8 @@ export default function HomePage() {
       <Features />
       <Join />
       <Portfolio />
-      <Choose />
       <Try />
+      <Choose />
     </>
   )
 }

@@ -1,7 +1,16 @@
 @use "@/styles/mixins" as *;
 
 .icon {
+  width: 1em;
+
   * {
     stroke-width: 1;
+  }
+
+  &[data-icon="kalit"] {
+    * {
+      stroke-width: 20 !important;
+      stroke: currentColor;
+    }
   }
 }

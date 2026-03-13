@@ -118,6 +118,42 @@ export const Defs = () => {
             { offset: 1, color: "var(--color-4)" }
           ]}
         />
+        <RadialGradient
+          id="underline"
+          cx="0"
+          cy="0"
+          r="1"
+          gradientTransform="matrix(113.816 -6.06327 48.1492 27.3082 1.50049 13.421)"
+          gradientUnits="userSpaceOnUse"
+          stops={[
+            { offset: 0.163893, color: "var(--color-1)" },
+            { offset: 0.377558, color: "var(--color-2)" },
+            { offset: 0.745238, color: "var(--color-3)" },
+            { offset: 1, color: "var(--color-4)" }
+          ]}
+        />
+        <LinearGradient
+          id="try_line"
+          direction="to-left"
+          gradientUnits="objectBoundingBox"
+          stops={[
+            { offset: 0, color: "var(--color-1)" },
+            { offset: 0.33, color: "var(--color-2)" },
+            { offset: 0.66, color: "var(--color-3)" },
+            { offset: 1, color: "var(--color-4)" }
+          ]}
+        />
+        <LinearGradient
+          id="choose_line"
+          direction="to-right"
+          gradientUnits="objectBoundingBox"
+          stops={[
+            { offset: 0, color: "var(--color-1)" },
+            { offset: 0.33, color: "var(--color-2)" },
+            { offset: 0.66, color: "var(--color-3)" },
+            { offset: 1, color: "var(--color-4)" }
+          ]}
+        />
       </defs>
     </svg>
   )

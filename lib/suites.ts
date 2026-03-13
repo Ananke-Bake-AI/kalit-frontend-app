@@ -6,6 +6,7 @@ export interface SuiteConfig {
   title: string
   button: string
   description: string
+  smallDescription: string
 }
 
 export const SUITES: SuiteConfig[] = [
@@ -14,27 +15,31 @@ export const SUITES: SuiteConfig[] = [
     color: "var(--color-1)",
     title: "pentest",
     button: "Start with Pentest",
-    description: "Continuously scan and secure your systems. AI detects vulnerabilities before they become threats."
+    description: "Continuously scan and secure your systems. AI detects vulnerabilities before they become threats.",
+    smallDescription: "AI security scans. Find and fix vulnerabilities."
   },
   {
     id: "flow",
     color: "var(--color-2)",
     title: "flow",
     button: "Create my landing",
-    description: "Generate high-quality websites and landing pages in minutes. Design, copy, and hosting included."
+    description: "Generate high-quality websites and landing pages in minutes. Design, copy, and hosting included.",
+    smallDescription: "Sites and landings in minutes."
   },
   {
     id: "marketing",
     color: "var(--color-3)",
     title: "marketing",
     button: "Start my campaign",
-    description: "Automate user acquisition. AI creates, runs, and optimizes campaigns to maximize conversions."
+    description: "Automate user acquisition. AI creates, runs, and optimizes campaigns to maximize conversions.",
+    smallDescription: "AI campaigns. Maximize conversions."
   },
   {
     id: "project",
     color: "var(--color-4)",
     title: "project",
     button: "Launch my project",
-    description: "Turn a prompt into a fully deployed application. AI builds and launches your product end-to-end."
+    description: "Turn a prompt into a fully deployed application. AI builds and launches your product end-to-end.",
+    smallDescription: "Prompt to deployed app in minutes."
   }
 ]

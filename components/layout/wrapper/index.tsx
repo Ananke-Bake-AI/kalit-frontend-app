@@ -10,6 +10,7 @@ import { RealViewport } from "../real-viewport"
 import { Toast } from "../toast"
 import { Defs } from "./defs"
 import s from "./wrapper.module.scss"
+import { Footer } from "../footer"
 
 interface WrapperProps {
   children: ReactNode
@@ -24,6 +25,7 @@ export const Wrapper = ({ children }: WrapperProps) => {
       <Lenis root options={{}} />
       <Header />
       <main className={s.main}>{children}</main>
+      <Footer />
       <Toast />
       <RealViewport />
       <Defs />

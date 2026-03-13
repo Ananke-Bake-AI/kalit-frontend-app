@@ -17,7 +17,8 @@ export const useReveal = () => {
           ease: "power2.out"
         })
       },
-      start: "top bottom"
+      start: "top bottom",
+      once: true
     })
   })
 }

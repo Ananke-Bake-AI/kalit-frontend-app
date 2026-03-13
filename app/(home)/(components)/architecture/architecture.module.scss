@@ -6,6 +6,7 @@ $responsiveArchitecture: 900px;
   --width-line: calc(500px + 100 * (100vw - 320px) / 1080);
   @include section;
   margin-top: var(--spacing-4);
+  overflow: hidden;
 
   .heading {
     h2 {
@@ -32,15 +33,11 @@ $responsiveArchitecture: 900px;
   width: var(--width-line);
   bottom: 0.45em;
   overflow: visible;
-  left: 95.25%;
-  transform: translateY(30%);
+  left: 95.35%;
+  transform: translateY(36%);
 
   @include max($responsiveArchitecture) {
     display: none;
-  }
-
-  @include max(1600px) {
-    transform: translateY(32%);
   }
 
   * {

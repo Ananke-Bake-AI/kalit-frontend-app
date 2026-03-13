@@ -24,7 +24,8 @@ export const Subtitle = forwardRef<HTMLDivElement, SubtitleProps>(({ children, c
       ease: easings.quartOut,
       duration: 1.2,
       scrollTrigger: {
-        trigger: containerRef.current
+        trigger: containerRef.current,
+        once: true
       }
     })
   }, [width])

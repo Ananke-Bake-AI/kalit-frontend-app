@@ -1,10 +1,10 @@
 "use client"
 
 import { Button } from "@/components/button"
-import { Logo } from "@/components/logo"
+import { Link } from "@/components/link"
+import { Logotype } from "@/components/logotype"
 import { useAppStore } from "@/stores/app"
 import clsx from "clsx"
-import Link from "next/link"
 import { Nav } from "../nav"
 import s from "./header.module.scss"
 
@@ -15,8 +15,7 @@ export const Header = () => {
     <header className={clsx(s.header, nav && s.open)}>
       <div className={s.content}>
         <Link href="/" className={s.logo}>
-          <Logo id="kalit" />
-          <span>kalit</span>
+          <Logotype />
         </Link>
         <Nav />
         <Button className={s.btn} circle>

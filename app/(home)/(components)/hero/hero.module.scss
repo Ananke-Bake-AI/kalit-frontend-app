@@ -17,10 +17,11 @@ $responsive: $responsive;
   .paragraph {
     width: calc(400px + 80 * (100vw - 320px) / 1080);
     margin: 0 auto var(--size-10);
+    padding-top: var(--size-6);
 
     @include max($responsive) {
       width: 80%;
-      padding-top: var(--size-8);
+      padding-top: var(--size-2);
       margin: 0 0 var(--size-10);
     }
   }
@@ -32,13 +33,13 @@ $responsive: $responsive;
   visibility: hidden;
 
   @include max($responsive) {
-    margin-top: 0;
+    margin-top: var(--size-4);
     transform: none !important;
     @include fs(60px, 36, 128px);
   }
 
   h1 {
-    line-height: 1.35;
+    line-height: 1.05;
     padding-top: 0.2em;
     font-size: 1em;
 
@@ -54,10 +55,6 @@ $responsive: $responsive;
     }
 
     & > span {
-      @include min($responsive) {
-        margin-top: -0.45em;
-      }
-
       & > *:not(.line) {
         @include min($responsive) {
           padding-inline: 0.1em;
@@ -66,7 +63,6 @@ $responsive: $responsive;
 
         @include max($responsive) {
           display: block !important;
-          margin-bottom: -0.35em;
         }
       }
     }
@@ -98,14 +94,14 @@ $responsive: $responsive;
 
   &1 {
     top: 0;
-    right: 88.24%;
-    transform: translateY(-11.7%);
+    right: 88.3%;
+    transform: translateY(-17%);
 
     @include max($responsive) {
       display: block;
       transform: scaleX(-1);
-      left: 3.84em;
-      top: 0.6em;
+      left: 3.86em;
+      top: 0.4em;
       right: 0;
     }
   }
@@ -113,19 +109,19 @@ $responsive: $responsive;
   &2 {
     top: 0;
     left: 97.2%;
-    transform: translateY(-32%);
+    transform: translateY(-45%);
   }
 
   &3 {
     top: 0;
     right: 96.9%;
-    transform: translateY(-37%);
+    transform: translateY(-45%);
   }
 
   &4 {
     top: 0;
     left: 88.175%;
-    transform: translateY(7%);
+    transform: translateY(1%);
   }
 }
 
@@ -141,18 +137,18 @@ $responsive: $responsive;
 
   .c1 {
     --animation-duration: 2.5s;
-    top: 5vh;
+    top: 6vh;
     left: -3vw;
 
     @include max(1500px) {
-      top: 16vh;
+      top: 13vh;
       left: 2vw;
     }
   }
 
   .c2 {
     --animation-duration: 3s;
-    bottom: -5vh;
+    bottom: -8vh;
     left: 4vw;
   }
 
@@ -165,11 +161,11 @@ $responsive: $responsive;
   .c4 {
     --animation-duration: 3.25s;
     right: -5vw;
-    bottom: -1vh;
+    bottom: -4vh;
 
     @include max(1500px) {
       right: 10vw;
-      bottom: 6vh;
+      bottom: 2vh;
     }
   }
 }

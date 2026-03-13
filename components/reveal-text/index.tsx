@@ -39,39 +39,28 @@ export const RevealText = ({
     () => {
       if (!elementRef.current) return
 
-      const svg = elementRef.current?.querySelectorAll("[data-icon-svg]")
-      const split = SplitText.create(elementRef.current, {
+      const svg = elementRef.current.querySelectorAll("[data-icon-svg]")
+      const split = new SplitText(elementRef.current, {
         type: "words",
         wordsClass: s.word,
-        reduceWhiteSpace: true
-      })
-
-      if (!split.words || split.words.length === 0) return
-
-      const wordSpans: HTMLSpanElement[] = []
-      split.words.forEach((word) => {
-        const textContent = word.textContent || ""
-        const span = document.createElement("span")
-        span.textContent = textContent
-        word.textContent = ""
-        span.setAttribute("data-word", "")
-        word.appendChild(span)
-        wordSpans.push(span)
+        smartWrap: true
       })
 
       const tl = gsap.timeline({
         defaults: { ease: easings.smoothOut },
         scrollTrigger: {
           trigger: elementRef.current,
-          start
+          start,
+          once: true
         }
       })
 
       if (animate) {
-        tl.from(wordSpans, {
-          y: "110%",
+        tl.from(split.words, {
+          yPercent: 110,
           stagger: 0.1,
           duration: 0.9,
+          opacity: 0,
           ease: "back.out(1.2)",
           onComplete: () => {
             onComplete?.()
@@ -93,7 +82,6 @@ export const RevealText = ({
         }
       }
 
-      // Cleanup function pour réinitialiser SplitText
       return () => {
         if (split) {
           split.revert()

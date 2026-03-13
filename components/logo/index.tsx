@@ -1,10 +1,10 @@
 import clsx from "clsx"
-import { forwardRef } from "react"
+import { forwardRef, SVGProps } from "react"
 import s from "./logo.module.scss"
 
 type LogoId = "kalit" | "pentest" | "flow" | "marketing" | "project"
 
-interface LogoProps {
+interface LogoProps extends SVGProps<SVGSVGElement> {
   className?: string
   all?: boolean
   id?: LogoId
@@ -41,12 +41,12 @@ const LOGO_PATHS: { id: LogoId; d: string }[] = [
   }
 ]
 
-export const Logo = forwardRef<SVGSVGElement, LogoProps>(({ className, all = false, id = "kalit" }, ref) => {
+export const Logo = forwardRef<SVGSVGElement, LogoProps>(({ className, all = false, id = "kalit", ...props }, ref) => {
   const title = all ? "Kalit — Product Family" : LOGO_TITLES[id]
   const visibleIds = all ? LOGO_PATHS.map((item) => item.id) : [id]
 
   return (
-    <svg className={clsx(s.logo, className)} ref={ref} viewBox="0 0 82 82">
+    <svg {...props} className={clsx(s.logo, className)} ref={ref} viewBox="0 0 82 82">
       <title>{title}</title>
       {LOGO_PATHS.filter((path) => visibleIds.includes(path.id)).map((path) => (
         <path key={path.id} data-logo-id={path.id} d={path.d} />

@@ -1,5 +1,5 @@
-import { Illustration } from "@/components/illustration"
 import { Link } from "@/components/link"
+import { Logo } from "@/components/logo"
 import { SUITES } from "@/lib/suites"
 import s from "./nav.module.scss"
 
@@ -10,12 +10,15 @@ export const Nav = () => {
         <li className={s.subnav}>
           <span className={s.link}>Suites</span>
           <ul className={s.sub}>
-            {SUITES.map(({ id, title, color }) => (
+            {SUITES.map(({ id, title, color, smallDescription }) => (
               <li key={id} style={{ "--color": color } as React.CSSProperties}>
                 <Link href={`/${id}`}>
-                  <Illustration suite={id} />
-                  <span className={s.title}>
+                  <div className={s.logo}>
+                    <Logo id={id} />
+                  </div>
+                  <span className={s.content}>
                     <strong>{title}</strong>
+                    <p>{smallDescription}</p>
                   </span>
                 </Link>
               </li>

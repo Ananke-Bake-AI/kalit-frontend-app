@@ -3,12 +3,8 @@
 .heading {
   h2 {
     @include fs(40px, 24, 128px);
-    line-height: 0.85;
+    line-height: 1.05;
     margin-top: var(--size-10);
-
-    [data-word] {
-      padding-bottom: 0.14em;
-    }
 
     & + .paragraph {
       margin-top: var(--size-6);
@@ -30,6 +26,7 @@
         border-radius: var(--radius-rounded);
         color: var(--white);
         background: var(--gradient-radial-1);
+        top: 0.5em;
       }
 
       &[data-icon="right"] {

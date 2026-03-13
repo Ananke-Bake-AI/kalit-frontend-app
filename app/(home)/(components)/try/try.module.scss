@@ -1,1 +1,281 @@
 @use "@/styles/mixins" as *;
+
+$responsiveTry: 1084px;
+
+.try {
+  @include section;
+  margin-top: var(--spacing-4);
+  overflow: hidden;
+
+  .container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+
+    @include max($responsiveTry) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--spacing-2-5);
+    }
+  }
+
+  .heading {
+    z-index: 15;
+
+    [data-paragraph] {
+      width: calc(400px + 50 * (100vw - 320px) / 1080);
+      max-width: var(--container-max);
+    }
+
+    [data-underline] {
+      svg {
+        transform: skewY(5deg);
+        top: 75%;
+        stroke-width: 1.5;
+      }
+    }
+
+    @include max($responsiveTry) {
+      text-align: center;
+    }
+  }
+
+  @include max($responsiveTry) {
+    .list,
+    .textarea {
+      width: calc(500px + 200 * (100vw - 320px) / 1080);
+      max-width: 100%;
+    }
+  }
+}
+
+.form {
+  --padding: calc(24px + 6 * (100vw - 320px) / 1080);
+  padding-top: var(--spacing-2-5);
+  flex: 1;
+  position: relative;
+
+  @include max($responsiveTry) {
+    padding-top: 0;
+    width: 100%;
+  }
+}
+
+.textarea {
+  height: calc(200px + 50 * (100vw - 320px) / 1080);
+  background-color: var(--glass-50);
+  @include cornerShape(var(--radius-1));
+  @include border-glass(var(--gradient-border-glass-3));
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  z-index: 5;
+  margin: auto;
+
+  .icon {
+    position: absolute;
+    left: calc(var(--padding) * 0.85);
+    top: calc(var(--padding) * 0.85);
+    width: 1.5em;
+  }
+
+  textarea {
+    display: block;
+    width: 100%;
+    flex: 1;
+    background-color: transparent;
+    padding: var(--padding);
+    font-family: var(--font-main);
+    font-weight: 300;
+    padding-left: calc(var(--padding) * 2.15);
+    @include no-scrollbar;
+
+    &::placeholder {
+      color: var(--text);
+    }
+
+    &:focus {
+      &::placeholder {
+        color: var(--text-secondary);
+      }
+    }
+  }
+}
+
+.bottom {
+  bottom: 0;
+  padding: calc(var(--padding) / 1.5);
+  display: flex;
+  align-items: center;
+  gap: calc(var(--padding) / 4);
+
+  button {
+    --size: calc(32px + 4 * (100vw - 320px) / 1080);
+    height: var(--size);
+    min-width: var(--size);
+    @include cornerShape(var(--radius-4));
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 1.25em;
+    transition:
+      background-color var(--transition-link),
+      transform var(--transition-scale);
+
+    &:active {
+      transform: scale(0.9);
+    }
+
+    span {
+      font-size: calc(var(--size) / 2.5);
+      display: inline-block;
+      padding-inline: 1em;
+    }
+
+    &.b1 {
+      background-color: var(--glass-50);
+      margin-right: auto;
+      @include border-glass(var(--gradient-border-glass-3));
+
+      @include is-hover {
+        background-color: var(--glass-75);
+      }
+    }
+
+    &.b2 {
+      background-color: oklch(from var(--text) l c h / 0.05);
+      color: var(--white);
+
+      @include is-hover {
+        background-color: oklch(from var(--text) l c h / 0.1);
+      }
+    }
+
+    &.b3 {
+      background: var(--gradient-radial-1);
+      width: var(--size);
+      svg {
+        stroke: var(--white);
+        width: 55%;
+      }
+    }
+  }
+}
+
+.bg {
+  position: absolute;
+  z-index: 0;
+  inset: -50% -25%;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    background: radial-gradient(circle at 50% 100%, oklch(from var(--bg-1) l c h / 0) 30%, var(--bg-1) 80%);
+    z-index: 1;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    z-index: 1;
+    background: linear-gradient(to right, var(--bg-1) 0%, oklch(from var(--bg-1) l c h / 0) 15% 85%, var(--bg-1) 100%);
+  }
+
+  .gradient {
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(to bottom, var(--bg-1) 0%, oklch(from var(--bg-1) l c h / 0), var(--bg-1));
+    }
+  }
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+  position: relative;
+  z-index: 10;
+  margin-top: var(--size-4);
+  gap: var(--size-2);
+  flex-wrap: wrap;
+
+  button {
+    position: relative;
+    display: inline-flex;
+    color: var(--white);
+    padding: 0.65em 1em;
+    font-size: 0.8em;
+    background-color: var(--glass-15);
+    border-radius: var(--radius-rounded);
+    @include border-glass(var(--gradient-border-glass-3));
+    gap: 0.5em;
+    transition:
+      background-color var(--transition-link),
+      transform var(--transition-scale);
+
+    &:active {
+      transform: scale(0.9);
+    }
+
+    @include is-hover {
+      background-color: oklch(1 0 0 / 0.3);
+    }
+
+    svg {
+      transform: scale(1.15);
+      min-width: 1em;
+      top: -0.025em;
+      position: relative;
+
+      * {
+        stroke-width: 1.5;
+      }
+    }
+  }
+}
+
+.line {
+  position: absolute;
+  stroke-width: 13;
+  z-index: 20;
+  overflow: visible;
+
+  * {
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 2;
+    stroke-dashoffset: var(--dash-offset, 2);
+  }
+
+  @include max(500px) {
+    display: none;
+  }
+
+  &.line1 {
+    bottom: 100%;
+    right: 48%;
+
+    @include max($responsiveTry) {
+      min-width: 300px;
+      right: 100%;
+      transform: rotate(-90deg);
+      bottom: 50%;
+      transform-origin: bottom right;
+    }
+  }
+
+  &.line2 {
+    min-width: 300px;
+    bottom: 50%;
+    transform: translateY(50%);
+    left: 100%;
+  }
+}

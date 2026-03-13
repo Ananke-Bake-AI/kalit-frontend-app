@@ -22,11 +22,12 @@ html {
   -webkit-tap-highlight-color: transparent;
   height: 100%;
   font-synthesis: none !important;
+  font-kerning: none;
 }
 
 body {
   min-height: 100vh;
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizeSpeed;
 }
 
 img,

@@ -4,7 +4,7 @@ import type { LenisOptions } from "lenis"
 import "lenis/dist/lenis.css"
 import type { LenisRef, LenisProps as ReactLenisProps } from "lenis/react"
 import { ReactLenis } from "lenis/react"
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTempus } from "tempus/react"
 
 interface LenisProps extends Omit<ReactLenisProps, "ref"> {
@@ -14,6 +14,23 @@ interface LenisProps extends Omit<ReactLenisProps, "ref"> {
 
 export function Lenis({ root, options }: LenisProps) {
   const lenisRef = useRef<LenisRef>(null)
+  const [isReducedMotion, setIsReducedMotion] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const handleChange = () => {
+      setIsReducedMotion(mediaQuery.matches)
+    }
+
+    handleChange()
+    mediaQuery.addEventListener("change", handleChange)
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange)
+    }
+  }, [])
 
   useTempus((time: number) => {
     if (lenisRef.current?.lenis) {
@@ -21,16 +38,21 @@ export function Lenis({ root, options }: LenisProps) {
     }
   })
 
+  if (isReducedMotion) {
+    return null
+  }
+
   return (
     <ReactLenis
       ref={lenisRef}
       root={root}
       options={{
-        ...options,
-        duration: 1.1,
-        lerp: options?.lerp ?? 0.15,
+        duration: 0.8,
+        lerp: options?.lerp ?? 0.1,
+        smoothWheel: true,
         autoRaf: false,
-        anchors: true
+        anchors: true,
+        ...options
       }}
     />
   )

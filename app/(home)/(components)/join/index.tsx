@@ -26,7 +26,8 @@ export const Join = () => {
       .timeline({
         scrollTrigger: {
           trigger: listRef.current,
-          start: "top bottom"
+          start: "top bottom",
+          once: true
         }
       })
       .fromTo(

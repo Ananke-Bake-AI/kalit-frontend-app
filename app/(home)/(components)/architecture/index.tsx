@@ -20,7 +20,8 @@ export const Architecture = () => {
       .timeline({
         scrollTrigger: {
           trigger: path1Ref.current,
-          start: "top bottom"
+          start: "top bottom",
+          once: true
         }
       })
       .fromTo(
