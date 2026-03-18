@@ -21,6 +21,19 @@ export interface LayoutProps {
 export default function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="en" dir="ltr" suppressHydrationWarning={true}>
+      <head>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18025663729" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-18025663729');
+            `,
+          }}
+        />
+      </head>
       <body className={fonts}>
         <Providers>{children}</Providers>
       </body>
