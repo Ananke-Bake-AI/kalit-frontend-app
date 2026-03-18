@@ -5,6 +5,7 @@ import { ButtonGroup } from "@/components/button/group"
 import { Container } from "@/components/container"
 import { Models } from "@/components/models"
 import { Paragraph } from "@/components/paragraph"
+import { RevealText } from "@/components/reveal-text"
 import { Subtitle } from "@/components/subtitle"
 import { Line } from "@/components/svg/line"
 import clsx from "clsx"
@@ -21,10 +22,6 @@ export const Hero = () => {
   const heroLine4Id = `${heroId}-hero-line-4`
   const titleRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement>(null)
-  const word1Ref = useRef<HTMLSpanElement>(null)
-  const word2Ref = useRef<HTMLSpanElement>(null)
-  const word3Ref = useRef<HTMLSpanElement>(null)
-  const word4Ref = useRef<HTMLSpanElement>(null)
   const path1Ref = useRef<SVGPathElement>(null)
   const line1Ref = useRef<SVGLineElement>(null)
   const path2Ref = useRef<SVGPathElement>(null)
@@ -35,22 +32,15 @@ export const Hero = () => {
   const line4Ref = useRef<SVGLineElement>(null)
 
   useLayoutEffect(() => {
-    const words = [word1Ref.current, word2Ref.current, word3Ref.current, word4Ref.current]
     const animatedPaths = [path1Ref.current, path2Ref.current, path3Ref.current, path4Ref.current]
     const animatedLines = [line1Ref.current, line2Ref.current, line3Ref.current, line4Ref.current]
     const cards = cardsRef.current ? Array.from(cardsRef.current.children) : []
 
-    if (
-      !titleRef.current ||
-      words.some((item) => !item) ||
-      animatedPaths.some((item) => !item) ||
-      animatedLines.some((item) => !item)
-    ) {
+    if (!titleRef.current || animatedPaths.some((item) => !item) || animatedLines.some((item) => !item)) {
       return
     }
 
     gsap.set(titleRef.current, { visibility: "hidden", scale: 1.12 })
-    gsap.set(words, { yPercent: 110, opacity: 0 })
     gsap.set(animatedPaths, { "--dash-offset": 2 })
     gsap.set(animatedLines, { "--dash-offset": 2 })
     gsap.set(cards, { scale: 0 })
@@ -59,17 +49,6 @@ export const Hero = () => {
       .timeline()
       .set(titleRef.current, { visibility: "visible" }, 0.2)
       .to(titleRef.current, { scale: 1, duration: 1.8, ease: "back.inOut" }, "intro")
-      .to(
-        words,
-        {
-          yPercent: 0,
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.9,
-          ease: "back.out(1.2)"
-        },
-        "intro"
-      )
       .fromTo(
         animatedPaths,
         { "--dash-offset": 2 },
@@ -109,14 +88,9 @@ export const Hero = () => {
       <Container>
         <Subtitle>Early access — Now open</Subtitle>
         <div ref={titleRef} className={s.title}>
-          <h1>
+          <RevealText tag="h1" split={false}>
             <span>
-              <span ref={word1Ref} className={s.word}>
-                Build,
-              </span>{" "}
-              <span ref={word2Ref} className={s.word}>
-                Launch
-              </span>
+              Build, Launch
               <Line viewBox="0 0 621 429" className={clsx(s.line, s.line1)}>
                 <defs>
                   <radialGradient
@@ -170,12 +144,7 @@ export const Hero = () => {
               </Line>
             </span>
             <span>
-              <span ref={word3Ref} className={s.word}>
-                Grow,
-              </span>{" "}
-              <span ref={word4Ref} className={s.word}>
-                Secure
-              </span>
+              Grow, Secure
               <Line viewBox="0 0 557 253" className={clsx(s.line, s.line3)}>
                 <defs>
                   <radialGradient
@@ -227,7 +196,7 @@ export const Hero = () => {
                 <line ref={line4Ref} pathLength={1} x1="721" x2="900" y1="203.6" y2="203.6" stroke="var(--color-4)" />
               </Line>
             </span>
-          </h1>
+          </RevealText>
           <div ref={cardsRef} data-cards className={s.cards}>
             <HeroCard
               className={s.c1}

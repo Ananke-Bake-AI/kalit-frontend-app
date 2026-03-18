@@ -19,6 +19,7 @@ interface RevealTextProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string
   tag?: Tag
   animate?: boolean
+  split?: boolean
   start?: string
   onComplete?: () => void
 }
@@ -28,6 +29,7 @@ export const RevealText = ({
   className,
   tag = "div",
   animate = true,
+  split = true,
   start = "50% bottom",
   onComplete,
   ...props
@@ -37,10 +39,10 @@ export const RevealText = ({
 
   useGSAP(
     () => {
-      if (!elementRef.current) return
+      if (!elementRef.current || !split) return
 
       const svg = elementRef.current.querySelectorAll("[data-icon-svg]")
-      const split = new SplitText(elementRef.current, {
+      const splitText = new SplitText(elementRef.current, {
         type: "words",
         wordsClass: s.word,
         smartWrap: true
@@ -56,7 +58,7 @@ export const RevealText = ({
       })
 
       if (animate) {
-        tl.from(split.words, {
+        tl.from(splitText.words, {
           yPercent: 110,
           stagger: 0.1,
           duration: 0.9,
@@ -83,12 +85,12 @@ export const RevealText = ({
       }
 
       return () => {
-        if (split) {
-          split.revert()
+        if (splitText) {
+          splitText.revert()
         }
       }
     },
-    { scope: elementRef, dependencies: [animate, start, onComplete] }
+    { scope: elementRef, dependencies: [animate, split, start, onComplete] }
   )
 
   return (

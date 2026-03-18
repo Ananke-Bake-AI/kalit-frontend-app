@@ -74,12 +74,6 @@ $responsive: $responsive;
   }
 }
 
-.word {
-  position: relative;
-  display: inline-block;
-  will-change: transform, opacity;
-}
-
 .line {
   pointer-events: none;
   position: absolute;
