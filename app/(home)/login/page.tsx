@@ -1,13 +1,16 @@
 "use client"
 
 import { Button } from "@/components/button"
-import { signIn } from "next-auth/react"
+import { Container } from "@/components/container"
+import { Logo } from "@/components/logo"
+import { SUITES } from "@/lib/suites"
+import clsx from "clsx"
 import Link from "next/link"
+import { signIn } from "next-auth/react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Suspense, useState } from "react"
 import { toast } from "sonner"
 import s from "../auth.module.scss"
-import clsx from "clsx"
 
 export default function LoginPage() {
   return (
@@ -52,64 +55,87 @@ function LoginForm() {
 
   return (
     <section className={s.page}>
-      <div className={s.wrapper}>
-        <div className={s.header}>
-          <h1>Sign in</h1>
-          <p>Welcome back to Kalit</p>
-        </div>
-        <div className={s.card}>
-      <form onSubmit={handleSubmit} className={clsx(s.form, loading && s.loading)}>
+      <Container>
+        <div className={s.shell}>
+          <div className={s.showcase}>
+            <div className={s.showcaseHeader}>
+              <span className={s.kicker}>Kalit</span>
+              <h1>Sign in to your workspace.</h1>
+              <p>Pick up where you left off across product, launch, growth, and security.</p>
+            </div>
 
-        <div className={s.field}>
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+            <div className={s.highlights}>
+              {SUITES.map((suite) => (
+                <div key={suite.id} className={s.highlight}>
+                  <div className={s.highlightTitle}>
+                    <span className={s.highlightIcon} style={{ color: suite.color }}>
+                      <Logo id={suite.id} />
+                    </span>
+                    <span>Kalit {suite.title}</span>
+                  </div>
+                  <p className={s.highlightText}>{suite.smallDescription}</p>
+                </div>
+              ))}
+            </div>
+          </div>
 
-        <div className={s.field}>
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+          <div className={s.card}>
+            <div className={s.header}>
+              <h1>Sign in</h1>
+              <p>Use your email or continue with Google or GitHub.</p>
+            </div>
 
-        <div className={s.submit}>
-          <Button type="submit" disabled={loading}>
-            {loading ? "Signing in..." : "Sign in"}
-          </Button>
-        </div>
+            <form onSubmit={handleSubmit} className={clsx(s.form, loading && s.loading)}>
+              <div className={s.field}>
+                <label htmlFor="email">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-        <div className={s.divider}>
-          <span>or continue with</span>
-        </div>
+              <div className={s.field}>
+                <label htmlFor="password">Password</label>
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
 
-        <div className={s.oauth}>
-          <Button type="button" variant="secondary" onClick={() => handleOAuth("google")}>
-            Google
-          </Button>
-          <Button type="button" variant="secondary" onClick={() => handleOAuth("github")}>
-            GitHub
-          </Button>
-        </div>
+              <div className={s.submit}>
+                <Button type="submit" disabled={loading}>
+                  {loading ? "Signing in..." : "Continue"}
+                </Button>
+              </div>
 
-        <p className={s.footer}>
-          Don&apos;t have an account?{" "}
-          <Link href="/register">Sign up</Link>
-        </p>
-      </form>
+              <div className={s.divider}>
+                <span>or continue with</span>
+              </div>
+
+              <div className={s.oauth}>
+                <Button type="button" variant="secondary" onClick={() => handleOAuth("google")}>
+                  Google
+                </Button>
+                <Button type="button" variant="secondary" onClick={() => handleOAuth("github")}>
+                  GitHub
+                </Button>
+              </div>
+
+              <p className={s.footer}>
+                Don&apos;t have an account? <Link href="/register">Create one</Link>
+              </p>
+            </form>
+          </div>
         </div>
-      </div>
+      </Container>
     </section>
   )
 }

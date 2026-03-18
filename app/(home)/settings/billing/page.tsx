@@ -1,9 +1,14 @@
 import { auth } from "@/lib/auth"
+import { getPlan, PLANS } from "@/lib/plans"
 import { prisma } from "@/lib/prisma"
-import { PLANS } from "@/lib/plans"
 import { redirect } from "next/navigation"
-import { BillingActions } from "./actions"
+import { CheckoutButton, ManageBillingButton } from "./actions"
 import s from "../../app.module.scss"
+
+function formatMembers(limit: number) {
+  if (limit === -1) return "Unlimited members"
+  return `${limit} member${limit === 1 ? "" : "s"}`
+}
 
 export default async function BillingPage() {
   const session = await auth()
@@ -14,47 +19,76 @@ export default async function BillingPage() {
     orderBy: { createdAt: "desc" },
   })
 
+  const currentPlan = subscription ? getPlan(subscription.planKey) : null
+
   return (
     <>
-      <div className={s.card}>
-        <h2 className={s.cardTitle}>Current plan</h2>
-        {subscription ? (
-          <>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-              <span style={{ fontFamily: "var(--font-heading)", fontSize: "1.25em", textTransform: "capitalize" }}>
-                {subscription.planKey}
-              </span>
-              <span className={`${s.badge} ${s.success}`}>{subscription.status.toLowerCase()}</span>
-            </div>
-            <p style={{ fontSize: "0.85em", color: "var(--text-secondary)", marginBottom: "1rem" }}>
-              Current period: {subscription.currentPeriodStart.toLocaleDateString()} — {subscription.currentPeriodEnd.toLocaleDateString()}
+      <div className={s.panel} style={{ marginBottom: "var(--spacing-1-5)" }}>
+        <div className={s.panelHeader}>
+          <div>
+            <h2 className={s.panelTitle}>{currentPlan?.name || "Free workspace"}</h2>
+            <p className={s.panelSubtitle}>
+              {currentPlan
+                ? `${currentPlan.creditsPerMonth} credits per month, ${formatMembers(currentPlan.maxMembers)}, ${currentPlan.suites.length} suite${currentPlan.suites.length === 1 ? "" : "s"} included.`
+                : "No active subscription yet."}
             </p>
-            <BillingActions hasSubscription={true} />
-          </>
-        ) : (
-          <>
-            <p style={{ color: "var(--text-secondary)", marginBottom: "1rem" }}>No active subscription</p>
-            <BillingActions hasSubscription={false} />
-          </>
-        )}
+          </div>
+          {subscription ? (
+            <span className={`${s.badge} ${s.success}`}>{subscription.status.toLowerCase()}</span>
+          ) : (
+            <span className={s.badge}>Free</span>
+          )}
+        </div>
+        {subscription ? (
+          <div className={s.infoRow}>
+            <label>Renews</label>
+            <span>{subscription.currentPeriodEnd.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
+          </div>
+        ) : null}
+        <div style={{ marginTop: "1rem" }}>
+          {subscription ? (
+            <ManageBillingButton label="Open billing portal" />
+          ) : (
+            <CheckoutButton planKey="starter" label="Start with Starter" />
+          )}
+        </div>
       </div>
 
-      <h2 className={s.sectionTitle} style={{ marginTop: "var(--spacing-1-5)" }}>Available plans</h2>
       <div className={s.planGrid}>
-        {PLANS.map((plan) => (
-          <div key={plan.key} className={`${s.planCard} ${plan.popular ? s.popular : ""}`}>
-            {plan.popular && <span className={`${s.badge} ${s.popular}`}>Popular</span>}
-            <h3>{plan.name}</h3>
-            <div className={s.price}>
-              ${(plan.monthlyPrice / 100).toFixed(0)}<small>/mo</small>
+        {PLANS.map((plan) => {
+          const isCurrent = subscription?.planKey === plan.key
+
+          return (
+            <div key={plan.key} className={`${s.planCard} ${plan.popular ? s.planFeatured : ""}`}>
+              {plan.popular && <span className={`${s.badge} ${s.popular}`}>Most selected</span>}
+              {isCurrent && <span className={`${s.badge} ${s.success}`}>Current plan</span>}
+              <div>
+                <h2 className={s.panelTitle}>{plan.name}</h2>
+                <p className={s.panelSubtitle}>
+                  {plan.suites.length} suite{plan.suites.length === 1 ? "" : "s"} included, {plan.creditsPerMonth} credits per month, {formatMembers(plan.maxMembers)}.
+                </p>
+              </div>
+              <div className={s.price}>
+                ${(plan.monthlyPrice / 100).toFixed(0)}
+                <small>/ month</small>
+              </div>
+              <ul className={s.planList}>
+                {plan.features.map((feature) => (
+                  <li key={feature}>{feature}</li>
+                ))}
+              </ul>
+              {isCurrent ? (
+                <ManageBillingButton />
+              ) : (
+                <CheckoutButton
+                  planKey={plan.key}
+                  label={subscription ? `Switch to ${plan.name}` : `Choose ${plan.name}`}
+                  variant={plan.popular ? "primary" : "secondary"}
+                />
+              )}
             </div>
-            <ul>
-              {plan.features.map((feature) => (
-                <li key={feature}>{feature}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </>
   )

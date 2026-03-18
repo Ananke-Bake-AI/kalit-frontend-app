@@ -1,6 +1,7 @@
 "use server"
 
 import { auth } from "@/lib/auth"
+import { APP_URL } from "@/lib/config"
 import { prisma } from "@/lib/prisma"
 import { getStripe } from "@/lib/stripe"
 import { getPlan } from "@/lib/plans"
@@ -44,8 +45,8 @@ export async function createCheckoutSession(planKey: string) {
     customer: customerId,
     mode: "subscription",
     line_items: [{ price: plan.stripePriceId, quantity: 1 }],
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?checkout=success`,
-    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings/billing?checkout=canceled`,
+    success_url: new URL("/dashboard?checkout=success", APP_URL).toString(),
+    cancel_url: new URL("/settings/billing?checkout=canceled", APP_URL).toString(),
     metadata: {
       orgId: org.id,
       planKey: plan.key,
@@ -78,7 +79,7 @@ export async function createPortalSession() {
   const stripe = getStripe()
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: org.stripeCustomerId,
-    return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings/billing`,
+    return_url: new URL("/settings/billing", APP_URL).toString(),
   })
 
   return { url: portalSession.url }

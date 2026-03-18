@@ -139,7 +139,7 @@ export const Try = () => {
     {
       text: "Landing",
       icon: "hugeicons:rocket-01",
-      value: "Create a startup landing page with pricing tiers and FAQ"
+      value: "Create a product landing page with pricing tiers and FAQ"
     },
     {
       text: "SaaS",

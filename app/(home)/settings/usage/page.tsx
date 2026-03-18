@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth"
+import { getRemainingCredits, resolveEntitlements } from "@/lib/entitlements"
 import { prisma } from "@/lib/prisma"
-import { resolveEntitlements, getRemainingCredits } from "@/lib/entitlements"
 import { redirect } from "next/navigation"
 import s from "../../app.module.scss"
 
@@ -26,31 +26,51 @@ export default async function UsagePage() {
 
   return (
     <>
-      <div className={s.card}>
-        <h2 className={s.cardTitle}>Credits this month</h2>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <span style={{ fontFamily: "var(--font-heading)", fontSize: "2em", color: "var(--text)" }}>{remaining}</span>
-          <span style={{ fontSize: "0.85em", color: "var(--text-secondary)" }}>of {entitlements.creditsPerMonth} remaining</span>
+      <div className={s.panel}>
+        <div className={s.panelHeader}>
+          <div>
+            <h2 className={s.panelTitle}>Monthly credit pool</h2>
+            <p className={s.panelSubtitle}>Credits used and remaining this month.</p>
+          </div>
+          <span className={s.badge}>{remaining} remaining</span>
+        </div>
+
+        <div className={s.usageMeta}>
+          <span>{Math.max(used, 0)} credits used this month</span>
+          <span>{entitlements.creditsPerMonth} credits total allowance</span>
         </div>
         <div className={s.usageBar}>
           <div className={s.fill} style={{ width: `${Math.min(percentage, 100)}%` }} />
         </div>
       </div>
 
-      {recentUsage.length > 0 && (
-        <div className={s.card} style={{ marginTop: "var(--spacing-1)" }}>
-          <h2 className={s.cardTitle}>Recent usage</h2>
-          {recentUsage.map((record) => (
-            <div key={record.id} className={s.memberRow}>
-              <div className={s.memberInfo}>
-                <div className={s.memberName} style={{ textTransform: "capitalize" }}>{record.suiteId}</div>
-                <div className={s.memberEmail}>{record.action}</div>
-              </div>
-              <span style={{ fontSize: "0.85em", color: "var(--text)" }}>{record.credits} credits</span>
-            </div>
-          ))}
+      <div className={s.panel}>
+        <div className={s.panelHeader}>
+          <div>
+            <h2 className={s.panelTitle}>Recent usage</h2>
+            <p className={s.panelSubtitle}>Recent activity for this month.</p>
+          </div>
         </div>
-      )}
+
+        {recentUsage.length === 0 ? (
+          <div className={s.emptyState}>
+            <h3>No usage recorded yet</h3>
+            <p>Usage will appear here once this workspace starts running actions.</p>
+          </div>
+        ) : (
+          <div className={s.usageHistory}>
+            {recentUsage.map((record) => (
+              <div key={record.id} className={s.memberRow}>
+                <div className={s.memberInfo}>
+                  <div className={s.memberName}>{record.suiteId}</div>
+                  <div className={s.memberEmail}>{record.action}</div>
+                </div>
+                <span className={s.memberRole}>{record.credits} credits</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </>
   )
 }

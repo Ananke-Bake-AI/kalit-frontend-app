@@ -1,16 +1,32 @@
 "use client"
 
 import { Button } from "@/components/button"
+import { Container } from "@/components/container"
 import { Logo } from "@/components/logo"
 import { SUITES } from "@/lib/suites"
 import { completeOnboarding } from "@/server/actions/onboarding"
+import clsx from "clsx"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import s from "../setup.module.scss"
-import clsx from "clsx"
 import type { SuiteId } from "@/lib/app-suites"
+
+const notes = [
+  {
+    title: "Name your workspace",
+    body: "Use your company or project name.",
+  },
+  {
+    title: "Add your website if you have one",
+    body: "This helps Kalit tailor pages and campaigns later.",
+  },
+  {
+    title: "Choose what to do first",
+    body: "Start with the suite that matches your immediate goal.",
+  },
+]
 
 export default function SetupPage() {
   const router = useRouter()
@@ -47,90 +63,109 @@ export default function SetupPage() {
   }
 
   return (
-    <div className={s.page}>
-      <div className={s.wrapper}>
-        <div className={s.header}>
-          <h1>Welcome to Kalit</h1>
-          <p>{step === 1 ? "Set up your workspace" : "What do you want to do first?"}</p>
-          <div className={s.progress}>
-            {[1, 2].map((i) => (
-              <span key={i} className={clsx(i <= step && s.active)} />
-            ))}
+    <section className={s.page}>
+      <Container>
+        <div className={s.shell}>
+          <div className={s.showcase}>
+            <span className={s.kicker}>Workspace onboarding</span>
+            <div className={s.header}>
+              <h1>Set up your workspace.</h1>
+              <p>Two quick steps and you are in.</p>
+            </div>
+
+            <div className={s.progress}>
+              {[1, 2].map((i) => (
+                <span key={i} className={clsx(i <= step && s.active)} />
+              ))}
+            </div>
+
+            <div className={s.notes}>
+              {notes.map((note) => (
+                <div key={note.title} className={s.note}>
+                  <strong>{note.title}</strong>
+                  <span>{note.body}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className={s.card}>
+            <div className={s.header}>
+              <h1>{step === 1 ? "Workspace details" : "Pick your first suite"}</h1>
+              <p>
+                {step === 1
+                  ? "Name your company or project."
+                  : "Choose what you want Kalit to help you with first."}
+              </p>
+            </div>
+
+            {step === 1 && (
+              <>
+                <div className={s.field}>
+                  <label htmlFor="orgName">Workspace name</label>
+                  <input
+                    id="orgName"
+                    placeholder="My company"
+                    value={orgName}
+                    onChange={(e) => setOrgName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className={s.field}>
+                  <label htmlFor="websiteUrl">Website (optional)</label>
+                  <input
+                    id="websiteUrl"
+                    placeholder="https://example.com"
+                    value={websiteUrl}
+                    onChange={(e) => setWebsiteUrl(e.target.value)}
+                  />
+                </div>
+                <Button
+                  onClick={() => {
+                    if (orgName.length < 2) {
+                      toast.error("Workspace name must be at least 2 characters")
+                      return
+                    }
+                    setStep(2)
+                  }}
+                >
+                  Continue
+                </Button>
+              </>
+            )}
+
+            {step === 2 && (
+              <>
+                <div className={s.suites}>
+                  {SUITES.map((suite) => (
+                    <button
+                      key={suite.id}
+                      type="button"
+                      onClick={() => setPrimarySuite(suite.id as SuiteId)}
+                      className={clsx(s.suiteCard, primarySuite === suite.id && s.active)}
+                    >
+                      <div className={s.icon} style={{ color: suite.color }}>
+                        <Logo id={suite.id} />
+                      </div>
+                      <span className={s.name}>Kalit {suite.title}</span>
+                      <span className={s.desc}>{suite.smallDescription}</span>
+                    </button>
+                  ))}
+                </div>
+
+                <div className={s.actions}>
+                  <Button variant="secondary" onClick={() => setStep(1)}>
+                    Back
+                  </Button>
+                  <Button onClick={handleComplete} disabled={loading}>
+                    {loading ? "Setting up..." : "Launch workspace"}
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         </div>
-
-        <div className={s.card}>
-          {step === 1 && (
-            <>
-              <div className={s.field}>
-                <label htmlFor="orgName">Workspace name</label>
-                <input
-                  id="orgName"
-                  placeholder="My Company"
-                  value={orgName}
-                  onChange={(e) => setOrgName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className={s.field}>
-                <label htmlFor="websiteUrl">Website (optional)</label>
-                <input
-                  id="websiteUrl"
-                  placeholder="https://example.com"
-                  value={websiteUrl}
-                  onChange={(e) => setWebsiteUrl(e.target.value)}
-                />
-              </div>
-              <Button
-                onClick={() => {
-                  if (orgName.length < 2) {
-                    toast.error("Workspace name must be at least 2 characters")
-                    return
-                  }
-                  setStep(2)
-                }}
-              >
-                Continue
-              </Button>
-            </>
-          )}
-
-          {step === 2 && (
-            <>
-              <div className={s.suites}>
-                {SUITES.map((suite) => (
-                  <button
-                    key={suite.id}
-                    type="button"
-                    onClick={() => setPrimarySuite(suite.id as SuiteId)}
-                    className={clsx(s.suiteCard, primarySuite === suite.id && s.active)}
-                  >
-                    <div className={s.icon} style={{ color: suite.color }}>
-                      <Logo id={suite.id} />
-                    </div>
-                    <span className={s.name}>{suite.title}</span>
-                    <span className={s.desc}>
-                      {suite.id === "project" && "Build an app"}
-                      {suite.id === "flow" && "Create a site"}
-                      {suite.id === "marketing" && "Launch growth"}
-                      {suite.id === "pentest" && "Scan security"}
-                    </span>
-                  </button>
-                ))}
-              </div>
-
-              <div className={s.actions}>
-                <Button variant="secondary" onClick={() => setStep(1)}>
-                  Back
-                </Button>
-                <Button onClick={handleComplete} disabled={loading}>
-                  {loading ? "Setting up..." : "Get started"}
-                </Button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
+      </Container>
+    </section>
   )
 }

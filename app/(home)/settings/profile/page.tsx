@@ -11,32 +11,40 @@ export default async function ProfilePage() {
   if (!user) redirect("/login")
 
   const initial = user.name?.charAt(0)?.toUpperCase() || user.email.charAt(0).toUpperCase()
+  const signInMethod = user.hashedPassword ? "Email and password" : "OAuth via Google or GitHub"
 
   return (
-    <div className={s.profileCard}>
-      <div className={s.profileHeader}>
-        <div className={s.profileAvatar}>{initial}</div>
-        <div>
-          <div className={s.profileName}>{user.name || "Unnamed"}</div>
-          <div className={s.profileEmail}>{user.email}</div>
+    <>
+      <div className={s.profileCard}>
+        <div className={s.profileHeader}>
+          <div className={s.profileAvatar}>{initial}</div>
+          <div>
+            <div className={s.profileName}>{user.name || "Unnamed user"}</div>
+            <div className={s.profileEmail}>{user.email}</div>
+          </div>
+        </div>
+
+        <div className={s.infoRow}>
+          <label>Name</label>
+          <span>{user.name || "Not set yet"}</span>
+        </div>
+        <div className={s.infoRow}>
+          <label>Email</label>
+          <span>{user.email}</span>
+        </div>
+        <div className={s.infoRow}>
+          <label>Sign-in method</label>
+          <span>{signInMethod}</span>
+        </div>
+        <div className={s.infoRow}>
+          <label>Primary suite</label>
+          <span>{user.defaultSuite ? user.defaultSuite.charAt(0).toUpperCase() + user.defaultSuite.slice(1) : "Not selected"}</span>
+        </div>
+        <div className={s.infoRow}>
+          <label>Member since</label>
+          <span>{user.createdAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</span>
         </div>
       </div>
-      <div className={s.infoRow}>
-        <label>Name</label>
-        <span>{user.name || "Not set"}</span>
-      </div>
-      <div className={s.infoRow}>
-        <label>Email</label>
-        <span>{user.email}</span>
-      </div>
-      <div className={s.infoRow}>
-        <label>Account type</label>
-        <span>{user.hashedPassword ? "Email & password" : "OAuth (Google/GitHub)"}</span>
-      </div>
-      <div className={s.infoRow}>
-        <label>Member since</label>
-        <span>{user.createdAt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</span>
-      </div>
-    </div>
+    </>
   )
 }

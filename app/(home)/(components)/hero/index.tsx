@@ -11,11 +11,13 @@ import { Line } from "@/components/svg/line"
 import { useGSAP } from "@gsap/react"
 import clsx from "clsx"
 import gsap from "gsap"
+import { usePathname } from "next/navigation"
 import { useRef } from "react"
 import { HeroCard } from "./card"
 import s from "./hero.module.scss"
 
 export const Hero = () => {
+  const pathname = usePathname()
   const containerRef = useRef<HTMLElement>(null)
   const titleRef = useRef<HTMLDivElement>(null)
   const path1Ref = useRef<SVGPathElement>(null)
@@ -28,12 +30,20 @@ export const Hero = () => {
   const line4Ref = useRef<SVGLineElement>(null)
 
   useGSAP(() => {
+    const animatedPaths = [path1Ref.current, path2Ref.current, path3Ref.current, path4Ref.current]
+    const animatedLines = [line1Ref.current, line2Ref.current, line3Ref.current, line4Ref.current]
+
+    gsap.set(titleRef.current, { visibility: "hidden", scale: 1.12 })
+    gsap.set(animatedPaths, { "--dash-offset": 2 })
+    gsap.set(animatedLines, { "--dash-offset": 2 })
+    gsap.set("[data-cards] > *", { scale: 0 })
+
     gsap
       .timeline()
-      .to(titleRef.current, { visibility: "visible", delayAfter: 0.3 })
-      .fromTo(titleRef.current, { scale: 1.15 }, { scale: 1, duration: 2, ease: "back.inOut" }, "a")
+      .set(titleRef.current, { visibility: "visible" }, 0.2)
+      .to(titleRef.current, { scale: 1, duration: 1.8, ease: "back.inOut" }, "intro")
       .fromTo(
-        [path1Ref.current, path2Ref.current, path3Ref.current, path4Ref.current],
+        animatedPaths,
         { "--dash-offset": 2 },
         {
           "--dash-offset": 0,
@@ -41,10 +51,10 @@ export const Hero = () => {
           duration: 4,
           delay: 0.4
         },
-        "a"
+        "intro"
       )
       .fromTo(
-        [line1Ref.current, line2Ref.current, line3Ref.current, line4Ref.current],
+        animatedLines,
         { "--dash-offset": 2 },
         {
           "--dash-offset": 0,
@@ -52,15 +62,15 @@ export const Hero = () => {
           duration: 0.8,
           delay: 2.2
         },
-        "a"
+        "intro"
       )
       .fromTo(
         "[data-cards] > *",
         { scale: 0 },
         { scale: 1, stagger: 0.25, duration: 1, ease: "back.out", delay: 1.5 },
-        "a"
+        "intro"
       )
-  }, { scope: containerRef, revertOnUpdate: true })
+  }, { scope: containerRef, dependencies: [pathname], revertOnUpdate: true })
 
   return (
     <section ref={containerRef} className={s.hero}>

@@ -5,11 +5,47 @@ import { createCheckoutSession, createPortalSession } from "@/server/actions/bil
 import { useState } from "react"
 import { toast } from "sonner"
 
-interface BillingActionsProps {
-  hasSubscription: boolean
+interface CheckoutButtonProps {
+  planKey: string
+  label: string
+  variant?: "primary" | "secondary" | "tertiary"
+  disabled?: boolean
 }
 
-export function BillingActions({ hasSubscription }: BillingActionsProps) {
+export function CheckoutButton({ planKey, label, variant = "primary", disabled = false }: CheckoutButtonProps) {
+  const [loading, setLoading] = useState(false)
+
+  const handleCheckout = async () => {
+    setLoading(true)
+    const result = await createCheckoutSession(planKey)
+    setLoading(false)
+
+    if (result.error) {
+      toast.error(result.error)
+      return
+    }
+
+    if (result.url) {
+      window.location.href = result.url
+    }
+  }
+
+  return (
+    <Button onClick={handleCheckout} disabled={disabled || loading} variant={variant}>
+      {loading ? "Redirecting..." : label}
+    </Button>
+  )
+}
+
+interface ManageBillingButtonProps {
+  label?: string
+  variant?: "primary" | "secondary" | "tertiary"
+}
+
+export function ManageBillingButton({
+  label = "Manage subscription",
+  variant = "secondary",
+}: ManageBillingButtonProps) {
   const [loading, setLoading] = useState(false)
 
   const handlePortal = async () => {
@@ -27,37 +63,9 @@ export function BillingActions({ hasSubscription }: BillingActionsProps) {
     }
   }
 
-  const handleCheckout = async (planKey: string) => {
-    setLoading(true)
-    const result = await createCheckoutSession(planKey)
-    setLoading(false)
-
-    if (result.error) {
-      toast.error(result.error)
-      return
-    }
-
-    if (result.url) {
-      window.location.href = result.url
-    }
-  }
-
-  if (hasSubscription) {
-    return (
-      <Button variant="secondary" onClick={handlePortal} disabled={loading}>
-        {loading ? "Loading..." : "Manage subscription"}
-      </Button>
-    )
-  }
-
   return (
-    <div style={{ display: "flex", gap: "0.75rem" }}>
-      <Button onClick={() => handleCheckout("starter")} disabled={loading} variant="secondary">
-        Start with Starter
-      </Button>
-      <Button onClick={() => handleCheckout("pro")} disabled={loading}>
-        Go Pro
-      </Button>
-    </div>
+    <Button variant={variant} onClick={handlePortal} disabled={loading}>
+      {loading ? "Loading..." : label}
+    </Button>
   )
 }
