@@ -4,15 +4,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  min-height: 100svh;
-  padding: var(--spacing-2) var(--spacing-0);
-  background: var(--body);
+  min-height: 60vh;
+  padding: var(--spacing-3) 0;
 }
 
 .wrapper {
   width: 100%;
   max-width: 28rem;
+  margin: 0 auto;
 }
 
 .header {

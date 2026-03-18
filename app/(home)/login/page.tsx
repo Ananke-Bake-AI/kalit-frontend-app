@@ -51,9 +51,14 @@ function LoginForm() {
   }
 
   return (
-    <div className={s.card}>
+    <section className={s.page}>
+      <div className={s.wrapper}>
+        <div className={s.header}>
+          <h1>Sign in</h1>
+          <p>Welcome back to Kalit</p>
+        </div>
+        <div className={s.card}>
       <form onSubmit={handleSubmit} className={clsx(s.form, loading && s.loading)}>
-        <h2 className={s.title}>Sign in to your account</h2>
 
         <div className={s.field}>
           <label htmlFor="email">Email</label>
@@ -103,6 +108,8 @@ function LoginForm() {
           <Link href="/register">Sign up</Link>
         </p>
       </form>
-    </div>
+        </div>
+      </div>
+    </section>
   )
 }

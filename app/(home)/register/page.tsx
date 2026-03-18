@@ -52,9 +52,14 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className={s.card}>
+    <section className={s.page}>
+      <div className={s.wrapper}>
+        <div className={s.header}>
+          <h1>Get started</h1>
+          <p>Create your Kalit account</p>
+        </div>
+        <div className={s.card}>
       <form onSubmit={handleSubmit} className={clsx(s.form, loading && s.loading)}>
-        <h2 className={s.title}>Create your account</h2>
 
         <div className={s.field}>
           <label htmlFor="name">Name</label>
@@ -117,6 +122,8 @@ export default function RegisterPage() {
           <Link href="/login">Sign in</Link>
         </p>
       </form>
-    </div>
+        </div>
+      </div>
+    </section>
   )
 }
