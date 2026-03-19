@@ -1,12 +1,11 @@
 import { auth } from "@/lib/auth"
 import { checkSuiteAccess } from "@/lib/entitlements"
 import { SUITES } from "@/lib/suites"
-import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import { Container } from "@/components/container"
 import { Button } from "@/components/button"
 import { Logo } from "@/components/logo"
-import { ProjectDashboard } from "./dashboard"
+import { SuiteLauncher } from "@/components/app/suite-launcher"
 import s from "../app.module.scss"
 
 export default async function ProjectPage() {
@@ -33,15 +32,10 @@ export default async function ProjectPage() {
     )
   }
 
-  const apps = await prisma.projectApp.findMany({
-    where: { orgId: session.user.orgId },
-    orderBy: { createdAt: "desc" },
-  })
-
   return (
     <section className={s.page}>
       <Container>
-        <ProjectDashboard apps={apps} />
+        <SuiteLauncher suiteId="project" suiteName="Project" />
       </Container>
     </section>
   )
