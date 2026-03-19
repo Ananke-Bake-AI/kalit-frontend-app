@@ -1,8 +1,9 @@
 "use client"
 
 import { Button } from "@/components/button"
-import { updateProfile } from "@/server/actions/profile"
+import { updateProfile, deleteAccount } from "@/server/actions/profile"
 import { changePassword } from "@/server/actions/password"
+import { signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -165,6 +166,79 @@ export function ChangePasswordForm() {
           </Button>
         </div>
       </form>
+    </div>
+  )
+}
+
+export function DeleteAccountForm() {
+  const [confirmText, setConfirmText] = useState("")
+  const [loading, setLoading] = useState(false)
+
+  const handleDelete = async () => {
+    if (confirmText !== "delete my account") return
+
+    setLoading(true)
+    const result = await deleteAccount()
+    setLoading(false)
+
+    if (result.error) {
+      toast.error(result.error)
+      return
+    }
+
+    await signOut({ callbackUrl: "/" })
+  }
+
+  return (
+    <div className={s.panel} style={{ borderColor: "oklch(0.65 0.22 25 / 0.3)" }}>
+      <div className={s.panelHeader}>
+        <div>
+          <h2 className={s.panelTitle} style={{ color: "oklch(0.65 0.22 25)" }}>Delete account</h2>
+          <p className={s.panelSubtitle}>
+            Permanently delete your account and all associated data. This action cannot be undone.
+          </p>
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+          Type <strong>delete my account</strong> to confirm.
+        </p>
+        <input
+          type="text"
+          value={confirmText}
+          onChange={(e) => setConfirmText(e.target.value)}
+          placeholder="delete my account"
+          style={{
+            height: "3rem",
+            padding: "0 1rem",
+            borderRadius: "0.75rem",
+            border: "1px solid oklch(0.65 0.22 25 / 0.3)",
+            background: "oklch(1 0 0 / 0.7)",
+            color: "var(--text)",
+            fontSize: "0.94rem",
+            outline: "none",
+          }}
+        />
+        <div>
+          <button
+            onClick={handleDelete}
+            disabled={confirmText !== "delete my account" || loading}
+            style={{
+              padding: "0.75rem 1.5rem",
+              borderRadius: "var(--radius-rounded)",
+              border: "none",
+              background: confirmText === "delete my account" ? "oklch(0.65 0.22 25)" : "oklch(0 0 0 / 0.1)",
+              color: confirmText === "delete my account" ? "white" : "var(--text-secondary)",
+              fontWeight: 600,
+              fontSize: "0.9rem",
+              cursor: confirmText === "delete my account" ? "pointer" : "not-allowed",
+              transition: "all 0.2s",
+            }}
+          >
+            {loading ? "Deleting..." : "Permanently delete account"}
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
