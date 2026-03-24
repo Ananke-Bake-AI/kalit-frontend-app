@@ -1,0 +1,37 @@
+---
+description: Kalit — routing App Router, SCSS modules, pas Tailwind, champs TextField
+alwaysApply: true
+---
+
+# Kalit — conventions à respecter
+
+## Structure `app/`
+
+- **`app/(home)/`** : page d’accueil + `(components)` marketing uniquement (hero, features, etc.). Pas de dashboard ni settings ici.
+- **`app/(auth)/`** : login, register, forgot/reset password, verify-email + `auth.module.scss`. Dossier `(auth)/(components)/` pour UI auth si besoin.
+- **`app/(dashboard)/`** : tout le reste connecté (dashboard, settings, jobs, suites, setup, FAQ, support, légal…) + `(components)/` partagés (`page-section`, `page-header`, `surface-panel`, `legal-document`, `suite-workspace-view`, etc.).
+
+Les groupes `(…)` n’apparaissent pas dans l’URL.
+
+## Styles
+
+- **Pas de Tailwind** (retiré du projet). Uniquement **Sass + CSS Modules** : `import s from './nom.module.scss'`.
+- **Pas de fichier « shell » unique** pour toute l’app : colocaliser les styles (un module par composant ou par page / sous-feature).
+- **Verre / carte partagée** : `@use "@/styles/app-glass" as *` puis `@include glass-panel($radius)` dans le module concerné.
+- Variables / mixins globaux : `@/styles/_colors.scss`, `_variables.scss`, `_mixins.scss`, `_easing.scss`.
+
+## Formulaires
+
+- Tous les champs texte : **`@/components/text-field`** (`TextField`) — aligné sur le style auth. Pas de `<input>` nu + styles dupliqués.
+
+## Composants UI
+
+- **Boutons / liens / icônes** : `@/components/button`, `@/components/link`, `@/components/icon` (pas `next/link` ni `@iconify/react` direct pour l’UI produit).
+- **Pastilles** : `@/components/badge`.
+- **États vides** : `@/components/empty-placeholder`.
+- **`lib/cn`** : alias de **`clsx` uniquement** — ne pas réintroduire `tailwind-merge`.
+
+## Anti-patterns
+
+- Ne pas ajouter `tailwindcss`, `@tailwindcss/postcss`, ni `tailwind-merge`.
+- Ne pas recréer un gros `shell.module.scss` « fourre-tout » : préférer des modules ciblés + `SurfacePanel` / `PageSection` / `PageHeader` quand c’est adapté.

@@ -1,7 +1,10 @@
 "use client"
 
-import { forwardRef, useEffect, useState } from "react"
-import { Line } from "./line"
+import { useGSAP } from "@gsap/react"
+import clsx from "clsx"
+import gsap from "gsap"
+import { useRef } from "react"
+import s from "./svg.module.scss"
 
 interface AnimatedLineProps {
   d: string
@@ -9,36 +12,33 @@ interface AnimatedLineProps {
   className?: string
   stroke?: string
   strokeWidth?: number
+  options?: ScrollTrigger
 }
 
-export const AnimatedLine = forwardRef<SVGPathElement, AnimatedLineProps>(function AnimatedLine(
-  { d, viewBox, className, stroke = "currentColor", strokeWidth },
-  ref
-) {
-  const [length, setLength] = useState(0)
+export const AnimatedLine = ({ d, viewBox, className, stroke = "currentColor", strokeWidth }: AnimatedLineProps) => {
+  const pathRef = useRef<SVGPathElement | null>(null)
 
-  useEffect(() => {
-    const path = (ref as React.RefObject<SVGPathElement>)?.current
-    if (!path) return
-
-    const totalLength = path.getTotalLength()
-    setLength(totalLength)
-  }, [d])
+  useGSAP(() => {
+    gsap.fromTo(
+      pathRef.current,
+      { "--dash-offset": 2 },
+      {
+        "--dash-offset": 0,
+        duration: 4,
+        ease: "power1.inOut",
+        delay: 0.4,
+        scrollTrigger: {
+          trigger: pathRef.current,
+          start: "top bottom",
+          once: true
+        }
+      }
+    )
+  }, [])
 
   return (
-    <Line viewBox={viewBox} className={className}>
-      <path
-        ref={ref}
-        d={d}
-        stroke={stroke}
-        fill="none"
-        strokeWidth={strokeWidth}
-        data-length={length}
-        style={{
-          strokeDasharray: length,
-          strokeDashoffset: 0
-        }}
-      />
-    </Line>
+    <svg viewBox={viewBox} className={clsx(className, s.animatedLine)}>
+      <path ref={pathRef} d={d} stroke={stroke} pathLength={1} />
+    </svg>
   )
-})
+}

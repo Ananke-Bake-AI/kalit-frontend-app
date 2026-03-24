@@ -1,0 +1,61 @@
+@use "@/styles/mixins" as *;
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+
+  @include max($responsive) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.rowGrow {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.dangerHint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+
+  strong {
+    color: var(--text);
+  }
+}
+
+.dangerButton {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-rounded);
+  border: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+
+  &:disabled {
+    background: oklch(0 0 0 / 0.08);
+    color: var(--text-secondary);
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled) {
+    background: oklch(0.65 0.22 25);
+    color: var(--white);
+    cursor: pointer;
+
+    @include is-hover {
+      filter: brightness(1.06);
+    }
+  }
+}

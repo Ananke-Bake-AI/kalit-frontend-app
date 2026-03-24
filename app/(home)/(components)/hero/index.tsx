@@ -7,15 +7,16 @@ import { Logo } from "@/components/logo"
 import { Models } from "@/components/models"
 import { RevealText } from "@/components/reveal-text"
 import { Subtitle } from "@/components/subtitle"
-import { Line } from "@/components/svg/line"
+import { AnimatedLine } from "@/components/svg/animated-line"
+import { useAnimatedPlaceholder } from "@/hooks/use-animated-placeholder"
+import { detectSuiteFromPrompt, getHeroPromptSuites, getSuiteDisplayTitle, type SuiteConfig } from "@/lib/suites"
+import { useGSAP } from "@gsap/react"
 import clsx from "clsx"
 import gsap from "gsap"
 import { useRouter } from "next/navigation"
-import { useCallback, useId, useLayoutEffect, useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { HeroCard } from "./card"
 import s from "./hero.module.scss"
-
-const BG_COLORS = ["#91E500", "#8200DF", "#12BCFF", "#91E500", "#2F44FF", "#8200DF", "#91E500"]
 
 const PLACEHOLDERS = [
   "Build me a SaaS app with auth, billing, and a dashboard...",
@@ -24,143 +25,36 @@ const PLACEHOLDERS = [
   "Scan my web app for security vulnerabilities and fix them..."
 ]
 
-type SuiteMatch = {
-  id: "project" | "flow" | "marketing" | "pentest"
-  name: string
-  description: string
-  color: string
-  logo: "project" | "flow" | "marketing" | "pentest"
-}
-
-const SUITE_MATCHES: SuiteMatch[] = [
-  { id: "project", name: "Project", description: "AI agents will plan, build, test, and deploy your app end-to-end.", color: "#8200DF", logo: "project" },
-  { id: "flow", name: "Flow", description: "Design, copy, and structure — your site will be live in minutes.", color: "#2F44FF", logo: "flow" },
-  { id: "marketing", name: "Marketing", description: "AI will plan, create, and optimize your campaigns across channels.", color: "#12BCFF", logo: "marketing" },
-  { id: "pentest", name: "Pentest", description: "AI will scan your systems, find vulnerabilities, and suggest fixes.", color: "#91E500", logo: "pentest" }
-]
-
-const SUITE_KEYWORDS: Record<string, string> = {
-  app: "project", application: "project", saas: "project", dashboard: "project", backend: "project",
-  api: "project", database: "project", fullstack: "project", "full-stack": "project", mobile: "project",
-  ios: "project", android: "project", deploy: "project", software: "project", platform: "project",
-  crud: "project", auth: "project", authentication: "project", billing: "project", stripe: "project",
-  landing: "flow", website: "flow", "landing page": "flow", page: "flow", portfolio: "flow",
-  blog: "flow", site: "flow", homepage: "flow", design: "flow", restaurant: "flow", agency: "flow",
-  marketing: "marketing", campaign: "marketing", ads: "marketing", seo: "marketing", social: "marketing",
-  growth: "marketing", acquisition: "marketing", instagram: "marketing", facebook: "marketing",
-  google: "marketing", tiktok: "marketing", email: "marketing", newsletter: "marketing",
-  content: "marketing", leads: "marketing", funnel: "marketing",
-  security: "pentest", pentest: "pentest", vulnerability: "pentest", vulnerabilities: "pentest",
-  scan: "pentest", hack: "pentest", secure: "pentest", audit: "pentest", penetration: "pentest",
-  owasp: "pentest", xss: "pentest", injection: "pentest", firewall: "pentest"
-}
-
-function detectSuite(input: string): SuiteMatch {
-  const lower = input.toLowerCase()
-  const scores: Record<string, number> = { project: 0, flow: 0, marketing: 0, pentest: 0 }
-  for (const [keyword, suiteId] of Object.entries(SUITE_KEYWORDS)) {
-    if (lower.includes(keyword)) scores[suiteId] += keyword.split(" ").length
-  }
-  const best = Object.entries(scores).sort((a, b) => b[1] - a[1])[0]
-  if (best[1] === 0) return SUITE_MATCHES[0]
-  return SUITE_MATCHES.find((s) => s.id === best[0]) || SUITE_MATCHES[0]
-}
-
 export const Hero = () => {
   const router = useRouter()
   const [promptValue, setPromptValue] = useState("")
-  const [matchedSuite, setMatchedSuite] = useState<SuiteMatch | null>(null)
+  const [matchedSuite, setMatchedSuite] = useState<SuiteConfig | null>(null)
   const [isThinking, setIsThinking] = useState(false)
   const promptRef = useRef<HTMLTextAreaElement | null>(null)
-  const promptTimelineRef = useRef<gsap.core.Timeline | null>(null)
-  const heroId = useId().replace(/:/g, "")
-  const heroLine1Id = `${heroId}-hero-line-1`
-  const heroLine2Id = `${heroId}-hero-line-2`
-  const heroLine3Id = `${heroId}-hero-line-3`
-  const heroLine4Id = `${heroId}-hero-line-4`
   const titleRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<HTMLDivElement>(null)
-  const path1Ref = useRef<SVGPathElement>(null)
-  const line1Ref = useRef<SVGLineElement>(null)
-  const path2Ref = useRef<SVGPathElement>(null)
-  const line2Ref = useRef<SVGLineElement>(null)
-  const path3Ref = useRef<SVGPathElement>(null)
-  const line3Ref = useRef<SVGLineElement>(null)
-  const path4Ref = useRef<SVGPathElement>(null)
-  const line4Ref = useRef<SVGLineElement>(null)
 
-  useLayoutEffect(() => {
-    const animatedPaths = [path1Ref.current, path2Ref.current, path3Ref.current, path4Ref.current]
-    const animatedLines = [line1Ref.current, line2Ref.current, line3Ref.current, line4Ref.current]
-    const cards = cardsRef.current ? Array.from(cardsRef.current.children) : []
+  const {
+    timelineRef: promptTimelineRef,
+    handleFocus: handlePromptFocus,
+    handleBlur: handlePromptBlur
+  } = useAnimatedPlaceholder(promptRef, {
+    phrases: PLACEHOLDERS,
+    focusedPlaceholder: "Describe what you want to build..."
+  })
 
-    if (!titleRef.current || animatedPaths.some((item) => !item) || animatedLines.some((item) => !item)) {
-      return
-    }
-
-    gsap.set(titleRef.current, { visibility: "hidden", scale: 1.12 })
-    gsap.set(animatedPaths, { "--dash-offset": 2 })
-    gsap.set(animatedLines, { "--dash-offset": 2 })
-    gsap.set(cards, { scale: 0 })
-
-    const timeline = gsap
+  useGSAP(() => {
+    gsap
       .timeline()
-      .set(titleRef.current, { visibility: "visible" }, 0.2)
-      .to(titleRef.current, { scale: 1, duration: 1.8, ease: "back.inOut" }, "intro")
+      .to(titleRef.current, { visibility: "visible", delayAfter: 0.3 })
+      .fromTo(titleRef.current, { scale: 1.15 }, { scale: 1, duration: 2, ease: "back.inOut" }, "a")
       .fromTo(
-        animatedPaths,
-        { "--dash-offset": 2 },
-        { "--dash-offset": 0, ease: "power1.inOut", duration: 4, delay: 0.4 },
-        "intro"
-      )
-      .fromTo(
-        animatedLines,
-        { "--dash-offset": 2 },
-        { "--dash-offset": 0, ease: "power1.inOut", duration: 0.8, delay: 2.2 },
-        "intro"
-      )
-      .fromTo(
-        cards,
+        "[data-cards] > *",
         { scale: 0 },
         { scale: 1, stagger: 0.25, duration: 1, ease: "back.out", delay: 1.5 },
-        "intro"
+        "a"
       )
-
-    // Prompt placeholder animation
-    if (promptRef.current) {
-      const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 })
-      PLACEHOLDERS.forEach((phrase) => {
-        const chars = phrase.split("")
-        tl.call(() => { if (promptRef.current) promptRef.current.placeholder = "|" })
-        chars.forEach((_, i) => {
-          tl.call(() => { if (promptRef.current) promptRef.current.placeholder = `${phrase.slice(0, i + 1)}|` }, [], "+=0.04")
-        })
-        tl.to({}, { duration: 1 })
-        chars.forEach((_, i) => {
-          tl.call(() => {
-            if (!promptRef.current) return
-            const r = phrase.length - i - 1
-            promptRef.current.placeholder = r ? `${phrase.slice(0, r)}|` : "|"
-          }, [], "+=0.02")
-        })
-      })
-      promptTimelineRef.current = tl
-    }
-
-    return () => {
-      timeline.kill()
-      promptTimelineRef.current?.kill()
-    }
   }, [])
-
-  const handlePromptFocus = () => {
-    promptTimelineRef.current?.pause()
-    if (promptRef.current) promptRef.current.placeholder = "Describe what you want to build..."
-  }
-
-  const handlePromptBlur = () => {
-    if (!promptValue.trim()) promptTimelineRef.current?.play()
-  }
 
   const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPromptValue(e.target.value)
@@ -175,23 +69,29 @@ export const Hero = () => {
     setMatchedSuite(null)
     setTimeout(() => {
       setIsThinking(false)
-      setMatchedSuite(detectSuite(trimmed))
+      setMatchedSuite(detectSuiteFromPrompt(trimmed))
     }, 800)
   }, [promptValue])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSubmit() }
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      handleSubmit()
+    }
   }
 
   const handleSuiteClick = (suiteId: string) => {
     router.push(`/${suiteId}?prompt=${encodeURIComponent(promptValue.trim())}`)
   }
 
-  const handleQuickSelect = (suite: SuiteMatch, prompt: string) => {
-    setPromptValue(prompt)
+  const handleQuickSelect = (suite: SuiteConfig) => {
+    setPromptValue(suite.quickPrompt)
     promptTimelineRef.current?.pause()
     setIsThinking(true)
-    setTimeout(() => { setIsThinking(false); setMatchedSuite(suite) }, 600)
+    setTimeout(() => {
+      setIsThinking(false)
+      setMatchedSuite(suite)
+    }, 600)
   }
 
   return (
@@ -202,110 +102,33 @@ export const Hero = () => {
           <RevealText tag="h1" split={false}>
             <span>
               Build, Launch
-              <Line viewBox="0 0 621 429" className={clsx(s.line, s.line1)}>
-                <defs>
-                  <radialGradient
-                    id={heroLine1Id}
-                    cx="0"
-                    cy="0"
-                    r="1"
-                    gradientUnits="userSpaceOnUse"
-                    gradientTransform="translate(615.873 112.067) rotate(158.849) scale(586.974 679.116)"
-                  >
-                    <stop offset="0" stopColor="var(--text)" />
-                    <stop offset="0.15" stopColor="var(--color-1)" />
-                    <stop offset="0.3" stopColor="var(--color-1)" />
-                    <stop offset="0.5" stopColor="var(--color-2)" />
-                    <stop offset="0.75" stopColor="var(--color-3)" />
-                    <stop offset="1" stopColor="var(--color-4)" />
-                  </radialGradient>
-                </defs>
-                <path
-                  ref={path1Ref}
-                  pathLength={1}
-                  d="M614.025 111.307V61.694c0-30.481-24.706-55.193-55.187-55.2l-56.152-.014c-30.491-.007-55.213 24.709-55.213 55.2v73.986c0 13.034 10.566 23.6 23.6 23.6s23.6-10.764 23.6-23.798c0-13.255-10.746-24.202-24-24.202h-24.8c-26.952 0-48.8 21.849-48.8 48.8v207c-.001 30.486-24.714 55.2-55.2 55.2H191.472c-30.486 0-55.2-24.714-55.2-55.2v-7c0-30.486-24.713-55.2-55.2-55.2h-90.63"
-                  stroke={`url(#${heroLine1Id})`}
-                />
-                <line ref={line1Ref} pathLength={1} x1="-95" x2="-300" y1="51.4" y2="51.4" stroke="var(--color-4)" />
-              </Line>
-              <Line viewBox="0 0 557 173" className={clsx(s.line, s.line2)}>
-                <defs>
-                  <radialGradient
-                    id={heroLine2Id}
-                    cx="0"
-                    cy="0"
-                    r="1"
-                    gradientUnits="userSpaceOnUse"
-                    gradientTransform="matrix(567.49 -108 -212.587 437.783 6.4803 108.88)"
-                  >
-                    <stop offset="0" stopColor="var(--text)" />
-                    <stop offset="0.25" stopColor="var(--color-4)" />
-                    <stop offset="0.5" stopColor="var(--color-3)" />
-                    <stop offset="0.75" stopColor="var(--color-2)" />
-                    <stop offset="1" stopColor="var(--color-1)" />
-                  </radialGradient>
-                </defs>
-                <path
-                  ref={path2Ref}
-                  pathLength={1}
-                  d="M6.48047 111.28L6.48047 61.6801C6.48047 31.1939 31.1943 6.48001 61.6805 6.48001H128.68C152.76 6.48001 172.28 26.0004 172.28 50.08C172.28 74.1596 191.801 93.6799 215.88 93.6799H369.98C384.837 93.6799 396.88 81.4121 396.88 66.5556C396.88 51.9448 385.036 39.8798 370.425 39.8798C355.815 39.8798 343.97 51.7242 343.97 66.335V110.68C343.97 141.166 368.684 165.88 399.17 165.88H616.97"
-                  stroke={`url(#${heroLine2Id})`}
-                />
-                <line ref={line2Ref} pathLength={1} x1="616" x2="800" y1="166" y2="166" stroke="var(--color-1)" />
-              </Line>
+              <AnimatedLine
+                className={clsx(s.line, s.line1)}
+                viewBox="0 0 621 429"
+                stroke="url(#hero_line_1)"
+                d="M607.958 111.307V61.6937C607.958 31.2129 583.253 6.50125 552.772 6.49378L496.62 6.48C466.128 6.47252 441.406 31.1886 441.406 61.68V135.666C441.406 148.7 451.972 159.266 465.006 159.266C478.04 159.266 488.606 148.502 488.606 135.468C488.606 122.213 477.861 111.266 464.606 111.266H439.806C412.855 111.266 391.006 133.115 391.006 160.066L391.006 367.066C391.006 397.552 366.292 422.266 335.806 422.266H185.406C154.92 422.266 130.206 397.552 130.206 367.066V360.066C130.206 329.58 105.492 304.866 75.0061 304.866H-508"
+              />
+              <AnimatedLine
+                className={clsx(s.line, s.line2)}
+                viewBox="0 0 557 173"
+                stroke="url(#hero_line_2)"
+                d="M6.48047 111.28L6.48047 61.6801C6.48047 31.1939 31.1943 6.48001 61.6805 6.48001H128.68C152.76 6.48001 172.28 26.0004 172.28 50.08C172.28 74.1596 191.801 93.6799 215.88 93.6799H369.98C384.837 93.6799 396.88 81.4121 396.88 66.5556C396.88 51.9448 385.036 39.8798 370.425 39.8798C355.815 39.8798 343.97 51.7242 343.97 66.335V110.68C343.97 141.166 368.684 165.88 399.17 165.88H966.594"
+              />
             </span>
             <span>
               Grow, Secure
-              <Line viewBox="0 0 557 253" className={clsx(s.line, s.line3)}>
-                <defs>
-                  <radialGradient
-                    id={heroLine3Id}
-                    cx="0"
-                    cy="0"
-                    r="1"
-                    gradientUnits="userSpaceOnUse"
-                    gradientTransform="matrix(-473.27 -152 323.364 -304.629 549.713 180.72)"
-                  >
-                    <stop offset="0" stopColor="var(--text)" />
-                    <stop offset="0.25" stopColor="var(--color-2)" />
-                    <stop offset="0.5" stopColor="var(--color-1)" />
-                    <stop offset="0.75" stopColor="var(--color-3)" />
-                    <stop offset="1" stopColor="var(--color-4)" />
-                  </radialGradient>
-                </defs>
-                <path
-                  ref={path3Ref}
-                  pathLength={1}
-                  d="M549.713 177.32V190.92C549.713 221.406 524.999 246.12 494.513 246.12L336.913 246.12C306.426 246.12 281.713 221.406 281.713 190.92V126.92C281.713 96.4339 256.999 71.72 226.513 71.72L138.612 71.72C123.977 71.72 112.113 83.5845 112.113 98.22V99.055C112.113 113.229 123.603 124.72 137.777 124.72C151.952 124.72 163.442 113.229 163.442 99.0551V61.92C163.442 31.4339 138.728 6.71997 108.242 6.71997H-8.55762"
-                  stroke={`url(#${heroLine3Id})`}
-                />
-                <line ref={line3Ref} pathLength={1} x1="69" x2="-200" y1="226.5" y2="226.5" stroke="var(--color-4)" />
-              </Line>
-              <Line viewBox="0 0 604 211" className={clsx(s.line, s.line4)}>
-                <defs>
-                  <radialGradient
-                    id={heroLine4Id}
-                    cx="0"
-                    cy="0"
-                    r="1"
-                    gradientUnits="userSpaceOnUse"
-                    gradientTransform="matrix(600.49 138 -402.225 314.22 6.48025 72.6799)"
-                  >
-                    <stop offset="0" stopColor="var(--text)" />
-                    <stop offset="0.25" stopColor="var(--color-3)" />
-                    <stop offset="0.5" stopColor="var(--color-2)" />
-                    <stop offset="0.75" stopColor="var(--color-1)" />
-                    <stop offset="1" stopColor="var(--color-4)" />
-                  </radialGradient>
-                </defs>
-                <path
-                  ref={path4Ref}
-                  pathLength={1}
-                  d="M6.48047 77.28V93.28C6.48047 123.766 31.1944 148.48 61.6805 148.48H246.481C276.967 148.48 301.68 123.766 301.68 93.28V34.18C301.68 18.8817 289.279 6.47998 273.98 6.47998C258.682 6.47998 246.28 18.8817 246.28 34.18V35.08C246.28 50.8753 259.085 63.68 274.88 63.68H377.77C408.256 63.68 432.97 88.3939 432.97 118.88V148.48C432.97 178.966 457.684 203.68 488.17 203.68H720.97"
-                  stroke={`url(#${heroLine4Id})`}
-                />
-                <line ref={line4Ref} pathLength={1} x1="721" x2="900" y1="203.6" y2="203.6" stroke="var(--color-4)" />
-              </Line>
+              <AnimatedLine
+                className={clsx(s.line, s.line3)}
+                viewBox="0 0 557 253"
+                stroke="url(#hero_line_3)"
+                d="M543.646 177.32V190.92C543.646 221.406 518.932 246.12 488.446 246.12L330.846 246.12C300.36 246.12 275.646 221.406 275.646 190.92V126.92C275.646 96.4339 250.932 71.72 220.446 71.72L132.546 71.72C117.911 71.72 106.046 83.5845 106.046 98.22V99.055C106.046 113.229 117.537 124.72 131.711 124.72C145.885 124.72 157.376 113.229 157.376 99.0551V61.92C157.376 31.4339 132.662 6.71997 102.176 6.71997H-510"
+              />
+              <AnimatedLine
+                className={clsx(s.line, s.line4)}
+                viewBox="0 0 604 211"
+                stroke="url(#hero_line_4)"
+                d="M6.48047 77.28V93.28C6.48047 123.766 31.1944 148.48 61.6805 148.48H246.481C276.967 148.48 301.68 123.766 301.68 93.28V34.18C301.68 18.8817 289.279 6.47998 273.98 6.47998C258.682 6.47998 246.28 18.8817 246.28 34.18V35.08C246.28 50.8753 259.085 63.68 274.88 63.68H377.77C408.256 63.68 432.97 88.3939 432.97 118.88V148.48C432.97 178.966 457.684 203.68 488.17 203.68H1091.59"
+              />
             </span>
           </RevealText>
           <div ref={cardsRef} data-cards className={s.cards}>
@@ -360,7 +183,9 @@ export const Hero = () => {
                 />
               </div>
               <div className={s.promptBottom}>
-                <button className={s.promptMic} type="button"><Icon icon="hugeicons:mic-02" /></button>
+                <button className={s.promptMic} type="button">
+                  <Icon icon="hugeicons:mic-02" />
+                </button>
                 <button className={s.promptSend} type="button" onClick={handleSubmit} disabled={!promptValue.trim()}>
                   <Logo id="kalit" />
                   <span>Find my suite</span>
@@ -369,7 +194,11 @@ export const Hero = () => {
 
               {isThinking && (
                 <div className={s.promptThinking}>
-                  <div className={s.promptDots}><span /><span /><span /></div>
+                  <div className={s.promptDots}>
+                    <span />
+                    <span />
+                    <span />
+                  </div>
                   <span>Analyzing your request...</span>
                 </div>
               )}
@@ -380,11 +209,17 @@ export const Hero = () => {
                     <Icon icon="hugeicons:sparkles" />
                     <span>Recommended suite</span>
                   </div>
-                  <button className={s.promptResultCard} type="button" onClick={() => handleSuiteClick(matchedSuite.id)}>
-                    <div className={s.promptResultIcon}><Logo id={matchedSuite.logo} /></div>
+                  <button
+                    className={s.promptResultCard}
+                    type="button"
+                    onClick={() => handleSuiteClick(matchedSuite.id)}
+                  >
+                    <div className={s.promptResultIcon}>
+                      <Logo id={matchedSuite.id} />
+                    </div>
                     <div className={s.promptResultInfo}>
-                      <strong>Kalit {matchedSuite.name}</strong>
-                      <span>{matchedSuite.description}</span>
+                      <strong>Kalit {getSuiteDisplayTitle(matchedSuite)}</strong>
+                      <span>{matchedSuite.matchDescription}</span>
                     </div>
                     <Icon icon="hugeicons:arrow-right-02" className={s.promptResultArrow} />
                   </button>
@@ -394,26 +229,23 @@ export const Hero = () => {
           </div>
 
           <div className={s.promptQuick}>
-            {SUITE_MATCHES.map((suite) => (
+            {getHeroPromptSuites().map((suite) => (
               <button
                 key={suite.id}
                 type="button"
                 style={{ "--suite-color": suite.color } as React.CSSProperties}
-                onClick={() => handleQuickSelect(suite,
-                  suite.id === "project" ? "Build me a SaaS application with authentication and billing"
-                    : suite.id === "flow" ? "Create a landing page for my product with pricing"
-                    : suite.id === "marketing" ? "Launch a growth campaign across social media channels"
-                    : "Scan my web application for security vulnerabilities"
-                )}
+                onClick={() => handleQuickSelect(suite)}
               >
-                <span className={s.promptQuickIcon}><Logo id={suite.logo} /></span>
-                <span>{suite.name}</span>
+                <span className={s.promptQuickIcon}>
+                  <Logo id={suite.id} />
+                </span>
+                <span>{getSuiteDisplayTitle(suite)}</span>
               </button>
             ))}
           </div>
 
-          <div className={s.promptBg}>
-            <Color4Bg style="blur-gradient" colors={BG_COLORS} seed={1000} loop={true} noise={0} />
+          <div className={s.promptBg} aria-hidden>
+            <Color4Bg style="blur-gradient" />
           </div>
         </div>
 

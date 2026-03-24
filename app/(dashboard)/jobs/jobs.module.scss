@@ -1,0 +1,48 @@
+@use "@/styles/app-glass" as *;
+@use "@/styles/mixins" as *;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-2);
+}
+
+.jobCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--size-4);
+  @include glass-panel(1.4rem);
+  padding: clamp(1rem, 2vw, 1.45rem);
+
+  @include max($responsive) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.jobMain {
+  display: flex;
+  align-items: center;
+  gap: var(--size-4);
+}
+
+.jobMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--size-3);
+}
+
+.jobTitle {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 0;
+}
+
+.jobDate,
+.jobCredits {
+  margin: 0;
+  font-size: 0.8em;
+  color: var(--text-secondary);
+}

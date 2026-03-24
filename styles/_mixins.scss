@@ -1,5 +1,6 @@
 $responsive: 600px;
 $responsiveNav: 800px;
+$responsiveSettings: 950px;
 
 // Responsive
 @mixin max($width) {
@@ -150,13 +151,15 @@ $responsiveNav: 800px;
   }
 }
 
-@mixin glass($shadow: true, $bg: var(--glass-50)) {
+@mixin glass($shadow: true, $bg: var(--glass-50), $blur: false) {
   background-color: $bg;
-  backdrop-filter: blur(16px) saturate(100%);
   @if $shadow {
     box-shadow: 0 -4px 8px 4px oklch(1 0 0 / 0.75) inset;
   }
-  @include performance("backdrop-filter");
+  @if $blur {
+    backdrop-filter: blur(16px) saturate(100%);
+    @include performance("backdrop-filter");
+  }
 }
 
 @mixin border-glass($gradient: var(--gradient-border-glass)) {

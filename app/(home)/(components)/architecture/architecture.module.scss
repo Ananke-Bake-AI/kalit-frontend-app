@@ -122,7 +122,7 @@ $responsiveArchitecture: 900px;
     }
 
     &.layer2 {
-      @include glass;
+      @include glass($blur: true);
       @include border-glass;
       flex-direction: row;
       gap: var(--size-5);

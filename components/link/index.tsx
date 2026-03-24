@@ -3,12 +3,14 @@
 import clsx from "clsx"
 import NextLink, { LinkProps as NextLinkProps } from "next/link"
 import { usePathname } from "next/navigation"
+import type { CSSProperties } from "react"
 import { forwardRef, MouseEvent } from "react"
 
 interface LinkProps extends Omit<NextLinkProps, "href"> {
   href: string
   title?: string
   className?: string
+  style?: CSSProperties
   children: React.ReactNode
   onClick?: (event: MouseEvent<HTMLAnchorElement | HTMLDivElement>) => void
   isActive?: boolean
@@ -21,6 +23,7 @@ export const Link = forwardRef<HTMLAnchorElement | HTMLDivElement, LinkProps>(
       href,
       title,
       className,
+      style,
       onClick,
       children,
       isActive,
@@ -63,6 +66,7 @@ export const Link = forwardRef<HTMLAnchorElement | HTMLDivElement, LinkProps>(
           onClick={handleClick}
           title={title}
           className={className}
+          style={style}
           data-pointer
         >
           {children}
@@ -77,6 +81,7 @@ export const Link = forwardRef<HTMLAnchorElement | HTMLDivElement, LinkProps>(
         href={href}
         title={title}
         className={clsx(className, isCurrentActive && activeClassName)}
+        style={style}
         {...props}
         {...attr}
       >

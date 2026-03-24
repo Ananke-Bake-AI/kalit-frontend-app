@@ -1,0 +1,178 @@
+@use "@/styles/app-glass" as *;
+@use "@/styles/mixins" as *;
+
+.statsGrid {
+  display: grid;
+  gap: clamp(0.9rem, 2vw, 1.25rem);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: var(--spacing-1-5);
+
+  @include max($responsive) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.statCard {
+  @include glass-panel(1.25rem);
+  position: relative;
+  padding: var(--size-6);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 0.22rem;
+    background: var(--gradient-linear-3);
+    border-radius: 1.25rem 1.25rem 0 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+
+.statLabel {
+  display: block;
+  margin-bottom: 0.55rem;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.statValue {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 2vw, 1.7rem);
+  line-height: 1;
+  color: var(--text);
+}
+
+.statHint {
+  display: block;
+  margin-top: 0.6rem;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+}
+
+.quickGrid {
+  display: grid;
+  gap: clamp(0.9rem, 2vw, 1.25rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @include max($responsive) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.quickCard {
+  display: block;
+  padding: var(--size-6);
+  text-decoration: none;
+  background-color: oklch(from var(--bg-1) l c h / 0.5);
+  @include cornerShape(var(--radius-3));
+  transition:
+    transform var(--transition-scale),
+    background-color var(--transition-link),
+    border-color var(--transition-link);
+
+  &:hover {
+    background-color: var(--bg-1);
+  }
+}
+
+.quickLabel {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: var(--font-heading);
+  color: var(--text);
+  font-size: 1.15rem;
+}
+
+.quickValue {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.2;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  color: var(--text);
+  margin-bottom: 0.85rem;
+}
+
+.suitesGrid {
+  display: grid;
+  gap: clamp(0.9rem, 2vw, 1.25rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @include max($responsive) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.suiteCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4);
+  padding: clamp(1rem, 2vw, 1.4rem);
+  text-decoration: none;
+  @include glass-panel(1.4rem);
+  transition:
+    transform 0.25s var(--cubic),
+    box-shadow 0.25s var(--cubic),
+    border-color 0.25s var(--cubic);
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 28px 50px oklch(0 0 0 / 0.1),
+      0 -4px 8px 4px oklch(1 0 0 / 0.55) inset,
+      inset 0 1px 0 oklch(1 0 0 / 0.88);
+  }
+}
+
+.suiteIcon {
+  width: 2.75rem;
+  height: 2.75rem;
+  color: var(--suite-color, var(--text));
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.suiteAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: auto;
+  color: var(--suite-color, var(--text));
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.locked {
+  opacity: 0.72;
+
+  &:hover {
+    transform: none;
+    box-shadow: 0 24px 44px oklch(0 0 0 / 0.05);
+  }
+}
+
+.suiteHeading {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.suiteBlurb {
+  max-width: 34rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}

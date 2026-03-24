@@ -1,0 +1,35 @@
+.list {
+  & > details {
+    border-bottom: 1px solid oklch(0 0 0 / 0.06);
+    padding: 1.25rem 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
+.summary {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  color: var(--text);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+.answer {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin-top: 0.75rem;
+  margin-bottom: 0;
+  padding-right: 2rem;
+}

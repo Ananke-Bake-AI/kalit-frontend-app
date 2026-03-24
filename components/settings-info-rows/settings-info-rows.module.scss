@@ -1,0 +1,38 @@
+@use "@/styles/mixins" as *;
+
+.row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--size-4);
+  padding: 0.95rem 0;
+  border-bottom: 1px solid oklch(0 0 0 / 0.05);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  label {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  span {
+    max-width: 24rem;
+    color: var(--text);
+    font-size: 0.94rem;
+    line-height: 1.55;
+    text-align: right;
+  }
+
+  @include max($responsive) {
+    flex-direction: column;
+
+    span {
+      text-align: left;
+    }
+  }
+}

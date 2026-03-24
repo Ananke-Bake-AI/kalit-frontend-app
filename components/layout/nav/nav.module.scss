@@ -140,11 +140,9 @@
     left: 0;
     top: 125%;
     @include cornerShape(var(--size-8));
-    @include glass($bg: var(--glass-75));
+    @include glass($bg: var(--glass-75), $blur: true);
     @include border-glass;
-    box-shadow:
-      0 -4px 8px 4px oklch(1 0 0 / 0.75) inset,
-      0 24px 100px -8px oklch(0 0 0 / 0.15);
+    box-shadow: var(--shadow-1);
   }
 
   @include max($responsiveNav) {

@@ -1,0 +1,23 @@
+@use "@/styles/mixins" as *;
+
+.root {
+  --avatar-size: 1em;
+  box-sizing: border-box;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  line-height: 0;
+  border-radius: var(--radius-rounded);
+  background: oklch(from var(--text) l c h / 0.05);
+
+  img {
+    width: 70%;
+    height: 70%;
+    object-fit: cover;
+    display: block;
+  }
+}

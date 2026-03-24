@@ -1,0 +1,60 @@
+@use "@/styles/app-glass" as *;
+@use "@/styles/mixins" as *;
+
+.surface {
+  @include glass-panel(1.4rem);
+  padding: clamp(1rem, 2vw, 1.45rem);
+}
+
+.narrow {
+  width: 100%;
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
+.prose {
+  h2 {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    color: var(--text);
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+
+  ul {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    padding-left: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  strong {
+    color: var(--text);
+  }
+
+  a {
+    color: var(--color-4);
+    font-weight: 600;
+    text-decoration: none;
+
+    @include is-hover {
+      text-decoration: underline;
+    }
+  }
+}

@@ -1,0 +1,41 @@
+@use "@/styles/app-glass" as *;
+@use "@/styles/mixins" as *;
+
+.root {
+  @include glass-panel(1.4rem);
+  padding: clamp(var(--size-7), 2vw, var(--size-8));
+}
+
+.spaced {
+  margin-bottom: var(--spacing-1-5);
+}
+
+.danger {
+  border-color: oklch(0.65 0.22 25 / 0.35) !important;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--size-4);
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+.titleDanger {
+  color: oklch(0.65 0.22 25);
+}
+
+.subtitle {
+  max-width: 34rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-top: 0.2em;
+}

@@ -2,6 +2,9 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["bcryptjs"],
+  images: {
+    qualities: [25, 50, 75, 80, 100]
+  },
   async headers() {
     return [
       {
@@ -11,21 +14,21 @@ const nextConfig: NextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           {
             key: "Referrer-Policy",
-            value: "strict-origin-when-cross-origin",
+            value: "strict-origin-when-cross-origin"
           },
           { key: "X-XSS-Protection", value: "0" },
           {
             key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=()",
+            value: "camera=(), microphone=(), geolocation=()"
           },
           {
             key: "Strict-Transport-Security",
-            value: "max-age=63072000; includeSubDomains; preload",
-          },
-        ],
-      },
+            value: "max-age=63072000; includeSubDomains; preload"
+          }
+        ]
+      }
     ]
-  },
+  }
 }
 
 export default nextConfig

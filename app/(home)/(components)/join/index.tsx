@@ -1,7 +1,6 @@
 "use client"
 
 import { Button } from "@/components/button"
-import { Color4Bg } from "@/components/color4bg"
 import { Container } from "@/components/container"
 import { Heading } from "@/components/heading"
 import { Logo } from "@/components/logo"
@@ -10,11 +9,9 @@ import { useGSAP } from "@gsap/react"
 import { Icon } from "@iconify/react"
 import clsx from "clsx"
 import gsap from "gsap"
-import Link from "next/link"
+import { Link } from "@/components/link"
 import { useRef } from "react"
 import s from "./join.module.scss"
-
-const COLORS = ["#91E500", "#8200DF", "#12BCFF", "#91E500", "#2F44FF", "#8200DF", "#91E500"]
 
 export const Join = () => {
   const listRef = useRef<HTMLDivElement>(null)
@@ -98,9 +95,7 @@ export const Join = () => {
               </div>
             ))}
           </div>
-          <div className={s.bg}>
-            <Color4Bg className={s.gradient} style="blur-gradient" colors={COLORS} seed={1000} loop={true} noise={0} />
-          </div>
+          <div className={s.bg} aria-hidden />
         </div>
       </Container>
     </section>

@@ -1,14 +1,15 @@
 "use client"
 
+import { Avatar } from "@/components/avatar"
 import { Button } from "@/components/button"
 import { Icon } from "@/components/icon"
 import { Link } from "@/components/link"
 import { Logotype } from "@/components/logotype"
 import { useAppStore } from "@/stores/app"
-import type { Session } from "next-auth"
-import { useSession, signOut } from "next-auth/react"
 import clsx from "clsx"
-import { useState, useRef, useEffect } from "react"
+import type { Session } from "next-auth"
+import { signOut, useSession } from "next-auth/react"
+import { useEffect, useRef, useState } from "react"
 import { Nav } from "../nav"
 import s from "./header.module.scss"
 
@@ -50,11 +51,10 @@ export const Header = ({ initialSession = null }: HeaderProps) => {
               aria-expanded={menuOpen}
               aria-haspopup="menu"
             >
-              <span className={s.avatar}>
-                {resolvedSession.user.name?.charAt(0)?.toUpperCase() ||
-                  resolvedSession.user.email?.charAt(0)?.toUpperCase() ||
-                  "U"}
-              </span>
+              <Avatar
+                className={s.avatar}
+                name={resolvedSession.user.name || resolvedSession.user.email || "Account"}
+              />
               <span className={s.userMeta}>
                 <span className={s.userName}>{resolvedSession.user.name || "Account"}</span>
               </span>
@@ -67,11 +67,10 @@ export const Header = ({ initialSession = null }: HeaderProps) => {
             {menuOpen && (
               <div className={s.dropdown} role="menu">
                 <div className={s.dropdownHeader}>
-                  <span className={s.dropdownAvatar}>
-                    {resolvedSession.user.name?.charAt(0)?.toUpperCase() ||
-                      resolvedSession.user.email?.charAt(0)?.toUpperCase() ||
-                      "U"}
-                  </span>
+                  <Avatar
+                    className={s.dropdownAvatar}
+                    name={resolvedSession.user.name || resolvedSession.user.email || "Account"}
+                  />
                   <div className={s.dropdownIdentity}>
                     <span className={s.dropdownName}>{resolvedSession.user.name || "Account"}</span>
                     <span>{resolvedSession.user.email}</span>
@@ -79,23 +78,28 @@ export const Header = ({ initialSession = null }: HeaderProps) => {
                 </div>
                 <div className={s.dropdownGroup}>
                   <Link href="/dashboard" className={s.dropdownItem} onClick={() => setMenuOpen(false)}>
-                    <span className={s.dropdownIcon}><Icon icon="hugeicons:dashboard-square-01" /></span>
+                    <span className={s.dropdownIcon}>
+                      <Icon icon="hugeicons:dashboard-square-01" />
+                    </span>
                     <span className={s.dropdownLabel}>Dashboard</span>
                   </Link>
                   <Link href="/settings/profile" className={s.dropdownItem} onClick={() => setMenuOpen(false)}>
-                    <span className={s.dropdownIcon}><Icon icon="hugeicons:user-circle" /></span>
+                    <span className={s.dropdownIcon}>
+                      <Icon icon="hugeicons:user-circle" />
+                    </span>
                     <span className={s.dropdownLabel}>Profile</span>
                   </Link>
                   <Link href="/settings/billing" className={s.dropdownItem} onClick={() => setMenuOpen(false)}>
-                    <span className={s.dropdownIcon}><Icon icon="hugeicons:credit-card" /></span>
+                    <span className={s.dropdownIcon}>
+                      <Icon icon="hugeicons:credit-card" />
+                    </span>
                     <span className={s.dropdownLabel}>Billing</span>
                   </Link>
                 </div>
-                <button
-                  className={s.dropdownItem}
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                >
-                  <span className={s.dropdownIcon}><Icon icon="hugeicons:logout-01" /></span>
+                <button className={s.dropdownItem} onClick={() => signOut({ callbackUrl: "/" })}>
+                  <span className={s.dropdownIcon}>
+                    <Icon icon="hugeicons:logout-01" />
+                  </span>
                   <span className={s.dropdownLabel}>Sign out</span>
                 </button>
               </div>

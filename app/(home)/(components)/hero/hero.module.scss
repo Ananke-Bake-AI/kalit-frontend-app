@@ -1,10 +1,7 @@
 @use "@/styles/mixins" as *;
 
-$responsive: $responsive;
-
 .hero {
   padding: calc(16px + 12 * (100vw - 320px) / 1080) 0 0;
-  overflow: hidden;
 
   @include min($responsive) {
     text-align: center;
@@ -13,29 +10,19 @@ $responsive: $responsive;
       font-size: 1.25em;
     }
   }
-
-  .paragraph {
-    width: calc(400px + 80 * (100vw - 320px) / 1080);
-    margin: 0 auto var(--size-10);
-    padding-top: var(--size-6);
-
-    @include max($responsive) {
-      width: 80%;
-      padding-top: var(--size-2);
-      margin: 0 0 var(--size-10);
-    }
-  }
 }
 
 .title {
   @include fs(48px, 36, 128px);
   margin: var(--size-10) 0 var(--size-7);
   visibility: hidden;
+  position: relative;
+  z-index: 100;
 
   @include max($responsive) {
     margin-top: var(--size-4);
     transform: none !important;
-    @include fs(60px, 36, 128px);
+    @include fs(54px, 36, 128px);
   }
 
   h1 {
@@ -75,54 +62,36 @@ $responsive: $responsive;
 }
 
 .line {
-  pointer-events: none;
-  position: absolute;
-  stroke-width: 0.14em;
-  max-width: none;
-  overflow: visible;
   width: 100%;
 
   @include max($responsive) {
     display: none;
   }
 
-  path,
-  line {
-    vector-effect: non-scaling-stroke;
-    stroke-dasharray: 2;
-    stroke-dashoffset: var(--dash-offset, 2);
-  }
-
   &1 {
-    top: 0;
-    right: 88.3%;
+    inset: 0 95.93% auto auto;
     transform: translateY(-17%);
 
     @include max($responsive) {
       display: block;
       transform: scaleX(-1);
-      left: 3.86em;
-      top: 0.4em;
-      right: 0;
+      inset: -1em 0 auto 5.28em;
     }
   }
 
   &2 {
-    top: 0;
-    left: 97.2%;
-    transform: translateY(-45%);
+    inset: 0 auto auto 91.05%;
+    transform: translateY(-49%);
   }
 
   &3 {
-    top: 0;
-    right: 96.9%;
-    transform: translateY(-45%);
+    inset: 0 96% auto auto;
+    transform: translateY(-48%);
   }
 
   &4 {
-    top: 0;
-    left: 88.175%;
-    transform: translateY(1%);
+    inset: 0 auto auto 90.9%;
+    transform: translateY(-4%);
   }
 }
 
@@ -135,38 +104,34 @@ $responsive: $responsive;
   @include max(1084px) {
     display: none;
   }
+}
 
-  .c1 {
+.c {
+  &1 {
     --animation-duration: 2.5s;
-    top: 6vh;
-    left: -3vw;
+    inset: 6vh auto auto -3vw;
 
     @include max(1500px) {
-      top: 13vh;
-      left: 2vw;
+      inset: 13vh auto auto 2vw;
     }
   }
 
-  .c2 {
+  &2 {
     --animation-duration: 3s;
-    bottom: -8vh;
-    left: 4vw;
+    inset: auto auto -4vh -2vw;
   }
 
-  .c3 {
+  &3 {
     --animation-duration: 2.75s;
-    top: 8vh;
-    right: 8vw;
+    inset: 8vh 8vw auto auto;
   }
 
-  .c4 {
+  &4 {
     --animation-duration: 3.25s;
-    right: -5vw;
-    bottom: -4vh;
+    inset: auto -5vw -4vh auto;
 
     @include max(1500px) {
-      right: 10vw;
-      bottom: 2vh;
+      inset: auto 10vw 4vh auto;
     }
   }
 }
@@ -180,7 +145,7 @@ $responsive: $responsive;
   .inside {
     font-size: 1rem;
     @include cornerShape(var(--radius-2));
-    @include glass;
+    @include glass($blur: true);
     @include border-glass;
     text-align: left;
     display: flex;
@@ -225,7 +190,7 @@ $responsive: $responsive;
     width: 2em;
     height: 2em;
     background-color: var(--color);
-    border-radius: var(--radius-rounded);
+    @include cornerShape(var(--radius-4));
     display: grid;
     place-items: center;
     color: var(--white);
@@ -236,244 +201,365 @@ $responsive: $responsive;
   }
 }
 
-// Prompt section
-.promptWrapper {
-  width: 100%;
-  max-width: 680px;
-  margin: var(--size-20) auto 0;
-  position: relative;
-  z-index: 2;
-}
+.prompt {
+  &Wrapper {
+    width: 100%;
+    max-width: 680px;
+    margin: var(--size-20) auto 0;
+    position: relative;
+    z-index: 2;
 
-.promptForm { position: relative; z-index: 5; }
+    @include max($responsive) {
+      margin-top: var(--size-12);
+    }
+  }
 
-.promptTextarea {
-  background-color: var(--glass-50);
-  @include cornerShape(var(--radius-1));
-  @include border-glass(var(--gradient-border-glass-3));
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
+  &Form {
+    position: relative;
+    z-index: 5;
+  }
 
-.promptInputRow {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--size-4);
-  padding: var(--size-7) var(--size-7) var(--size-4);
+  &Textarea {
+    background: linear-gradient(to bottom, var(--glass-50), var(--glass-75));
+    @include cornerShape(var(--radius-1));
+    @include border-glass(var(--gradient-border-glass-3));
+    @include backdrop;
+    position: relative;
+    display: flex;
+    flex-direction: column;
 
-  @include max($responsive) {
-    padding: var(--size-5) var(--size-5) var(--size-3);
+    textarea {
+      display: block;
+      width: 100%;
+      flex: 1;
+      background-color: transparent;
+      font-family: var(--font-main);
+      font-weight: 300;
+      font-size: calc(14px + 2 * (100vw - 320px) / 1080);
+      resize: none;
+      min-height: 80px;
+      @include no-scrollbar;
+
+      &::placeholder {
+        color: var(--text);
+      }
+
+      &:focus::placeholder {
+        color: var(--text-secondary);
+      }
+    }
+  }
+
+  &InputRow {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--size-4);
+    padding: var(--size-7) var(--size-7) var(--size-4);
+
+    @include max($responsive) {
+      padding: var(--size-5) var(--size-5) var(--size-3);
+      gap: var(--size-3);
+    }
+  }
+
+  &Icon {
+    font-size: 1.35em;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    position: relative;
+    top: -0.1em;
+  }
+
+  &Bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--size-5);
+  }
+
+  &Mic {
+    --btn-s: calc(36px + 4 * (100vw - 320px) / 1080);
+    width: var(--btn-s);
+    height: var(--btn-s);
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-rounded);
+    background-color: oklch(from var(--text) l c h / 0.05);
+    color: var(--text-secondary);
+    font-size: 1.15em;
+    transition:
+      background-color var(--transition-link),
+      transform var(--transition-scale);
+
+    &:active {
+      transform: scale(0.9);
+    }
+
+    @include is-hover {
+      background-color: oklch(from var(--text) l c h / 0.1);
+    }
+  }
+
+  &Send {
+    display: flex;
+    align-items: center;
     gap: var(--size-3);
+    height: calc(36px + 4 * (100vw - 320px) / 1080);
+    padding: 0 var(--size-6) 0 var(--size-4);
+    border-radius: var(--radius-rounded);
+    background: var(--gradient-radial-1);
+    color: var(--white);
+    font-family: var(--font-heading);
+    font-size: 0.875em;
+    transition:
+      opacity var(--transition-link),
+      transform var(--transition-scale);
+
+    svg {
+      width: 1.25em;
+      stroke: var(--white);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):active {
+      transform: scale(0.95);
+    }
+
+    @include is-hover {
+      &:not(:disabled) {
+        opacity: 0.9;
+      }
+    }
   }
-}
 
-.promptIcon {
-  font-size: 1.35em;
-  color: var(--text-secondary);
-  margin-top: 0.15em;
-  flex-shrink: 0;
-}
-
-.promptTextarea textarea {
-  display: block;
-  width: 100%;
-  flex: 1;
-  background-color: transparent;
-  font-family: var(--font-main);
-  font-weight: 300;
-  font-size: calc(14px + 2 * (100vw - 320px) / 1080);
-  resize: none;
-  min-height: 80px;
-  @include no-scrollbar;
-
-  &::placeholder { color: var(--text); }
-  &:focus::placeholder { color: var(--text-secondary); }
-}
-
-.promptBottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--size-3) var(--size-5);
-  border-top: 1px solid oklch(from var(--text) l c h / 0.06);
-}
-
-.promptMic {
-  --btn-s: calc(36px + 4 * (100vw - 320px) / 1080);
-  width: var(--btn-s);
-  height: var(--btn-s);
-  display: grid;
-  place-items: center;
-  border-radius: var(--radius-rounded);
-  background-color: oklch(from var(--text) l c h / 0.05);
-  color: var(--text-secondary);
-  font-size: 1.15em;
-  transition: background-color var(--transition-link), transform var(--transition-scale);
-  &:active { transform: scale(0.9); }
-  @include is-hover { background-color: oklch(from var(--text) l c h / 0.1); }
-}
-
-.promptSend {
-  display: flex;
-  align-items: center;
-  gap: var(--size-3);
-  height: calc(36px + 4 * (100vw - 320px) / 1080);
-  padding: 0 var(--size-6) 0 var(--size-4);
-  border-radius: var(--radius-rounded);
-  background: var(--gradient-radial-1);
-  color: var(--white);
-  font-size: 0.875em;
-  transition: opacity var(--transition-link), transform var(--transition-scale);
-  svg { width: 1.25em; stroke: var(--white); }
-  &:disabled { opacity: 0.4; cursor: not-allowed; }
-  &:not(:disabled):active { transform: scale(0.95); }
-  @include is-hover { &:not(:disabled) { opacity: 0.9; } }
-}
-
-.promptThinking {
-  display: flex;
-  align-items: center;
-  gap: var(--size-4);
-  padding: var(--size-6) var(--size-7);
-  color: var(--text-secondary);
-  font-size: 0.9em;
-  font-weight: 300;
-}
-
-.promptDots {
-  display: flex;
-  gap: 4px;
-  span {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background-color: var(--text-secondary);
-    animation: heroPromptDotPulse 1.2s infinite ease-in-out;
-    &:nth-child(2) { animation-delay: 0.15s; }
-    &:nth-child(3) { animation-delay: 0.3s; }
+  &Thinking {
+    display: flex;
+    align-items: center;
+    gap: var(--size-4);
+    padding: var(--size-6) var(--size-7);
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    font-weight: 300;
   }
-}
 
-@keyframes heroPromptDotPulse {
-  0%, 80%, 100% { opacity: 0.25; transform: scale(0.8); }
-  40% { opacity: 1; transform: scale(1); }
-}
+  &Dots {
+    display: flex;
+    gap: 4px;
 
-.promptResult {
-  padding: var(--size-5) var(--size-7);
-  animation: heroPromptSlideUp 0.35s ease-out;
-}
+    span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--text-secondary);
+      animation: heroPromptDotPulse 1.2s infinite ease-in-out;
 
-@keyframes heroPromptSlideUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+      &:nth-child(2) {
+        animation-delay: 0.15s;
+      }
 
-.promptResultHeader {
-  display: flex;
-  align-items: center;
-  gap: var(--size-2);
-  font-size: 0.75em;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--suite-color);
-  margin-bottom: var(--size-4);
-  font-weight: 500;
-}
+      &:nth-child(3) {
+        animation-delay: 0.3s;
+      }
+    }
+  }
 
-.promptResultCard {
-  display: flex;
-  align-items: center;
-  gap: var(--size-5);
-  width: 100%;
-  padding: var(--size-5) var(--size-6);
-  background-color: oklch(from var(--suite-color) l c h / 0.08);
-  @include cornerShape(var(--radius-2));
-  position: relative;
-  text-align: left;
-  transition: background-color var(--transition-link), transform var(--transition-scale);
-  &:active { transform: scale(0.98); }
-  @include is-hover { background-color: oklch(from var(--suite-color) l c h / 0.14); }
-}
+  &Result {
+    padding: var(--size-5);
+    padding-top: var(--size-0-5);
+    animation: heroPromptSlideUp 0.35s ease-out;
+  }
 
-.promptResultIcon {
-  width: 2.75em; height: 2.75em;
-  background-color: var(--suite-color);
-  border-radius: var(--radius-rounded);
-  display: grid; place-items: center;
-  flex-shrink: 0;
-  svg { width: 50%; stroke: var(--white); }
-}
-
-.promptResultInfo {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2em;
-  strong { font-family: var(--font-heading); font-weight: normal; font-size: 1.1em; }
-  span { font-size: 0.85em; color: var(--text-secondary); font-weight: 300; }
-}
-
-.promptResultArrow {
-  font-size: 1.5em;
-  color: var(--suite-color);
-  flex-shrink: 0;
-}
-
-.promptQuick {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--size-3);
-  margin-top: var(--size-6);
-  position: relative;
-  z-index: 10;
-  flex-wrap: wrap;
-
-  button {
+  &ResultHeader {
     display: flex;
     align-items: center;
     gap: var(--size-2);
-    padding: 0.6em 1em;
-    font-size: 0.825em;
-    color: var(--white);
-    background-color: var(--glass-15);
-    border-radius: var(--radius-rounded);
-    @include border-glass(var(--gradient-border-glass-3));
-    position: relative;
-    transition: background-color var(--transition-link), transform var(--transition-scale);
-    &:active { transform: scale(0.92); }
-    @include is-hover { background-color: oklch(from var(--suite-color) l c h / 0.2); }
+    font-size: 0.75em;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--suite-color);
+    margin-bottom: var(--size-4);
+    font-weight: 500;
+    padding-left: 0.5em;
   }
-}
 
-.promptQuickIcon {
-  width: 1.15em; height: 1.15em;
-  display: grid; place-items: center;
-  svg { width: 100%; stroke: var(--suite-color); }
-}
+  &ResultCard {
+    display: flex;
+    align-items: center;
+    gap: var(--size-5);
+    width: 100%;
+    padding: var(--size-5) var(--size-6);
+    background-color: oklch(from var(--suite-color) l c h / 0.08);
+    @include cornerShape(var(--radius-2));
+    position: relative;
+    text-align: left;
+    transition:
+      background-color var(--transition-link),
+      transform var(--transition-scale);
 
-.promptBg {
-  position: absolute;
-  z-index: 0;
-  top: -20%;
-  bottom: -30%;
-  left: -30%;
-  right: -30%;
-  pointer-events: none;
-  opacity: 0.5;
-  @include mask(radial-gradient(ellipse at 50% 45%, #000 10%, transparent 60%));
+    &:active {
+      transform: scale(0.98);
+    }
+
+    @include is-hover {
+      background-color: oklch(from var(--suite-color) l c h / 0.14);
+    }
+  }
+
+  &ResultIcon {
+    width: 2.75em;
+    height: 2.75em;
+    background-color: var(--suite-color);
+    @include cornerShape(var(--radius-3));
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+
+    svg {
+      width: 50%;
+      stroke: var(--white);
+    }
+  }
+
+  &ResultInfo {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2em;
+
+    strong {
+      font-family: var(--font-heading);
+      font-weight: normal;
+      font-size: 1.1em;
+    }
+
+    span {
+      font-size: 0.85em;
+      font-weight: 300;
+    }
+  }
+
+  &ResultArrow {
+    font-size: 1.5em;
+    color: var(--suite-color);
+    flex-shrink: 0;
+  }
+
+  &Quick {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--size-3);
+    margin-top: var(--size-6);
+    position: relative;
+    z-index: 10;
+    @include user-select;
+    // flex-wrap: wrap;
+
+    @include max(500px) {
+      gap: var(--size-2);
+      font-size: 0.9em;
+
+      button {
+        flex: 1;
+      }
+    }
+
+    button {
+      display: flex;
+      align-items: center;
+      gap: var(--size-2);
+      padding: 0.5em 1.15em 0.5em 0.9em;
+      font-size: 0.825em;
+      color: var(--text);
+      font-family: var(--font-heading);
+      border-radius: var(--radius-rounded);
+      position: relative;
+      background-color: var(--glass-50);
+      border: 1px solid oklch(from var(--white) l c h / 0.25);
+      transition:
+        background-color var(--transition-link),
+        color var(--transition-link),
+        border-color var(--transition-link),
+        transform var(--transition-scale);
+
+      &:active {
+        transform: scale(0.92);
+      }
+
+      @include is-hover {
+        background-color: oklch(from var(--suite-color) l c h / 1);
+        border-color: oklch(from var(--suite-color) l c h / 0.15);
+        color: var(--white);
+      }
+    }
+  }
+
+  &QuickIcon {
+    --icon: 1.75em;
+    width: var(--icon);
+    height: var(--icon);
+    display: grid;
+    place-items: center;
+    background-color: var(--suite-color);
+    border-radius: var(--radius-rounded);
+    padding: 0.4em;
+    margin-left: -0.4em;
+
+    svg {
+      width: 100%;
+      stroke: var(--white);
+    }
+  }
+
+  &Bg {
+    position: absolute;
+    z-index: -1;
+    inset: -50% -20%;
+    pointer-events: none;
+    background-color: var(--bg-1);
+    opacity: 0.55;
+    @include mask(radial-gradient(ellipse at 50% 45%, #000 12%, transparent 58%));
+  }
 }
 
 .ai {
   text-align: center;
   color: var(--text-secondary);
-  margin-top: var(--size-12);
+  margin-top: var(--size-16);
 
   h2 {
     font-size: 1em;
     font-weight: 300;
     margin-top: var(--size-2);
+  }
+}
+
+@keyframes heroPromptDotPulse {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes heroPromptSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

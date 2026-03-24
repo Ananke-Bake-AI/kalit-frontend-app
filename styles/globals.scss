@@ -21,6 +21,12 @@ html {
       transition: none !important;
     }
   }
+
+  #nprogress {
+    .bar {
+      background: var(--gradient-linear-3) !important;
+    }
+  }
 }
 
 body {

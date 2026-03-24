@@ -1,18 +1,16 @@
 "use client"
 
-import { Color4Bg } from "@/components/color4bg"
 import { Container } from "@/components/container"
 import { Heading } from "@/components/heading"
 import { Icon } from "@/components/icon"
 import { Logo } from "@/components/logo"
 import { Underline } from "@/components/underline"
+import { useAnimatedPlaceholder } from "@/hooks/use-animated-placeholder"
 import { useGSAP } from "@gsap/react"
 import clsx from "clsx"
 import gsap from "gsap"
 import { useRef } from "react"
 import s from "./try.module.scss"
-
-const COLORS = ["#91E500", "#8200DF", "#12BCFF", "#91E500", "#2F44FF", "#8200DF", "#91E500"]
 
 const PLACEHOLDERS = [
   "Build me an iOS/Android app with recording, effects, and social sharing",
@@ -23,9 +21,13 @@ const PLACEHOLDERS = [
 
 export const Try = () => {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null)
-  const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const line1PathRef = useRef<SVGPathElement | null>(null)
   const line2PathRef = useRef<SVGPathElement | null>(null)
+
+  const { timelineRef, handleFocus, handleBlur } = useAnimatedPlaceholder(textareaRef, {
+    phrases: PLACEHOLDERS,
+    focusedPlaceholder: "Write your project..."
+  })
 
   useGSAP(() => {
     gsap.fromTo(
@@ -58,72 +60,7 @@ export const Try = () => {
         }
       }
     )
-
-    if (textareaRef.current) {
-      const tl = gsap.timeline({ repeat: -1, repeatDelay: 1 })
-
-      PLACEHOLDERS.forEach((phrase) => {
-        const chars = phrase.split("")
-
-        tl.call(() => {
-          if (textareaRef.current) {
-            textareaRef.current.placeholder = "|"
-          }
-        })
-
-        chars.forEach((_, index) => {
-          tl.call(
-            () => {
-              if (!textareaRef.current) return
-              const text = phrase.slice(0, index + 1)
-              textareaRef.current.placeholder = `${text}|`
-            },
-            [],
-            "+=0.04"
-          )
-        })
-
-        tl.to({}, { duration: 1 })
-
-        chars.forEach((_, index) => {
-          tl.call(
-            () => {
-              if (!textareaRef.current) return
-              const remaining = phrase.length - index - 1
-              const text = phrase.slice(0, remaining)
-              textareaRef.current.placeholder = text ? `${text} |` : "|"
-            },
-            [],
-            "+=0.02"
-          )
-        })
-      })
-
-      timelineRef.current = tl
-
-      return () => {
-        tl.kill()
-      }
-    }
   }, [])
-
-  const handleFocus = () => {
-    if (!textareaRef.current) return
-    if (timelineRef.current) {
-      timelineRef.current.pause()
-    }
-    textareaRef.current.placeholder = "Write your project..."
-  }
-
-  const handleBlur = () => {
-    if (!textareaRef.current) return
-
-    const value = textareaRef.current.value.trim()
-
-    if (!value && timelineRef.current) {
-      timelineRef.current.play()
-    }
-  }
 
   const handlePresetClick = (value: string) => {
     if (!textareaRef.current) return
@@ -223,9 +160,7 @@ export const Try = () => {
               </button>
             ))}
           </div>
-          <div className={s.bg}>
-            <Color4Bg className={s.gradient} style="blur-gradient" colors={COLORS} seed={1000} loop={true} noise={0} />
-          </div>
+          <div className={s.bg} aria-hidden />
         </div>
       </Container>
     </section>

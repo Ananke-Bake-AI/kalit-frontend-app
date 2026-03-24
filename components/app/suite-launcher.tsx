@@ -1,8 +1,9 @@
 "use client"
 
-import { useState } from "react"
-import { Button } from "@/components/app/button"
+import { Button } from "@/components/button"
 import type { SuiteId } from "@/lib/suites"
+import { useState } from "react"
+import s from "./suite-launcher.module.scss"
 
 interface SuiteLauncherProps {
   suiteId: SuiteId
@@ -40,24 +41,20 @@ export function SuiteLauncher({ suiteId, suiteName }: SuiteLauncherProps) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 py-16 text-center">
-      <h2 className="text-xl font-semibold text-foreground">
-        Kalit {suiteName}
-      </h2>
-      <p className="max-w-md text-sm text-muted-fg">
+    <div className={s.root}>
+      <h2 className={s.title}>Kalit {suiteName}</h2>
+      <p className={s.description}>
         Launch the full {suiteName} suite in a dedicated workspace.
       </p>
       <Button
+        type="button"
         variant="primary"
-        size="lg"
-        loading={loading}
+        disabled={loading}
         onClick={handleLaunch}
       >
         {loading ? "Launching..." : `Open Kalit ${suiteName}`}
       </Button>
-      {error && (
-        <p className="text-sm text-destructive">{error}</p>
-      )}
+      {error ? <p className={s.error}>{error}</p> : null}
     </div>
   )
 }

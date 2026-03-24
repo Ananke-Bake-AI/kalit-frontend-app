@@ -1,0 +1,40 @@
+@use "@/styles/app-glass" as *;
+@use "@/styles/mixins" as *;
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1.25rem;
+  max-width: 52rem;
+  margin-inline: auto;
+}
+
+.card {
+  @include glass-panel(1.15rem);
+  padding: 1.5rem;
+}
+
+.cardTitle {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--text);
+  margin: 0 0 0.5rem;
+}
+
+.cardText {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  margin: 0 0 1rem;
+}
+
+.cardLink {
+  color: var(--color-4);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+
+  @include is-hover {
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,55 @@
+@use "@/styles/mixins" as *;
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--size-4);
+  padding: 0.9rem 0;
+  border-bottom: 1px solid oklch(0 0 0 / 0.05);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @include max($responsive) {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.title {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+}
+
+.meta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  background: oklch(from var(--color-2) l c h / 0.1);
+  color: var(--text);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.list {
+  display: grid;
+  gap: 0.75rem;
+}

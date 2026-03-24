@@ -41,4 +41,6 @@
     var(--color-1)
   );
   --gradient-linear-3: linear-gradient(to right, var(--color-1), var(--color-2), var(--color-3), var(--color-4));
+
+  --shadow-1: 0 -4px 8px 4px oklch(1 0 0 / 0.75) inset, 0 24px 100px -8px oklch(0 0 0 / 0.15);
 }

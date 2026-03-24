@@ -1,0 +1,108 @@
+@use "@/styles/app-glass" as *;
+@use "@/styles/mixins" as *;
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(15rem, 18rem) minmax(0, 1fr);
+  gap: clamp(1rem, 2vw, 1.25rem);
+
+  @include max($responsiveSettings) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.tabs {
+  display: grid;
+  gap: 0.8rem;
+  align-self: start;
+
+  @include max($responsiveSettings) {
+    position: fixed;
+    bottom: var(--size-6);
+    z-index: 1000;
+    display: flex;
+    @include glass($blur: true);
+    border-radius: 100px;
+    padding: var(--size-2);
+    box-shadow: var(--shadow-1);
+    transform: translateX(-50%);
+    left: 50%;
+
+    .tabContent,
+    .tabLabel,
+    .tabDescription {
+      display: none;
+    }
+  }
+}
+
+.tab {
+  transition:
+    transform 0.2s var(--cubic),
+    border-color 0.2s var(--cubic);
+  display: flex;
+  gap: 0.75rem;
+  text-decoration: none;
+
+  @include min($responsiveSettings) {
+    padding: 1rem 1rem 1rem 1.05rem;
+    @include glass-panel(var(--radius-2));
+  }
+
+  @include max($responsiveSettings) {
+    --size: calc(48px + 4 * (100vw - 320px) / 1080);
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &.tabActive {
+    background-color: var(--text);
+    color: var(--white);
+    box-shadow: 0 0 0;
+  }
+
+  &Icon {
+    display: inline-flex;
+    font-size: 1.25rem;
+    color: inherit;
+    opacity: 0.85;
+
+    @include min($responsiveSettings) {
+      margin-bottom: 0.5rem;
+    }
+
+    :global(svg) {
+      width: 1.25em;
+      height: 1.25em;
+    }
+  }
+
+  &Label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+  }
+
+  &Description {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    line-height: 1.35;
+  }
+
+  &.tabActive &Description {
+    color: oklch(from var(--white) l c h / 0.72);
+  }
+}
+
+.content {
+  display: grid;
+  gap: 1rem;
+}
