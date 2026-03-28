@@ -116,7 +116,7 @@ export const SUITES: SuiteConfig[] = [
     logoD:
       "M30.6809 51.2513C42.0363 51.2513 51.2417 42.046 51.2417 30.6905C51.2417 19.3351 42.0363 10.1298 30.6809 10.1298C19.3255 10.1298 10.1201 19.3351 10.1201 30.6906L10.1201 81.9968",
     logoTitle: "Kalit — Search Suite",
-    appUrl: process.env.SUITE_SEARCH_URL || "http://localhost:3003"
+    appUrl: process.env.SUITE_SEARCH_URL || "https://research.kalit.ai"
   }
 ]
 
