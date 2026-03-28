@@ -32,7 +32,18 @@ export function SuiteLauncher({ suiteId, suiteName }: SuiteLauncherProps) {
         return
       }
 
-      window.location.href = data.redirectUrl
+      // Sanitize the redirect URL — strip any stale localhost references
+      let url = data.redirectUrl as string
+      if (url.includes("localhost")) {
+        // Extract token and rebuild with correct base URL from the server's response
+        const tokenMatch = url.match(/[?&]token=([^&]+)/)
+        const token = tokenMatch ? tokenMatch[1] : ""
+        // Build the URL from the suite's known production domain
+        const ssoBase = `/api/suite/redirect?suiteId=${suiteId}&token=${token}`
+        url = ssoBase
+      }
+
+      window.location.href = url
     } catch {
       setError("Something went wrong. Please try again.")
     } finally {
