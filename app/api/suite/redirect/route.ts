@@ -11,7 +11,7 @@ import { getSuiteAppUrl, type SuiteId } from "@/lib/suites"
 
 const SUITE_URLS: Record<string, string> = {
   marketing: "https://marketing.kalit.ai",
-  search: "https://research.kalit.ai",
+  search: "https://search.kalit.ai",
   flow: process.env.SUITE_FLOW_URL || "http://localhost:3004",
   project: process.env.SUITE_PROJECT_URL || "http://localhost:3003",
   pentest: process.env.SUITE_PENTEST_URL || "http://localhost:3005",

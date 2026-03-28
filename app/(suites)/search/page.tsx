@@ -46,7 +46,7 @@ export default async function SearchPage() {
     .setAudience("search")
     .sign(encoder.encode(secret))
 
-  const baseUrl = process.env.SUITE_SEARCH_URL || "https://research.kalit.ai"
+  const baseUrl = process.env.SUITE_SEARCH_URL || "https://search.kalit.ai"
   const redirectUrl = `${baseUrl}/api/auth/sso/callback?token=${encodeURIComponent(token)}`
 
   redirect(redirectUrl)

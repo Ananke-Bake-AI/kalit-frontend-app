@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
     // Resolve suite URL — use env var with hardcoded fallbacks for reliability
     const SUITE_URLS: Record<string, string> = {
       marketing: process.env.SUITE_MARKETING_URL || "https://marketing.kalit.ai",
-      search: process.env.SUITE_SEARCH_URL || "https://research.kalit.ai",
+      search: process.env.SUITE_SEARCH_URL || "https://search.kalit.ai",
       flow: process.env.SUITE_FLOW_URL || "http://localhost:3004",
       project: process.env.SUITE_PROJECT_URL || "http://localhost:3003",
       pentest: process.env.SUITE_PENTEST_URL || "http://localhost:3005",
