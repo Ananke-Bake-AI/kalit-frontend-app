@@ -121,6 +121,105 @@
   }
 }
 
+.expiryRow {
+  display: flex;
+  align-items: center;
+  gap: var(--size-3);
+  flex-wrap: wrap;
+}
+
+.expiryLabel {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.expiryInput {
+  appearance: none;
+  background: oklch(from var(--text) l c h / 0.05);
+  border: 1px solid oklch(from var(--text) l c h / 0.08);
+  border-radius: var(--radius-3);
+  padding: 0.35em 0.7em;
+  font-size: 0.8rem;
+  font-family: var(--font-main);
+  color: var(--text);
+  cursor: pointer;
+
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(0.5);
+  }
+}
+
+.expiryClear {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--text);
+  }
+}
+
+.planGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--size-3);
+
+  @include max($responsive) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.planCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: var(--size-4) var(--size-5);
+  text-align: left;
+  border-radius: var(--radius-2);
+  border: 1px solid oklch(from var(--text) l c h / 0.08);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background-color var(--transition-link),
+    border-color var(--transition-link),
+    transform var(--transition-scale);
+
+  strong {
+    font-family: var(--font-heading);
+    font-size: 0.92rem;
+    color: var(--text);
+  }
+
+  &:hover {
+    background-color: oklch(from #8200DF l c h / 0.06);
+    border-color: oklch(from #8200DF l c h / 0.25);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &.planRevoke {
+    border-color: oklch(from #ef4444 l c h / 0.15);
+
+    &:hover {
+      background-color: oklch(from #ef4444 l c h / 0.06);
+      border-color: oklch(from #ef4444 l c h / 0.3);
+    }
+
+    strong {
+      color: #ef4444;
+    }
+  }
+}
+
+.planDesc {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1.3;
+}
+
 .creditForm {
   display: flex;
   gap: var(--size-3);
@@ -188,6 +287,11 @@
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+.entExpiry {
+  color: #f59e0b;
+  font-size: 0.68rem;
 }
 
 .revokeBtn {

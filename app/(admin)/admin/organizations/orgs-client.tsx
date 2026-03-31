@@ -7,9 +7,11 @@ import { SurfacePanel } from "@/components/surface-panel"
 import { TextField } from "@/components/text-field"
 import {
   addCredits,
+  assignPlan,
   getAdminOrganizations,
   grantEntitlement,
-  revokeEntitlement
+  revokeEntitlement,
+  revokePlan
 } from "@/server/actions/admin"
 import { useState, useTransition } from "react"
 import { toast } from "sonner"
@@ -25,12 +27,19 @@ const SUITE_ENTITLEMENTS = [
   { key: "suite.search.access", label: "Search" }
 ]
 
+const PLANS = [
+  { key: "starter", label: "Starter", desc: "Flow — 100 credits — 2 members" },
+  { key: "pro", label: "Pro", desc: "Flow + Project + Marketing — 500 credits — 10 members" },
+  { key: "enterprise", label: "Enterprise", desc: "All suites — 2,000 credits — Unlimited members" }
+]
+
 export function OrgsClient({ initialData }: { initialData: OrgData }) {
   const [data, setData] = useState(initialData)
   const [search, setSearch] = useState("")
   const [expandedOrg, setExpandedOrg] = useState<string | null>(null)
   const [creditAmount, setCreditAmount] = useState("")
   const [creditReason, setCreditReason] = useState("")
+  const [expiryDate, setExpiryDate] = useState("")
   const [isPending, startTransition] = useTransition()
 
   const refresh = (params: { search?: string; page?: number }) => {
@@ -55,6 +64,21 @@ export function OrgsClient({ initialData }: { initialData: OrgData }) {
       if ("error" in result) toast.error(result.error as string)
       else toast.success("Access granted")
     }
+    refresh({ search, page: data.page })
+  }
+
+  const handleAssignPlan = async (orgId: string, planKey: string) => {
+    const result = await assignPlan(orgId, planKey, expiryDate || undefined)
+    if ("error" in result) toast.error(result.error as string)
+    else toast.success(`${result.plan} plan assigned${expiryDate ? ` (expires ${expiryDate})` : ""}`)
+    refresh({ search, page: data.page })
+  }
+
+  const handleRevokePlan = async (orgId: string) => {
+    if (!confirm("Revoke all manual entitlements for this org?")) return
+    const result = await revokePlan(orgId)
+    if ("error" in result) toast.error(result.error as string)
+    else toast.success("Plan revoked")
     refresh({ search, page: data.page })
   }
 
@@ -120,6 +144,45 @@ export function OrgsClient({ initialData }: { initialData: OrgData }) {
                 {isExpanded && (
                   <div className={s.orgDetail}>
                     <div className={s.detailSection}>
+                      <h4 className={s.detailTitle}>Assign Plan</h4>
+                      <div className={s.expiryRow}>
+                        <label className={s.expiryLabel}>Expiry date (optional):</label>
+                        <input
+                          type="date"
+                          value={expiryDate}
+                          onChange={(e) => setExpiryDate(e.target.value)}
+                          className={s.expiryInput}
+                        />
+                        {expiryDate && (
+                          <button type="button" className={s.expiryClear} onClick={() => setExpiryDate("")}>
+                            Clear
+                          </button>
+                        )}
+                      </div>
+                      <div className={s.planGrid}>
+                        {PLANS.map((plan) => (
+                          <button
+                            key={plan.key}
+                            type="button"
+                            className={s.planCard}
+                            onClick={() => handleAssignPlan(org.id, plan.key)}
+                          >
+                            <strong>{plan.label}</strong>
+                            <span className={s.planDesc}>{plan.desc}</span>
+                          </button>
+                        ))}
+                        <button
+                          type="button"
+                          className={`${s.planCard} ${s.planRevoke}`}
+                          onClick={() => handleRevokePlan(org.id)}
+                        >
+                          <strong>Revoke</strong>
+                          <span className={s.planDesc}>Remove all manual entitlements</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className={s.detailSection}>
                       <h4 className={s.detailTitle}>Suite Access</h4>
                       <div className={s.suiteGrid}>
                         {SUITE_ENTITLEMENTS.map((suite) => {
@@ -181,7 +244,14 @@ export function OrgsClient({ initialData }: { initialData: OrgData }) {
                           <div key={ent.id} className={s.entitlementRow}>
                             <span className={s.entKey}>{ent.key}</span>
                             <span className={s.entValue}>{JSON.stringify(ent.value)}</span>
-                            <span className={s.entSource}>{ent.source}</span>
+                            <span className={s.entSource}>
+                              {ent.source}
+                              {ent.expiresAt && (
+                                <span className={s.entExpiry}>
+                                  {" "}expires {new Date(ent.expiresAt).toLocaleDateString()}
+                                </span>
+                              )}
+                            </span>
                             <button
                               type="button"
                               className={s.revokeBtn}

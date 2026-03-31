@@ -136,6 +136,54 @@ export async function addCredits(orgId: string, amount: number, reason: string) 
   return { success: true }
 }
 
+// ─── Plan Assignment ────────────────────────────────────
+
+export async function assignPlan(orgId: string, planKey: string, expiresAt?: string) {
+  await requireAdmin()
+
+  const { PLANS } = await import("@/lib/plans")
+  const plan = PLANS.find((p) => p.key === planKey)
+  if (!plan) return { error: "Unknown plan" }
+
+  const expiry = expiresAt ? new Date(expiresAt) : null
+
+  // Grant all suite entitlements for this plan
+  for (const suiteId of plan.suites) {
+    await prisma.entitlement.upsert({
+      where: { orgId_key: { orgId, key: `suite.${suiteId}.access` } },
+      update: { value: { granted: true }, source: "MANUAL", expiresAt: expiry },
+      create: { orgId, key: `suite.${suiteId}.access`, value: { granted: true }, source: "MANUAL", expiresAt: expiry }
+    })
+  }
+
+  // Set monthly credits
+  await prisma.entitlement.upsert({
+    where: { orgId_key: { orgId, key: "monthly.credits" } },
+    update: { value: { amount: plan.creditsPerMonth }, source: "MANUAL", expiresAt: expiry },
+    create: { orgId, key: "monthly.credits", value: { amount: plan.creditsPerMonth }, source: "MANUAL", expiresAt: expiry }
+  })
+
+  // Set max members
+  await prisma.entitlement.upsert({
+    where: { orgId_key: { orgId, key: "max.members" } },
+    update: { value: { amount: plan.maxMembers }, source: "MANUAL", expiresAt: expiry },
+    create: { orgId, key: "max.members", value: { amount: plan.maxMembers }, source: "MANUAL", expiresAt: expiry }
+  })
+
+  return { success: true, plan: plan.name }
+}
+
+export async function revokePlan(orgId: string) {
+  await requireAdmin()
+
+  // Remove all suite entitlements and plan-related entitlements
+  await prisma.entitlement.deleteMany({
+    where: { orgId, source: "MANUAL" }
+  })
+
+  return { success: true }
+}
+
 // ─── Monitoring ─────────────────────────────────────────
 
 export async function getAdminJobs(params: { status?: string; page?: number; limit?: number }) {
