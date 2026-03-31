@@ -1,0 +1,21 @@
+.marquee {
+  overflow: hidden;
+  transform: rotate(-4deg);
+  left: -5%;
+  position: relative;
+  width: 110%;
+  margin-top: var(--spacing-3);
+
+  &Scroll {
+    background-color: var(--color-3);
+    padding: var(--size-3);
+
+    & > * {
+      gap: var(--spacing-2-5);
+    }
+  }
+
+  img {
+    height: calc(50px + 20 * (100vw - 320px) / 1080);
+  }
+}

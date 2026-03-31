@@ -31,6 +31,22 @@ $responsive: 1200px;
   }
 }
 
+.how[data-accent="1"] .top {
+  color: var(--color-1);
+}
+
+.how[data-accent="2"] .top {
+  color: var(--color-2);
+}
+
+.how[data-accent="3"] .top {
+  color: var(--color-3);
+}
+
+.how[data-accent="4"] .top {
+  color: var(--color-4);
+}
+
 .steps {
   --step-width: calc(350px + 100 * (100vw - 320px) / 1080);
   --gap: var(--spacing-2-5);
@@ -112,7 +128,6 @@ $responsive: 1200px;
   align-items: center;
   justify-content: space-between;
   font-weight: 300;
-  color: var(--color-2);
   margin-bottom: auto;
 
   svg {

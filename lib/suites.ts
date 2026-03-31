@@ -103,9 +103,9 @@ export const SUITES: SuiteConfig[] = [
   },
   {
     id: "search",
-    color: "var(--color-2)",
-    gradient: "var(--gradient-color-2)",
-    gradientRadial: "var(--gradient-color-2-radial)",
+    color: "var(--color-5)",
+    gradient: "var(--gradient-color-5)",
+    gradientRadial: "var(--gradient-color-5-radial)",
     title: "search",
     button: "Find ideas",
     description:
@@ -114,7 +114,7 @@ export const SUITES: SuiteConfig[] = [
     matchDescription: "AI will scan trends, analyze markets, and surface the best project ideas to build.",
     quickPrompt: "Find trending SaaS ideas with high monetization potential",
     logoD:
-      "M30.68 10.13C19.33 10.13 10.12 19.34 10.12 30.69C10.12 42.05 19.33 51.25 30.68 51.25C42.04 51.25 51.24 42.05 51.24 30.69C51.24 19.34 42.04 10.13 30.68 10.13M45.5 46.5L62 82",
+      "M30.5918 30.4995C30.5918 19.1779 39.7697 10 51.0913 10C62.4129 10 71.5908 19.1779 71.5908 30.4995C71.5908 41.8211 62.4129 50.999 51.0913 50.999L30.6721 50.999L7.07098 74.6001",
     logoTitle: "Kalit — Search Suite",
     appUrl: process.env.SUITE_SEARCH_URL || "https://search.kalit.ai"
   }

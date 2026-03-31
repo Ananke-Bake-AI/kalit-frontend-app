@@ -7,16 +7,21 @@ $responsive: 1200px;
 
   @include max($responsive) {
     text-align: center;
-    // overflow: hidden;
     width: 100vw;
 
     [data-paragraph] {
       margin-inline: auto;
     }
+
+    .ctaBlock,
+    .linkRow {
+      justify-content: center;
+    }
   }
 
   .heading {
-    h1 {
+    h1,
+    h2 {
       @include fs(32px, 24, 128px);
     }
 
@@ -25,12 +30,6 @@ $responsive: 1200px;
       font-size: 2em;
       display: inline-block;
       position: relative;
-    }
-
-    .line {
-      width: 200%;
-      inset: 0 auto auto 96%;
-      transform: translateY(-71%);
     }
 
     [data-paragraph] {
@@ -42,10 +41,28 @@ $responsive: 1200px;
     }
   }
 
-  .button {
-    font-size: 1.15em;
+  .ctaBlock {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75em 1.25em;
     margin-top: var(--spacing-2);
   }
+
+  .button {
+    font-size: 1.15em;
+    margin-top: 0;
+  }
+}
+
+.line {
+  width: 200%;
+  inset: 0 auto auto 96%;
+  transform: translateY(-71%);
+}
+
+.layout {
+  position: relative;
 }
 
 .right {
@@ -99,6 +116,10 @@ $responsive: 1200px;
   font-size: calc(11px + 2 * (100vw - 320px) / 1080);
   margin: var(--spacing-1) 0;
 
+  &.dark {
+    color: var(--text);
+  }
+
   .btn {
     transition:
       transform var(--transition-scale),
@@ -131,6 +152,10 @@ $responsive: 1200px;
   width: 80%;
   margin-inline: auto;
   font-weight: 300;
+
+  &.dark {
+    color: var(--text);
+  }
 }
 
 .bg {

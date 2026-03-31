@@ -1,15 +1,15 @@
 import { Icon } from "@/components/icon"
 import clsx from "clsx"
-import s from "./how.module.scss"
+import s from "./suite-landing-how.module.scss"
 
-interface StepProps {
+export interface SuiteLandingStepProps {
   icon: string
-  number: number
+  number: 1 | 2 | 3
   title: string
   description: string
 }
 
-export const Step = ({ icon, number, title, description }: StepProps) => {
+export function SuiteLandingStep({ icon, number, title, description }: SuiteLandingStepProps) {
   return (
     <div className={clsx(s.step, s[`step${number}`])} data-reveal>
       <div className={s.top}>

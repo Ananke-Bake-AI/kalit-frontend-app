@@ -1,12 +1,15 @@
 "use client"
 
 import { Button } from "@/components/button"
-import { flowLoginHref } from "@/lib/flow-suite-entry"
+import { FLOW_MARKETING_PATH } from "@/lib/flow-suite-entry"
+import { suiteMarketingLoginHref } from "@/lib/suite-marketing-entry"
 import { useSession } from "next-auth/react"
 import type { ReactNode } from "react"
 
 export interface FlowSuiteCtaButtonProps {
   suiteAppUrl: string
+  /** Page marketing pour le retour après login (ex. `/flow`, `/pentest`). */
+  marketingPath?: string
   className?: string
   circle?: boolean
   variant?: "primary" | "secondary" | "tertiary"
@@ -15,6 +18,7 @@ export interface FlowSuiteCtaButtonProps {
 
 export function FlowSuiteCtaButton({
   suiteAppUrl,
+  marketingPath = FLOW_MARKETING_PATH,
   className,
   circle,
   variant = "primary",
@@ -47,7 +51,12 @@ export function FlowSuiteCtaButton({
   }
 
   return (
-    <Button className={className} circle={circle} variant={variant} href={flowLoginHref()}>
+    <Button
+      className={className}
+      circle={circle}
+      variant={variant}
+      href={suiteMarketingLoginHref(marketingPath)}
+    >
       {children}
     </Button>
   )

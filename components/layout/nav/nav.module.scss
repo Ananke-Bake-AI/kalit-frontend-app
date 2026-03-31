@@ -233,11 +233,11 @@
 
       p {
         color: var(--text);
-        font-size: 0.85em;
+        font-size: 0.75em;
         opacity: 0.5;
 
-        @include max($responsiveNav) {
-          font-size: 0.75em;
+        @include min($responsiveNav) {
+          @include clamp(2);
         }
       }
     }

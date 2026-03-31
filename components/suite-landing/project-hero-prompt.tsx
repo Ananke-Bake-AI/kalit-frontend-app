@@ -3,54 +3,41 @@
 import { HeroPromptChat } from "@/components/hero-prompt-chat"
 import { Icon } from "@/components/icon"
 import { useAnimatedPlaceholder } from "@/hooks/use-animated-placeholder"
-import { flowLoginHref, flowSuiteEntryUrl } from "@/lib/flow-suite-entry"
-import { useRouter } from "next/navigation"
+import { suiteEntryUrl, suiteMarketingLoginHref } from "@/lib/suite-marketing-entry"
+import { PROJECT_MARKETING_PATH } from "@/lib/suite-marketing-paths"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { useCallback, useRef, useState } from "react"
-import s from "./hero.module.scss"
+import s from "./suite-landing-hero.module.scss"
 
 const PLACEHOLDERS = [
-  "A landing page for my product with hero, features, and pricing...",
-  "A portfolio with project grid, about section, and contact form...",
-  "A simple marketing site with newsletter signup and blog...",
-  "An event page with schedule, speakers, and registration CTA..."
+  "Deploy a Next.js app with Postgres and auth to production...",
+  "Ship a REST API with CI, staging, and one-click rollback...",
+  "Monorepo with frontend, workers, and Redis — production ready...",
+  "Add preview environments for every pull request automatically..."
 ]
 
 const BUTTONS = [
-  {
-    icon: "hugeicons:rocket-01",
-    label: "Startup"
-  },
-  {
-    icon: "hugeicons:test-tube-01",
-    label: "SaaS"
-  },
-  {
-    icon: "hugeicons:user-story",
-    label: "Portfolio"
-  },
-  {
-    icon: "hugeicons:serving-food",
-    label: "Restaurant"
-  },
-  {
-    icon: "hugeicons:game-controller-01",
-    label: "Game"
-  }
+  { icon: "hugeicons:rocket-01", label: "SaaS App" },
+  { icon: "hugeicons:smart-phone-01", label: "Mobile App" },
+  { icon: "hugeicons:ai-game", label: "Game" },
+  { icon: "hugeicons:dashboard-square-setting", label: "Dashboard" },
+  { icon: "hugeicons:api", label: "API Backend" }
 ]
 
-interface FlowHeroPromptProps {
+export interface ProjectHeroPromptProps {
   suiteAppUrl: string
+  marketingPath?: string
 }
 
-export function FlowHeroPrompt({ suiteAppUrl }: FlowHeroPromptProps) {
+export function ProjectHeroPrompt({ suiteAppUrl, marketingPath = PROJECT_MARKETING_PATH }: ProjectHeroPromptProps) {
   const router = useRouter()
   const { status } = useSession()
   const [promptValue, setPromptValue] = useState("")
   const promptRef = useRef<HTMLTextAreaElement | null>(null)
   const { handleFocus, handleBlur } = useAnimatedPlaceholder(promptRef, {
     phrases: PLACEHOLDERS,
-    focusedPlaceholder: "Describe the site you want to build..."
+    focusedPlaceholder: "What do you want to build and ship today?"
   })
 
   const handleSubmit = useCallback(() => {
@@ -58,11 +45,11 @@ export function FlowHeroPrompt({ suiteAppUrl }: FlowHeroPromptProps) {
     if (!trimmed) return
     if (status === "loading") return
     if (status === "authenticated") {
-      window.location.assign(flowSuiteEntryUrl(suiteAppUrl, { prompt: trimmed }))
+      window.location.assign(suiteEntryUrl(suiteAppUrl, { prompt: trimmed }))
       return
     }
-    router.push(flowLoginHref({ prompt: trimmed }))
-  }, [promptValue, router, status, suiteAppUrl])
+    router.push(suiteMarketingLoginHref(marketingPath, { prompt: trimmed }))
+  }, [marketingPath, promptValue, router, status, suiteAppUrl])
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -77,14 +64,14 @@ export function FlowHeroPrompt({ suiteAppUrl }: FlowHeroPromptProps) {
         layout="flush"
         textareaRef={promptRef}
         value={promptValue}
-        placeholder="Describe the site you want to build..."
+        placeholder="What do you want to build and ship today?"
         onChange={(e) => setPromptValue(e.target.value)}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
         onSend={handleSubmit}
-        sendLabel="Start building"
-        sendLogoId="flow"
+        sendLabel="Ship app"
+        sendLogoId="project"
         showBlurBackground={false}
       />
       <div className={s.buttons}>
@@ -96,8 +83,8 @@ export function FlowHeroPrompt({ suiteAppUrl }: FlowHeroPromptProps) {
         ))}
       </div>
       <p className={s.mention}>
-        Describe it. Drop your files. Flow generates, previews, and packages your project automatically. No friction. No
-        code. Just results.
+        Describe your stack or paste a repo — Kalit provisions builds, deploys, and monitoring so you stay focused on
+        product code.
       </p>
     </>
   )

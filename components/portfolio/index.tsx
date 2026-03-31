@@ -6,6 +6,7 @@ import gsap from "gsap"
 import { type ReactNode, useRef } from "react"
 
 import { FlowSuiteCtaButton } from "@/components/flow-suite-cta-button"
+import { FLOW_MARKETING_PATH } from "@/lib/flow-suite-entry"
 import { Button } from "@/components/button"
 import { Container } from "@/components/container"
 import { Heading } from "@/components/heading"
@@ -20,6 +21,8 @@ export interface PortfolioProps {
   link?: string
   /** Si défini : connecté → app suite, sinon → login avec retour Flow */
   suiteAppUrl?: string
+  /** Page marketing pour le callback login (ex. `/pentest`). */
+  marketingPath?: string
   className?: string
 }
 
@@ -30,6 +33,7 @@ export function Portfolio({
   buttonText,
   link,
   suiteAppUrl,
+  marketingPath = FLOW_MARKETING_PATH,
   className
 }: PortfolioProps) {
   const carouselRef = useRef<HTMLDivElement | null>(null)
@@ -78,7 +82,7 @@ export function Portfolio({
           ))}
         </div>
         {suiteAppUrl ? (
-          <FlowSuiteCtaButton suiteAppUrl={suiteAppUrl} className={s.btn} circle>
+          <FlowSuiteCtaButton suiteAppUrl={suiteAppUrl} marketingPath={marketingPath} className={s.btn} circle>
             {buttonText}
           </FlowSuiteCtaButton>
         ) : (

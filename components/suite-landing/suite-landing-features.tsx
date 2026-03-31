@@ -3,41 +3,40 @@
 import { Container } from "@/components/container"
 import { FlowSuiteCtaButton } from "@/components/flow-suite-cta-button"
 import { Heading } from "@/components/heading"
+import type { Tag } from "@/types/Tag"
 import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
-import Image from "next/image"
-import { useRef } from "react"
-import s from "./features.module.scss"
+import { type ReactNode, useRef } from "react"
+import s from "./suite-landing-features.module.scss"
 
-const CARDS = [
-  {
-    img: "/img/flow1.png",
-    title: "Prompt-Based Creation",
-    text: "Describe your project in plain language. Our AI generates a complete, working web project instantly."
-  },
-  {
-    img: "/img/flow2.png",
-    title: "Live Preview",
-    text: "See your project come to life in real-time with an interactive preview right in your browser."
-  },
-  {
-    img: "/img/flow3.png",
-    title: "Download & Deploy",
-    text: "Export as a ready-to-deploy package. Take full ownership of your code and host it anywhere."
-  },
-  {
-    img: "/img/flow4.png",
-    title: "API Access",
-    text: "Integrate Flow into your workflow. Generate projects programmatically with your API keys."
-  }
-]
-
-interface FeaturesProps {
-  suiteAppUrl: string
+export interface SuiteLandingFeatureCard {
+  img: string
+  title: string
+  text: string
+  ctaLabel: string
 }
 
-export const Features = ({ suiteAppUrl }: FeaturesProps) => {
+export interface SuiteLandingFeaturesProps {
+  suiteAppUrl: string
+  marketingPath: string
+  headingSubtitle: string
+  headingParagraph: string
+  headingTitle: ReactNode
+  cards: SuiteLandingFeatureCard[]
+  headingTag?: Tag
+}
+
+export function SuiteLandingFeatures({
+  suiteAppUrl,
+  marketingPath,
+  headingSubtitle,
+  headingParagraph,
+  headingTitle,
+  cards,
+  headingTag
+}: SuiteLandingFeaturesProps) {
   const cardsRef = useRef<HTMLDivElement>(null)
+  const cardCount = cards.length
 
   useGSAP(
     () => {
@@ -73,40 +72,34 @@ export const Features = ({ suiteAppUrl }: FeaturesProps) => {
 
       return () => ctx.revert()
     },
-    { scope: cardsRef, dependencies: [CARDS.length] }
+    { scope: cardsRef, dependencies: [cardCount] }
   )
 
   return (
     <section className={s.features}>
       <Container className={s.container}>
-        <Heading
-          className={s.heading}
-          subtitle="Our features"
-          paragraph="From idea to deployed project in minutes. No barriers between your vision and a live website."
-        >
-          Everything you need
-          <br />
-          to ship faster
+        <Heading className={s.heading} tag={headingTag} subtitle={headingSubtitle} paragraph={headingParagraph}>
+          {headingTitle}
         </Heading>
         <div ref={cardsRef} className={s.cards}>
-          {CARDS.map((card, i) => (
-            <div className={s.card} key={i}>
+          {cards.map((card, i) => (
+            <div className={s.card} key={card.title}>
               <div className={s.left}>
                 <h3>{card.title}</h3>
                 <p>{card.text}</p>
-                <FlowSuiteCtaButton suiteAppUrl={suiteAppUrl} circle>
-                  Start Building
+                <FlowSuiteCtaButton suiteAppUrl={suiteAppUrl} marketingPath={marketingPath} circle>
+                  {card.ctaLabel}
                 </FlowSuiteCtaButton>
               </div>
               <div className={s.right}>
-                <Image
+                <img
                   src={card.img}
                   alt={card.title}
                   width={1314}
                   height={1046}
-                  quality={100}
                   draggable={false}
                   data-img={i}
+                  loading="lazy"
                 />
               </div>
             </div>
@@ -116,3 +109,5 @@ export const Features = ({ suiteAppUrl }: FeaturesProps) => {
     </section>
   )
 }
+
+SuiteLandingFeatures.displayName = "SuiteLandingFeatures"
