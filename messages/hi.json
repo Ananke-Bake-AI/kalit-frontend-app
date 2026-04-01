@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "आर्किटेक्चर",
-    "title": "Kalit एक मॉडल नहीं है",
+    "title": "Kalit एक",
     "description": "एक एक्सीक्यूशन लेयर जो AI इंटेलिजेंस को स्ट्रक्चर्ड वर्कफ़्लो, डिप्लॉयड सिस्टम और वास्तविक बिज़नेस परिणामों में बदलती है।",
     "aiModels": "AI मॉडल",
     "executionLayer": "Kalit एक्सीक्यूशन लेयर",
-    "runningSystems": "चालू सिस्टम"
+    "runningSystems": "चालू सिस्टम",
+    "titleBold": "मॉडल नहीं है"
   },
   "features": {
     "subtitle": "कैसे काम करता है",

@@ -7,6 +7,7 @@ import { Heading } from "@/components/heading"
 import { Link } from "@/components/link"
 import { Logo } from "@/components/logo"
 import { SUITES } from "@/lib/suites"
+import { useTranslation } from "@/stores/i18n"
 import { useGSAP } from "@gsap/react"
 import clsx from "clsx"
 import gsap from "gsap"
@@ -14,6 +15,7 @@ import { useRef } from "react"
 import s from "./join.module.scss"
 
 export const Join = () => {
+  const t = useTranslation()
   const listRef = useRef<HTMLDivElement>(null)
   const path1Ref = useRef<SVGPathElement>(null)
   const path2Ref = useRef<SVGPathElement>(null)
@@ -45,12 +47,10 @@ export const Join = () => {
       <Container>
         <Heading
           className={s.heading}
-          subtitle="Get started"
-          paragraph="Use one suite on its own or combine all four to build, launch, grow, and secure your business from one platform."
+          subtitle={t("join.subtitle")}
+          paragraph={t("join.description")}
         >
-          Start with the suite
-          <br />
-          that matches your goal
+          {t("join.title")}
         </Heading>
         <div className={s.bottom}>
           <div className={s.screen}>

@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "Mimari",
-    "title": "Kalit bir model değildir",
+    "title": "Kalit bir",
     "description": "AI zekasını yapılandırılmış iş akışlarına, çalışan sistemlere ve gerçek iş sonuçlarına dönüştüren bir yürütme katmanı.",
     "aiModels": "AI modelleri",
     "executionLayer": "Kalit Yürütme Katmanı",
-    "runningSystems": "Çalışan Sistemler"
+    "runningSystems": "Çalışan Sistemler",
+    "titleBold": "model değildir"
   },
   "features": {
     "subtitle": "Nasıl çalışır",

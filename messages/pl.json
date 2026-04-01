@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "Architektura",
-    "title": "Kalit to nie model",
+    "title": "Kalit nie jest",
     "description": "Warstwa wykonawcza, która przekształca inteligencję AI w ustrukturyzowane procesy, wdrożone systemy i realne wyniki biznesowe.",
     "aiModels": "Modele AI",
     "executionLayer": "Warstwa Wykonawcza Kalit",
-    "runningSystems": "Działające Systemy"
+    "runningSystems": "Działające Systemy",
+    "titleBold": "modelem"
   },
   "features": {
     "subtitle": "Jak to działa",

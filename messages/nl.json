@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "De Architectuur",
-    "title": "Kalit is geen model",
+    "title": "Kalit is geen",
     "description": "Een executielaag die AI-intelligentie omzet in gestructureerde workflows, werkende systemen en echte bedrijfsresultaten.",
     "aiModels": "AI-modellen",
     "executionLayer": "Kalit Executielaag",
-    "runningSystems": "Draaiende Systemen"
+    "runningSystems": "Draaiende Systemen",
+    "titleBold": "een model"
   },
   "features": {
     "subtitle": "Hoe het werkt",
@@ -74,7 +75,28 @@
   },
   "choose": {
     "subtitle": "Vergelijk",
-    "description": "Vergelijk Kalit met andere tools op de mogelijkheden die het meest belangrijk zijn voor founders en digitale teams."
+    "description": "Vergelijk Kalit met andere tools op de mogelijkheden die het meest belangrijk zijn voor founders en digitale teams.",
+    "title": "Waarom Kalit kiezen?",
+    "buildApps": "Complete apps",
+    "buildAppsDesc": "End-to-end app-ontwikkeling vanuit een prompt",
+    "launchWebsites": "Websites lanceren",
+    "launchWebsitesDesc": "Landingspagina's genereren en publiceren",
+    "marketingWorkflows": "Marketing-workflows",
+    "marketingWorkflowsDesc": "Acquisitiecampagnes opzetten en uitvoeren",
+    "securityScanning": "Beveiligingsscan",
+    "securityScanningDesc": "Automatische kwetsbaarheidsdetectie en -reparatie",
+    "multiAgent": "Multi-agent uitvoering",
+    "multiAgentDesc": "Gespecialiseerde agents die samenwerken",
+    "parallelTasks": "Parallelle taken",
+    "parallelTasksDesc": "Meerdere workflows tegelijkertijd uitvoeren",
+    "deployment": "Deployment inbegrepen",
+    "deploymentDesc": "Met één klik naar productie",
+    "beginner": "Beginnersvriendelijk",
+    "beginnerDesc": "Toegankelijk voor niet-technische founders",
+    "aiPlanning": "AI-strategieplanning",
+    "aiPlanningDesc": "AI-gestuurde projectarchitectuur en roadmap",
+    "endToEnd": "End-to-end workflow",
+    "endToEndDesc": "Van idee tot live product op één platform"
   },
   "footer": {
     "rights": "Alle rechten voorbehouden.",

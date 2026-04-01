@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "架构",
-    "title": "Kalit 不是一个模型",
+    "title": "Kalit 不是",
     "description": "一个执行层，将 AI 智能转化为结构化工作流、已部署的系统和真实的商业成果。",
     "aiModels": "AI 模型",
     "executionLayer": "Kalit 执行层",
-    "runningSystems": "运行中的系统"
+    "runningSystems": "运行中的系统",
+    "titleBold": "模型"
   },
   "features": {
     "subtitle": "工作原理",
@@ -74,7 +75,28 @@
   },
   "choose": {
     "subtitle": "对比",
-    "description": "在创始人和数字团队最关注的能力维度上，将 Kalit 与其他工具进行对比。"
+    "description": "在创始人和数字团队最关注的能力维度上，将 Kalit 与其他工具进行对比。",
+    "title": "为什么选择 Kalit？",
+    "buildApps": "完整应用开发",
+    "buildAppsDesc": "从提示词到完整应用的端到端开发",
+    "launchWebsites": "网站上线",
+    "launchWebsitesDesc": "生成并发布落地页",
+    "marketingWorkflows": "营销自动化",
+    "marketingWorkflowsDesc": "创建和执行获客营销活动",
+    "securityScanning": "安全扫描",
+    "securityScanningDesc": "自动检测和修复漏洞",
+    "multiAgent": "多代理协同",
+    "multiAgentDesc": "专业代理协作执行",
+    "parallelTasks": "并行任务",
+    "parallelTasksDesc": "同时运行多个工作流",
+    "deployment": "部署内置",
+    "deploymentDesc": "一键发布到生产环境",
+    "beginner": "新手友好",
+    "beginnerDesc": "非技术创始人也能轻松使用",
+    "aiPlanning": "AI 战略规划",
+    "aiPlanningDesc": "AI 驱动的项目架构和路线图",
+    "endToEnd": "端到端流程",
+    "endToEndDesc": "从创意到上线产品，一个平台搞定"
   },
   "footer": {
     "rights": "版权所有。",

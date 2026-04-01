@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "La arquitectura",
-    "title": "Kalit no es un modelo",
+    "title": "Kalit no es",
     "description": "Una capa de ejecución que transforma la inteligencia artificial en flujos de trabajo estructurados, sistemas desplegados y resultados de negocio reales.",
     "aiModels": "Modelos de IA",
     "executionLayer": "Capa de ejecución Kalit",
-    "runningSystems": "Sistemas en producción"
+    "runningSystems": "Sistemas en producción",
+    "titleBold": "un modelo"
   },
   "features": {
     "subtitle": "Cómo funciona",
@@ -74,7 +75,28 @@
   },
   "choose": {
     "subtitle": "Comparar",
-    "description": "Compara Kalit con otras herramientas en las capacidades que más importan a fundadores y equipos digitales."
+    "description": "Compara Kalit con otras herramientas en las capacidades que más importan a fundadores y equipos digitales.",
+    "title": "¿Por qué elegir Kalit?",
+    "buildApps": "Apps completas",
+    "buildAppsDesc": "Desarrollo de apps de principio a fin desde un prompt",
+    "launchWebsites": "Sitios web",
+    "launchWebsitesDesc": "Genera y publica landing pages",
+    "marketingWorkflows": "Marketing automatizado",
+    "marketingWorkflowsDesc": "Crea y ejecuta campañas de adquisición",
+    "securityScanning": "Escaneo de seguridad",
+    "securityScanningDesc": "Detección y corrección automática de vulnerabilidades",
+    "multiAgent": "Ejecución multi-agente",
+    "multiAgentDesc": "Agentes especializados trabajando juntos",
+    "parallelTasks": "Tareas paralelas",
+    "parallelTasksDesc": "Ejecuta múltiples flujos simultáneamente",
+    "deployment": "Despliegue incluido",
+    "deploymentDesc": "Publica en producción con un clic",
+    "beginner": "Para principiantes",
+    "beginnerDesc": "Accesible para fundadores sin perfil técnico",
+    "aiPlanning": "Planificación con IA",
+    "aiPlanningDesc": "Arquitectura de proyecto y roadmap impulsados por IA",
+    "endToEnd": "Flujo de principio a fin",
+    "endToEndDesc": "De la idea al producto en vivo en una sola plataforma"
   },
   "footer": {
     "rights": "Todos los derechos reservados.",

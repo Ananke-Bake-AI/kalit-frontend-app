@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "アーキテクチャ",
-    "title": "Kalitはモデルではない",
+    "title": "Kalitは",
     "description": "AI知能を構造化されたワークフロー、デプロイされたシステム、実際のビジネス成果に変換する実行レイヤーです。",
     "aiModels": "AIモデル",
     "executionLayer": "Kalit実行レイヤー",
-    "runningSystems": "稼働中のシステム"
+    "runningSystems": "稼働中のシステム",
+    "titleBold": "モデルではない"
   },
   "features": {
     "subtitle": "仕組み",
@@ -74,7 +75,28 @@
   },
   "choose": {
     "subtitle": "比較",
-    "description": "創業者やデジタルチームにとって最も重要な機能で、Kalitを他のツールと比較してみましょう。"
+    "description": "創業者やデジタルチームにとって最も重要な機能で、Kalitを他のツールと比較してみましょう。",
+    "title": "なぜKalitを選ぶ？",
+    "buildApps": "アプリ開発",
+    "buildAppsDesc": "プロンプトからエンドツーエンドのアプリ開発",
+    "launchWebsites": "サイト公開",
+    "launchWebsitesDesc": "ランディングページの生成と公開",
+    "marketingWorkflows": "マーケティング自動化",
+    "marketingWorkflowsDesc": "獲得キャンペーンの作成と実行",
+    "securityScanning": "セキュリティスキャン",
+    "securityScanningDesc": "脆弱性の自動検出と修正",
+    "multiAgent": "マルチエージェント実行",
+    "multiAgentDesc": "専門エージェントが連携して動作",
+    "parallelTasks": "並列タスク",
+    "parallelTasksDesc": "複数のワークフローを同時実行",
+    "deployment": "デプロイ込み",
+    "deploymentDesc": "ワンクリックで本番環境へ",
+    "beginner": "初心者対応",
+    "beginnerDesc": "技術知識がなくても使える",
+    "aiPlanning": "AI戦略プランニング",
+    "aiPlanningDesc": "AIによるプロジェクト設計とロードマップ",
+    "endToEnd": "エンドツーエンド",
+    "endToEndDesc": "アイデアから本番プロダクトまで一つのプラットフォームで"
   },
   "footer": {
     "rights": "全著作権所有。",

@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "L'Architettura",
-    "title": "Kalit non è un modello",
+    "title": "Kalit non è",
     "description": "Un livello di esecuzione che trasforma l'intelligenza artificiale in flussi di lavoro strutturati, sistemi operativi e risultati di business concreti.",
     "aiModels": "Modelli AI",
     "executionLayer": "Livello di Esecuzione Kalit",
-    "runningSystems": "Sistemi Operativi"
+    "runningSystems": "Sistemi Operativi",
+    "titleBold": "un modello"
   },
   "features": {
     "subtitle": "Come funziona",
@@ -74,7 +75,28 @@
   },
   "choose": {
     "subtitle": "Confronta",
-    "description": "Confronta Kalit con altri strumenti sulle funzionalità più importanti per founder e team digitali."
+    "description": "Confronta Kalit con altri strumenti sulle funzionalità più importanti per founder e team digitali.",
+    "title": "Perché scegliere Kalit?",
+    "buildApps": "App complete",
+    "buildAppsDesc": "Sviluppo app end-to-end da un prompt",
+    "launchWebsites": "Siti web",
+    "launchWebsitesDesc": "Generazione e pubblicazione di landing page",
+    "marketingWorkflows": "Marketing automatizzato",
+    "marketingWorkflowsDesc": "Creazione ed esecuzione di campagne di acquisizione",
+    "securityScanning": "Scansione di sicurezza",
+    "securityScanningDesc": "Rilevamento e correzione automatica delle vulnerabilità",
+    "multiAgent": "Esecuzione multi-agente",
+    "multiAgentDesc": "Agenti specializzati che lavorano insieme",
+    "parallelTasks": "Attività parallele",
+    "parallelTasksDesc": "Esecuzione simultanea di più flussi di lavoro",
+    "deployment": "Deploy incluso",
+    "deploymentDesc": "In produzione con un clic",
+    "beginner": "Per principianti",
+    "beginnerDesc": "Accessibile per founder non tecnici",
+    "aiPlanning": "Pianificazione strategica AI",
+    "aiPlanningDesc": "Architettura di progetto e roadmap guidate dall'AI",
+    "endToEnd": "Workflow end-to-end",
+    "endToEndDesc": "Dall'idea al prodotto live in un'unica piattaforma"
   },
   "footer": {
     "rights": "Tutti i diritti riservati.",

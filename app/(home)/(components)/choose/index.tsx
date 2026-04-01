@@ -4,6 +4,7 @@ import { Container } from "@/components/container"
 import { Heading } from "@/components/heading"
 import { Icon } from "@/components/icon"
 import { Logotype } from "@/components/logotype"
+import { useTranslation } from "@/stores/i18n"
 import { useGSAP } from "@gsap/react"
 import clsx from "clsx"
 import gsap from "gsap"
@@ -20,6 +21,8 @@ const Cross = () => {
 }
 
 export const Choose = () => {
+  const t = useTranslation()
+
   const iconCol = [
     "hugeicons:apple-reminder",
     "hugeicons:global",
@@ -33,48 +36,23 @@ export const Choose = () => {
     "hugeicons:chart-breakout-circle"
   ] as const
 
-  const rows = [
-    {
-      label: "Build Full Apps",
-      description: "End-to-end app development from a prompt"
-    },
-    {
-      label: "Launch Websites",
-      description: "Generate and publish landing pages"
-    },
-    {
-      label: "Marketing Workflows",
-      description: "Create and run acquisition campaigns"
-    },
-    {
-      label: "Security Scanning",
-      description: "Automated vulnerability detection and fixes"
-    },
-    {
-      label: "Multi-Agent Execution",
-      description: "Specialized agents working together"
-    },
-    {
-      label: "Parallel Tasks",
-      description: "Run multiple workflows simultaneously"
-    },
-    {
-      label: "Deployment Included",
-      description: "Ship to production in one click"
-    },
-    {
-      label: "Beginner Friendly",
-      description: "Accessible for non-technical founders"
-    },
-    {
-      label: "AI Strategic Planning",
-      description: "AI-driven project architecture and roadmap"
-    },
-    {
-      label: "End-to-End Workflow",
-      description: "From idea to live product in one platform"
-    }
-  ] as const
+  const rowKeys = [
+    { labelKey: "choose.buildApps", descKey: "choose.buildAppsDesc" },
+    { labelKey: "choose.launchWebsites", descKey: "choose.launchWebsitesDesc" },
+    { labelKey: "choose.marketingWorkflows", descKey: "choose.marketingWorkflowsDesc" },
+    { labelKey: "choose.securityScanning", descKey: "choose.securityScanningDesc" },
+    { labelKey: "choose.multiAgent", descKey: "choose.multiAgentDesc" },
+    { labelKey: "choose.parallelTasks", descKey: "choose.parallelTasksDesc" },
+    { labelKey: "choose.deployment", descKey: "choose.deploymentDesc" },
+    { labelKey: "choose.beginner", descKey: "choose.beginnerDesc" },
+    { labelKey: "choose.aiPlanning", descKey: "choose.aiPlanningDesc" },
+    { labelKey: "choose.endToEnd", descKey: "choose.endToEndDesc" }
+  ]
+
+  const rows = rowKeys.map((rk) => ({
+    label: t(rk.labelKey),
+    description: t(rk.descKey)
+  }))
 
   const columns = [
     {
@@ -158,10 +136,10 @@ export const Choose = () => {
       <Container>
         <Heading
           className={s.heading}
-          subtitle="Compare"
-          paragraph="Compare Kalit with other tools across the capabilities that matter most to founders and digital teams."
+          subtitle={t("choose.subtitle")}
+          paragraph={t("choose.description")}
         >
-          Why choose Kalit?
+          {t("choose.title")}
           <svg viewBox="0 0 941 241" className={clsx(s.line, s.line1)}>
             <path
               ref={line1Ref}

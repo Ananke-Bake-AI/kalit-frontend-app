@@ -5,22 +5,24 @@ import { Heading } from "@/components/heading"
 import { Logo } from "@/components/logo"
 import { Models } from "@/components/models"
 import { AnimatedLine } from "@/components/svg/animated-line"
+import { useTranslation } from "@/stores/i18n"
 import { Icon } from "@iconify/react"
 import clsx from "clsx"
 import s from "./architecture.module.scss"
 
 export const Architecture = () => {
+  const t = useTranslation()
   return (
     <section className={s.architecture}>
       <Container>
         <Heading
           className={s.heading}
-          subtitle="The Architecture"
-          paragraph="An execution layer that turns AI intelligence into structured workflows, deployed systems, and real business outcomes."
+          subtitle={t("architecture.subtitle")}
+          paragraph={t("architecture.description")}
         >
-          Kalit is not <br />
+          {t("architecture.title")} <br />
           <strong className={s.strong}>
-            a model
+            {t("architecture.titleBold")}
             <AnimatedLine
               className={s.line}
               viewBox="0 0 621 429"
@@ -31,7 +33,7 @@ export const Architecture = () => {
         </Heading>
         <div className={s.layers}>
           <div className={clsx(s.layer, s.layer1)}>
-            <h3>AI models</h3>
+            <h3>{t("architecture.aiModels")}</h3>
             <Models className={s.list} />
           </div>
           <svg viewBox="0 0 261 62" className={s.layer1Line}>
@@ -41,7 +43,7 @@ export const Architecture = () => {
             <div className={s.logo}>
               <Logo id="kalit" />
             </div>
-            <h3>Kalit Execution Layer</h3>
+            <h3>{t("architecture.executionLayer")}</h3>
           </div>
           <svg viewBox="0 0 13 67" className={s.layer2Line}>
             <line x1="0.5" y1="0" x2="0.500003" y2="66" stroke="var(--color-1)" />
@@ -53,7 +55,7 @@ export const Architecture = () => {
             <div className={s.icon}>
               <Icon icon="svg-spinners:pulse-rings-3" />
             </div>
-            <h3>Running Systems</h3>
+            <h3>{t("architecture.runningSystems")}</h3>
           </div>
         </div>
       </Container>

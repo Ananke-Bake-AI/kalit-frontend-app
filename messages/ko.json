@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "아키텍처",
-    "title": "Kalit은 모델이 아닙니다",
+    "title": "Kalit은",
     "description": "AI 지능을 구조화된 워크플로, 배포된 시스템, 실질적인 비즈니스 성과로 전환하는 실행 레이어입니다.",
     "aiModels": "AI 모델",
     "executionLayer": "Kalit 실행 레이어",
-    "runningSystems": "운영 중인 시스템"
+    "runningSystems": "운영 중인 시스템",
+    "titleBold": "모델이 아닙니다"
   },
   "features": {
     "subtitle": "작동 방식",
@@ -74,7 +75,28 @@
   },
   "choose": {
     "subtitle": "비교하기",
-    "description": "창업자와 디지털 팀에게 가장 중요한 기능 기준으로 Kalit을 다른 도구와 비교해 보세요."
+    "description": "창업자와 디지털 팀에게 가장 중요한 기능 기준으로 Kalit을 다른 도구와 비교해 보세요.",
+    "title": "왜 Kalit을 선택할까요?",
+    "buildApps": "앱 개발",
+    "buildAppsDesc": "프롬프트에서 엔드투엔드 앱 개발",
+    "launchWebsites": "웹사이트 출시",
+    "launchWebsitesDesc": "랜딩 페이지 생성 및 게시",
+    "marketingWorkflows": "마케팅 자동화",
+    "marketingWorkflowsDesc": "고객 획득 캠페인 제작 및 실행",
+    "securityScanning": "보안 스캔",
+    "securityScanningDesc": "취약점 자동 탐지 및 수정",
+    "multiAgent": "멀티 에이전트 실행",
+    "multiAgentDesc": "전문 에이전트가 협력하여 작동",
+    "parallelTasks": "병렬 작업",
+    "parallelTasksDesc": "여러 워크플로를 동시에 실행",
+    "deployment": "배포 포함",
+    "deploymentDesc": "원클릭으로 프로덕션 배포",
+    "beginner": "초보자 친화적",
+    "beginnerDesc": "비기술 창업자도 쉽게 사용 가능",
+    "aiPlanning": "AI 전략 기획",
+    "aiPlanningDesc": "AI 기반 프로젝트 설계와 로드맵",
+    "endToEnd": "엔드투엔드 워크플로",
+    "endToEndDesc": "아이디어에서 라이브 제품까지 하나의 플랫폼에서"
   },
   "footer": {
     "rights": "모든 권리 보유.",

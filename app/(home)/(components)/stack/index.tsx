@@ -6,6 +6,7 @@ import { Illustration } from "@/components/illustration"
 import { Paragraph } from "@/components/paragraph"
 import { Sprite } from "@/components/sprite"
 import { SUITES } from "@/lib/suites"
+import { useTranslation } from "@/stores/i18n"
 import { Icon } from "@/components/icon"
 import Link from "next/link"
 import { useCallback, useRef } from "react"
@@ -16,6 +17,7 @@ import { Swiper, SwiperRef, SwiperSlide } from "swiper/react"
 import s from "./stack.module.scss"
 
 export const Stack = () => {
+  const t = useTranslation()
   const sliderRef = useRef<SwiperRef>(null)
 
   const handlePrev = useCallback(() => {
@@ -32,15 +34,12 @@ export const Stack = () => {
     <section id="stack" className={s.stack}>
       <Container>
         <div className={s.top}>
-          <Heading className={s.heading} subtitle="Kalit Execution Stack">
-            Full Stack <br /> Model Matrix
+          <Heading className={s.heading} subtitle={t("stack.subtitle")}>
+            {t("stack.title")}
           </Heading>
           <div className={s.right}>
             <Paragraph>
-              <p>
-                Covering four major areas — apps, websites, growth, and security. Everything you need to build and scale
-                a digital product end to end.
-              </p>
+              <p>{t("stack.description")}</p>
             </Paragraph>
             <div className={s.nav}>
               <button onClick={handlePrev} aria-label="Previous">

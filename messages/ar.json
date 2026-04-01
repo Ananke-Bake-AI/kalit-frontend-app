@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "البنية",
-    "title": "Kalit ليس نموذجاً",
+    "title": "Kalit ليس",
     "description": "طبقة تنفيذ تحوّل ذكاء الذكاء الاصطناعي إلى سير عمل منظم وأنظمة قائمة ونتائج أعمال حقيقية.",
     "aiModels": "نماذج الذكاء الاصطناعي",
     "executionLayer": "طبقة التنفيذ في Kalit",
-    "runningSystems": "أنظمة قيد التشغيل"
+    "runningSystems": "أنظمة قيد التشغيل",
+    "titleBold": "نموذجًا"
   },
   "features": {
     "subtitle": "كيف يعمل",

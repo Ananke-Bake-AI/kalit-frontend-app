@@ -1,73 +1,45 @@
+"use client"
+
 import { Container } from "@/components/container"
 import { Logotype } from "@/components/logotype"
+import { useTranslation } from "@/stores/i18n"
 import Link from "next/link"
 import { Socials } from "../socials"
 import s from "./footer.module.scss"
 import { Newsletter } from "./newsletter"
 
-const NAVS = [
-  {
-    title: "Suites",
-    links: [
-      {
-        title: "Pentest",
-        href: "/pentest"
-      },
-      {
-        title: "Flow",
-        href: "/flow"
-      },
-      {
-        title: "Marketing",
-        href: "/marketing"
-      },
-      {
-        title: "Project",
-        href: "/project"
-      }
-    ]
-  },
-  {
-    title: "Resources",
-    links: [
-      {
-        title: "FAQ",
-        href: "/faq"
-      },
-      {
-        title: "Support",
-        href: "/support"
-      },
-      {
-        title: "Documentation",
-        href: "/documentation"
-      },
-      {
-        title: "GitHub",
-        href: "/github"
-      }
-    ]
-  },
-  {
-    title: "Company",
-    links: [
-      {
-        title: "Careers",
-        href: "/careers"
-      },
-      {
-        title: "Contact Us",
-        href: "/contact-us"
-      },
-      {
-        title: "Branding Kit",
-        href: "/branding-kit"
-      }
-    ]
-  }
-]
-
 export const Footer = () => {
+  const t = useTranslation()
+
+  const NAVS = [
+    {
+      title: t("footer.suites"),
+      links: [
+        { title: "Pentest", href: "/pentest" },
+        { title: "Flow", href: "/flow" },
+        { title: "Marketing", href: "/marketing" },
+        { title: "Project", href: "/project" }
+      ]
+    },
+    {
+      title: t("footer.resources"),
+      links: [
+        { title: t("footer.faq"), href: "/faq" },
+        { title: t("footer.support"), href: "/support" },
+        { title: t("footer.documentation"), href: "/documentation" },
+        { title: "GitHub", href: "/github" }
+      ]
+    },
+    {
+      title: t("footer.company"),
+      links: [
+        { title: t("footer.careers"), href: "/careers" },
+        { title: t("footer.contactUs"), href: "/contact-us" },
+        { title: t("footer.brandingKit"), href: "/branding-kit" }
+      ]
+    }
+  ]
+
   return (
     <footer className={s.footer}>
       <Container className={s.container}>
@@ -76,7 +48,7 @@ export const Footer = () => {
             <Logotype className={s.logo} />
             <div>
               <Socials />
-              <p>© 2026. All rights reserved.</p>
+              <p>© 2026. {t("footer.rights")}</p>
             </div>
           </div>
           <div className={s.nav}>
@@ -96,9 +68,9 @@ export const Footer = () => {
         </div>
         <Newsletter />
         <div className={s.bottom}>
-          <Link href="/terms-of-service">Terms and Conditions</Link>
-          <Link href="/privacy-policy">Privacy Policy</Link>
-          <p>All listed company names are trademarks ™ or registered trademarks ® of their respective holders.</p>
+          <Link href="/terms-of-service">{t("footer.terms")}</Link>
+          <Link href="/privacy-policy">{t("footer.privacy")}</Link>
+          <p>{t("footer.trademarks")}</p>
         </div>
       </Container>
     </footer>

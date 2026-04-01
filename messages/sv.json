@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "Arkitekturen",
-    "title": "Kalit är inte en modell",
+    "title": "Kalit är inte",
     "description": "Ett exekveringslager som omvandlar AI-intelligens till strukturerade arbetsflöden, driftsatta system och verkliga affärsresultat.",
     "aiModels": "AI-modeller",
     "executionLayer": "Kalits exekveringslager",
-    "runningSystems": "Aktiva system"
+    "runningSystems": "Aktiva system",
+    "titleBold": "en modell"
   },
   "features": {
     "subtitle": "Hur det fungerar",

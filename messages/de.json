@@ -41,11 +41,12 @@
   },
   "architecture": {
     "subtitle": "Die Architektur",
-    "title": "Kalit ist kein Modell",
+    "title": "Kalit ist kein",
     "description": "Eine Ausführungsschicht, die KI-Intelligenz in strukturierte Workflows, deployed Systeme und echte Geschäftsergebnisse verwandelt.",
     "aiModels": "KI-Modelle",
     "executionLayer": "Kalit Ausführungsschicht",
-    "runningSystems": "Laufende Systeme"
+    "runningSystems": "Laufende Systeme",
+    "titleBold": "ein Modell"
   },
   "features": {
     "subtitle": "So funktioniert's",
@@ -74,7 +75,28 @@
   },
   "choose": {
     "subtitle": "Vergleichen",
-    "description": "Vergleiche Kalit mit anderen Tools in den Fähigkeiten, die für Gründer und digitale Teams am wichtigsten sind."
+    "description": "Vergleiche Kalit mit anderen Tools in den Fähigkeiten, die für Gründer und digitale Teams am wichtigsten sind.",
+    "title": "Warum Kalit wählen?",
+    "buildApps": "Komplette Apps",
+    "buildAppsDesc": "App-Entwicklung von Anfang bis Ende aus einem Prompt",
+    "launchWebsites": "Websites starten",
+    "launchWebsitesDesc": "Landing Pages generieren und veröffentlichen",
+    "marketingWorkflows": "Marketing-Workflows",
+    "marketingWorkflowsDesc": "Akquise-Kampagnen erstellen und ausführen",
+    "securityScanning": "Sicherheits-Scan",
+    "securityScanningDesc": "Automatische Schwachstellenerkennung und -behebung",
+    "multiAgent": "Multi-Agenten-Ausführung",
+    "multiAgentDesc": "Spezialisierte Agenten arbeiten zusammen",
+    "parallelTasks": "Parallele Aufgaben",
+    "parallelTasksDesc": "Mehrere Workflows gleichzeitig ausführen",
+    "deployment": "Deployment inklusive",
+    "deploymentDesc": "Mit einem Klick in Produktion",
+    "beginner": "Einsteigerfreundlich",
+    "beginnerDesc": "Zugänglich für nicht-technische Gründer",
+    "aiPlanning": "KI-Strategieplanung",
+    "aiPlanningDesc": "KI-gestützte Projektarchitektur und Roadmap",
+    "endToEnd": "End-to-End-Workflow",
+    "endToEndDesc": "Von der Idee zum Live-Produkt auf einer Plattform"
   },
   "footer": {
     "rights": "Alle Rechte vorbehalten.",

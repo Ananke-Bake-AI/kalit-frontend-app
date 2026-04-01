@@ -1,16 +1,21 @@
+"use client"
+
 import { Button } from "@/components/button"
+import { useTranslation } from "@/stores/i18n"
 import s from "./footer.module.scss"
 
 export const Newsletter = () => {
+  const t = useTranslation()
+
   return (
     <div className={s.newsletter}>
       <div className={s.left}>
-        <h2>Get early access</h2>
-        <p>Be the first to try Kalit. Enter your email for early access and product updates.</p>
+        <h2>{t("footer.earlyAccess")}</h2>
+        <p>{t("footer.earlyAccessDesc")}</p>
       </div>
       <form className={s.form} action="/register" method="GET">
-        <input type="email" name="email" placeholder="Your email address" />
-        <Button type="submit">Join waitlist</Button>
+        <input type="email" name="email" placeholder={t("footer.emailPlaceholder")} />
+        <Button type="submit">{t("footer.joinWaitlist")}</Button>
       </form>
     </div>
   )
