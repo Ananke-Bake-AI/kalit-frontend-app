@@ -147,7 +147,20 @@
     "yourSuites": "Jouw Kalit suites",
     "openSuite": "Suite openen",
     "upgradeToUnlock": "Upgrade om te ontgrendelen",
-    "locked": "Vergrendeld"
+    "locked": "Vergrendeld",
+    "unlimitedSeats": "Onbeperkte plaatsen",
+    "seats": "plaatsen",
+    "currentPlanHint": "Facturering, toegang en limieten hier gesynchroniseerd.",
+    "creditsHint": "Beschikbaar voor deze maand.",
+    "jobsHint": "In wachtrij of actief in de suites.",
+    "seatsHint": "Eigenaren, editors en medewerkers.",
+    "profileDesc": "Accountgegevens en aanmeldvoorkeuren beheren.",
+    "billingDesc": "Plan, abonnement en upgrades beheren.",
+    "teamLabel": "Team",
+    "teamDesc": "Leden, rollen en toegang bekijken.",
+    "usageLabel": "Gebruik",
+    "usageDesc": "Credits en recente activiteit volgen.",
+    "suiteSuffix": "suite"
   },
   "common": {
     "previous": "Vorige",

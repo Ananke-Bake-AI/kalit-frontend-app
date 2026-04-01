@@ -147,7 +147,20 @@
     "yourSuites": "Tus suites Kalit",
     "openSuite": "Abrir suite",
     "upgradeToUnlock": "Actualizar para desbloquear",
-    "locked": "Bloqueado"
+    "locked": "Bloqueado",
+    "unlimitedSeats": "Plazas ilimitadas",
+    "seats": "plazas",
+    "currentPlanHint": "Facturación, acceso y límites sincronizados aquí.",
+    "creditsHint": "Disponibles este mes.",
+    "jobsHint": "En cola o ejecutándose en las suites.",
+    "seatsHint": "Propietarios, editores y colaboradores.",
+    "profileDesc": "Actualiza los detalles de tu cuenta y preferencias.",
+    "billingDesc": "Gestiona tu plan, suscripción y mejoras.",
+    "teamLabel": "Equipo",
+    "teamDesc": "Revisa miembros, roles y accesos.",
+    "usageLabel": "Uso",
+    "usageDesc": "Consulta créditos y actividad reciente.",
+    "suiteSuffix": "suite"
   },
   "common": {
     "previous": "Anterior",

@@ -147,7 +147,20 @@
     "yourSuites": "Deine Kalit Suites",
     "openSuite": "Suite öffnen",
     "upgradeToUnlock": "Upgraden zum Freischalten",
-    "locked": "Gesperrt"
+    "locked": "Gesperrt",
+    "unlimitedSeats": "Unbegrenzte Plätze",
+    "seats": "Plätze",
+    "currentPlanHint": "Abrechnung, Zugang und Limits hier synchronisiert.",
+    "creditsHint": "Verfügbar für diesen Monat.",
+    "jobsHint": "In Warteschlange oder laufend.",
+    "seatsHint": "Inhaber, Bearbeiter und Mitarbeiter.",
+    "profileDesc": "Kontodetails und Anmeldepräferenzen verwalten.",
+    "billingDesc": "Plan, Abonnement und Upgrades verwalten.",
+    "teamLabel": "Team",
+    "teamDesc": "Mitglieder, Rollen und Zugriff prüfen.",
+    "usageLabel": "Nutzung",
+    "usageDesc": "Credits und aktuelle Aktivität verfolgen.",
+    "suiteSuffix": "Suite"
   },
   "common": {
     "previous": "Zurück",

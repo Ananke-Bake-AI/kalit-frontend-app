@@ -147,7 +147,20 @@
     "yourSuites": "Kalit paketleriniz",
     "openSuite": "Paketi aç",
     "upgradeToUnlock": "Yükselt ve kilidi aç",
-    "locked": "Kilitli"
+    "locked": "Kilitli",
+    "unlimitedSeats": "Sınırsız",
+    "seats": "koltuk",
+    "currentPlanHint": "Faturalandırma, erişim ve limitler burada senkronize.",
+    "creditsHint": "Bu ay için kullanılabilir.",
+    "jobsHint": "Sırada veya çalışıyor.",
+    "seatsHint": "Sahipler, editörler ve işbirlikçiler.",
+    "profileDesc": "Hesap bilgilerinizi ve giriş tercihlerinizi yönetin.",
+    "billingDesc": "Plan, abonelik ve yükseltmeleri yönetin.",
+    "teamLabel": "Takım",
+    "teamDesc": "Üyeleri, rolleri ve erişimi inceleyin.",
+    "usageLabel": "Kullanım",
+    "usageDesc": "Kredileri ve son aktiviteyi takip edin.",
+    "suiteSuffix": "suite"
   },
   "common": {
     "previous": "Önceki",

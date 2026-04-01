@@ -147,7 +147,20 @@
     "yourSuites": "내 Kalit 스위트",
     "openSuite": "스위트 열기",
     "upgradeToUnlock": "업그레이드하여 잠금 해제",
-    "locked": "잠김"
+    "locked": "잠김",
+    "unlimitedSeats": "무제한",
+    "seats": "석",
+    "currentPlanHint": "결제, 접근, 제한이 여기서 동기화됩니다.",
+    "creditsHint": "이번 달 사용 가능 크레딧.",
+    "jobsHint": "대기 중이거나 실행 중인 작업.",
+    "seatsHint": "소유자, 편집자, 협업자.",
+    "profileDesc": "계정 정보와 로그인 설정을 관리합니다.",
+    "billingDesc": "요금제, 구독, 업그레이드를 관리합니다.",
+    "teamLabel": "팀",
+    "teamDesc": "멤버, 역할, 접근 권한을 확인합니다.",
+    "usageLabel": "사용량",
+    "usageDesc": "크레딧과 최근 활동을 추적합니다.",
+    "suiteSuffix": "스위트"
   },
   "common": {
     "previous": "이전",

@@ -147,7 +147,20 @@
     "yourSuites": "Dina Kalit-sviter",
     "openSuite": "Öppna svit",
     "upgradeToUnlock": "Uppgradera för att låsa upp",
-    "locked": "Låst"
+    "locked": "Låst",
+    "unlimitedSeats": "Obegränsade platser",
+    "seats": "platser",
+    "currentPlanHint": "Fakturering, åtkomst och gränser synkade här.",
+    "creditsHint": "Tillgängligt denna månad.",
+    "jobsHint": "I kö eller körs just nu.",
+    "seatsHint": "Ägare, redigerare och medarbetare.",
+    "profileDesc": "Hantera kontodetaljer och inloggningsinställningar.",
+    "billingDesc": "Hantera plan, prenumeration och uppgraderingar.",
+    "teamLabel": "Team",
+    "teamDesc": "Granska medlemmar, roller och åtkomst.",
+    "usageLabel": "Användning",
+    "usageDesc": "Spåra krediter och senaste aktivitet.",
+    "suiteSuffix": "svit"
   },
   "common": {
     "previous": "Föregående",

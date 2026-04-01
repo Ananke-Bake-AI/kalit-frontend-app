@@ -147,7 +147,20 @@
     "yourSuites": "باقات Kalit الخاصة بك",
     "openSuite": "فتح الباقة",
     "upgradeToUnlock": "ترقية لفتح القفل",
-    "locked": "مقفل"
+    "locked": "مقفل",
+    "unlimitedSeats": "غير محدود",
+    "seats": "مقاعد",
+    "currentPlanHint": "الفواتير والوصول والحدود متزامنة هنا.",
+    "creditsHint": "متاحة لهذا الشهر.",
+    "jobsHint": "في الانتظار أو قيد التنفيذ.",
+    "seatsHint": "المالكون والمحررون والمتعاونون.",
+    "profileDesc": "إدارة تفاصيل الحساب وتفضيلات تسجيل الدخول.",
+    "billingDesc": "إدارة الخطة والاشتراك والترقيات.",
+    "teamLabel": "الفريق",
+    "teamDesc": "مراجعة الأعضاء والأدوار والوصول.",
+    "usageLabel": "الاستخدام",
+    "usageDesc": "تتبع الرصيد والنشاط الأخير.",
+    "suiteSuffix": "سويت"
   },
   "common": {
     "previous": "السابق",

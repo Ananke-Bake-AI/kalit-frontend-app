@@ -147,7 +147,20 @@
     "yourSuites": "あなたのKalitスイート",
     "openSuite": "スイートを開く",
     "upgradeToUnlock": "アップグレードして解放",
-    "locked": "ロック中"
+    "locked": "ロック中",
+    "unlimitedSeats": "無制限",
+    "seats": "席",
+    "currentPlanHint": "請求、アクセス、制限がここで同期されます。",
+    "creditsHint": "今月利用可能なクレジット。",
+    "jobsHint": "待機中または実行中のジョブ。",
+    "seatsHint": "オーナー、エディター、コラボレーター。",
+    "profileDesc": "アカウント情報とログイン設定を管理。",
+    "billingDesc": "プラン、サブスクリプション、アップグレードを管理。",
+    "teamLabel": "チーム",
+    "teamDesc": "メンバー、ロール、アクセスを確認。",
+    "usageLabel": "使用状況",
+    "usageDesc": "クレジットと最近のアクティビティを追跡。",
+    "suiteSuffix": "スイート"
   },
   "common": {
     "previous": "前へ",

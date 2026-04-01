@@ -5,6 +5,7 @@ import { Logo } from "@/components/logo"
 import { SUITES, type SuiteId } from "@/lib/app-suites"
 import { auth } from "@/lib/auth"
 import { getRemainingCredits, resolveEntitlements } from "@/lib/entitlements"
+import { getServerTranslation } from "@/lib/i18n-server"
 import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
 import type { CSSProperties } from "react"
@@ -13,17 +14,10 @@ import { PageSection } from "@/components/page-section"
 import { SurfacePanel } from "@/components/surface-panel"
 import s from "./dashboard.module.scss"
 
-function formatMemberLimit(limit: number) {
-  if (limit === -1) {
-    return "Unlimited seats"
-  }
-
-  return `${limit} seat${limit === 1 ? "" : "s"}`
-}
-
 export default async function DashboardPage() {
   const session = await auth()
   if (!session?.user?.id) redirect("/login")
+  const t = await getServerTranslation()
 
   const membership = await prisma.membership.findFirst({
     where: { userId: session.user.id, isCurrent: true },
@@ -45,62 +39,47 @@ export default async function DashboardPage() {
     .filter(([, enabled]) => enabled)
     .map(([suiteId]) => suiteId) as SuiteId[]
 
+  const formatMemberLimit = (limit: number) =>
+    limit === -1 ? t("dashboard.unlimitedSeats") : `${limit} ${t("dashboard.seats")}`
+
   const stats = [
     {
-      label: "Current plan",
+      label: t("dashboard.currentPlan"),
       value: entitlements.planKey
         ? entitlements.planKey.charAt(0).toUpperCase() + entitlements.planKey.slice(1)
-        : enabledSuites.length > 0
-          ? "Custom"
-          : "Free",
-      hint: "Billing, access, and execution limits stay synced here."
+        : enabledSuites.length > 0 ? "Custom" : "Free",
+      hint: t("dashboard.currentPlanHint")
     },
     {
-      label: "Credits remaining",
+      label: t("dashboard.creditsRemaining"),
       value: `${credits} / ${entitlements.creditsPerMonth}`,
-      hint: "Available for this calendar month."
+      hint: t("dashboard.creditsHint")
     },
     {
-      label: "Active jobs",
+      label: t("dashboard.activeJobs"),
       value: String(jobCount),
-      hint: "Queued or currently running across the suite."
+      hint: t("dashboard.jobsHint")
     },
     {
-      label: "Team seats",
+      label: t("dashboard.teamSeats"),
       value: `${memberCount} / ${formatMemberLimit(entitlements.maxMembers)}`,
-      hint: "Owners, editors, and collaborators in this workspace."
+      hint: t("dashboard.seatsHint")
     }
   ]
 
   const quickLinks = [
-    {
-      href: "/settings/profile",
-      label: "Profile",
-      value: "Update your account details and sign-in preferences."
-    },
-    {
-      href: "/settings/billing",
-      label: "Billing",
-      value: "Manage plans, subscription status, and upgrades."
-    },
-    {
-      href: "/settings/team",
-      label: "Team",
-      value: "Review seats, roles, and workspace access."
-    },
-    {
-      href: "/settings/usage",
-      label: "Usage",
-      value: "Track credits and recent activity."
-    }
+    { href: "/settings/profile", label: t("nav.profile"), value: t("dashboard.profileDesc") },
+    { href: "/settings/billing", label: t("nav.billing"), value: t("dashboard.billingDesc") },
+    { href: "/settings/team", label: t("dashboard.teamLabel"), value: t("dashboard.teamDesc") },
+    { href: "/settings/usage", label: t("dashboard.usageLabel"), value: t("dashboard.usageDesc") }
   ]
 
   return (
     <PageSection>
       <Container>
         <PageHeader
-          title="Dashboard"
-          description={`Welcome back to ${membership.org.name}. Check your plan, usage, jobs, and available suites.`}
+          title={t("dashboard.title")}
+          description={t("dashboard.welcomeBack", { orgName: membership.org.name })}
         />
 
         <div className={s.statsGrid}>
@@ -115,8 +94,8 @@ export default async function DashboardPage() {
 
         <SurfacePanel
           spaced
-          title="Shortcuts"
-          subtitle="Go straight to the account, billing, team, and usage controls you are most likely to need next."
+          title={t("dashboard.shortcuts")}
+          subtitle={t("dashboard.shortcutsDesc")}
         >
           <div className={s.quickGrid}>
             {quickLinks.map((link) => (
@@ -128,7 +107,7 @@ export default async function DashboardPage() {
           </div>
         </SurfacePanel>
 
-        <h2 className={s.sectionTitle}>Your Kalit suites</h2>
+        <h2 className={s.sectionTitle}>{t("dashboard.yourSuites")}</h2>
         <div className={s.suitesGrid}>
           {SUITES.map((suite) => {
             const isEnabled = enabledSuites.includes(suite.id)
@@ -145,9 +124,9 @@ export default async function DashboardPage() {
                     <Logo id={suite.id} />
                   </div>
                   <Badge>Kalit {suite.name}</Badge>
-                  <h3 className={s.suiteHeading}>{suite.name} suite</h3>
+                  <h3 className={s.suiteHeading}>{suite.name} {t("dashboard.suiteSuffix")}</h3>
                   <p className={s.suiteBlurb}>{suite.description}</p>
-                  <span className={s.suiteAction}>Open suite</span>
+                  <span className={s.suiteAction}>{t("dashboard.openSuite")}</span>
                 </Link>
               )
             }
@@ -161,11 +140,11 @@ export default async function DashboardPage() {
                 <div className={s.suiteIcon}>
                   <Logo id={suite.id} />
                 </div>
-                <Badge>Locked</Badge>
-                <h3 className={s.suiteHeading}>{suite.name} suite</h3>
+                <Badge>{t("dashboard.locked")}</Badge>
+                <h3 className={s.suiteHeading}>{suite.name} {t("dashboard.suiteSuffix")}</h3>
                 <p className={s.suiteBlurb}>{suite.description}</p>
                 <Link href="/settings/billing" className={s.suiteAction}>
-                  Upgrade to unlock
+                  {t("dashboard.upgradeToUnlock")}
                 </Link>
               </div>
             )

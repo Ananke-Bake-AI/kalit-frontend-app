@@ -147,7 +147,20 @@
     "yourSuites": "Your Kalit suites",
     "openSuite": "Open suite",
     "upgradeToUnlock": "Upgrade to unlock",
-    "locked": "Locked"
+    "locked": "Locked",
+    "unlimitedSeats": "Unlimited seats",
+    "seats": "seats",
+    "currentPlanHint": "Billing, access, and execution limits stay synced here.",
+    "creditsHint": "Available for this calendar month.",
+    "jobsHint": "Queued or currently running across the suite.",
+    "seatsHint": "Owners, editors, and collaborators in this workspace.",
+    "profileDesc": "Update your account details and sign-in preferences.",
+    "billingDesc": "Manage plans, subscription status, and upgrades.",
+    "teamLabel": "Team",
+    "teamDesc": "Review seats, roles, and workspace access.",
+    "usageLabel": "Usage",
+    "usageDesc": "Track credits and recent activity.",
+    "suiteSuffix": "suite"
   },
   "common": {
     "previous": "Previous",

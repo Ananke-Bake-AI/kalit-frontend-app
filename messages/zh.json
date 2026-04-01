@@ -147,7 +147,20 @@
     "yourSuites": "您的 Kalit 套件",
     "openSuite": "打开套件",
     "upgradeToUnlock": "升级以解锁",
-    "locked": "已锁定"
+    "locked": "已锁定",
+    "unlimitedSeats": "无限制",
+    "seats": "个席位",
+    "currentPlanHint": "账单、访问权限和限制在此同步。",
+    "creditsHint": "本月可用。",
+    "jobsHint": "排队中或正在运行。",
+    "seatsHint": "所有者、编辑者和协作者。",
+    "profileDesc": "管理账户信息和登录偏好。",
+    "billingDesc": "管理套餐、订阅和升级。",
+    "teamLabel": "团队",
+    "teamDesc": "查看成员、角色和访问权限。",
+    "usageLabel": "使用情况",
+    "usageDesc": "追踪信用额度和近期活动。",
+    "suiteSuffix": "套件"
   },
   "common": {
     "previous": "上一页",
