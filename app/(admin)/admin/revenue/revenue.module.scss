@@ -1,0 +1,220 @@
+@use "@/styles/app-glass" as *;
+@use "@/styles/mixins" as *;
+
+.statsGrid {
+  display: grid;
+  gap: clamp(0.7rem, 1.5vw, 1rem);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+
+  @include max(900px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @include max($responsive) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.statCard {
+  @include glass-panel(1.25rem);
+  position: relative;
+  padding: var(--size-5) var(--size-6);
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 0.18rem;
+    background: linear-gradient(90deg, #22c55e, #16a34a);
+    border-radius: 1.25rem 1.25rem 0 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+
+.statLabel {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.statValue {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  line-height: 1;
+  color: var(--text);
+}
+
+.statHint {
+  display: block;
+  margin-top: 0.4rem;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+// ─── Plan breakdown ─────────────────────────────────────
+
+.planBreakdown {
+  display: grid;
+  gap: var(--size-4);
+}
+
+.planRow {
+  display: grid;
+  grid-template-columns: 6rem 5rem 1fr 5rem;
+  gap: var(--size-3);
+  align-items: center;
+}
+
+.planName {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  color: var(--text);
+}
+
+.planCount {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.planBar {
+  height: 0.6rem;
+  background: oklch(from var(--text) l c h / 0.06);
+  border-radius: var(--radius-rounded);
+  overflow: hidden;
+}
+
+.planBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border-radius: var(--radius-rounded);
+  min-width: 3px;
+  transition: width 0.3s ease;
+}
+
+.planRevenue {
+  text-align: right;
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  color: var(--text);
+}
+
+.emptySmall {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+// ─── Subscriptions table ────────────────────────────────
+
+.table {
+  display: grid;
+  overflow-x: auto;
+}
+
+.tableHeader {
+  display: grid;
+  grid-template-columns: 1.2fr 1.4fr 0.6fr 0.8fr 0.8fr 0.5fr 0.4fr 1.2fr;
+  gap: var(--size-3);
+  padding: var(--size-3) var(--size-5);
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid oklch(from var(--text) l c h / 0.06);
+  min-width: 800px;
+
+  @include max($responsive) {
+    display: none;
+  }
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 1.2fr 1.4fr 0.6fr 0.8fr 0.8fr 0.5fr 0.4fr 1.2fr;
+  gap: var(--size-3);
+  padding: var(--size-4) var(--size-5);
+  font-size: 0.84rem;
+  color: var(--text);
+  border-bottom: 1px solid oklch(from var(--text) l c h / 0.04);
+  align-items: center;
+  min-width: 800px;
+  transition: background-color var(--transition-link);
+
+  &:hover {
+    background-color: oklch(from var(--text) l c h / 0.02);
+  }
+
+  @include max($responsive) {
+    grid-template-columns: 1fr 1fr;
+    min-width: 0;
+    gap: var(--size-2);
+  }
+}
+
+.orgName {
+  font-weight: 500;
+}
+
+.ownerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  overflow: hidden;
+}
+
+.ownerName {
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.ownerEmail {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.planKey {
+  text-transform: capitalize;
+  font-weight: 500;
+}
+
+.date {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+.stripeId {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.stripeLink {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-link);
+
+  &:hover {
+    color: var(--text);
+    text-decoration: underline;
+  }
+}
+
+.mono {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.empty {
+  padding: var(--size-8);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+}

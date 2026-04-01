@@ -12,6 +12,7 @@ const TABS = [
   { icon: "hugeicons:dashboard-square-01", href: "/admin", label: "Dashboard" },
   { icon: "hugeicons:user-group", href: "/admin/users", label: "Users" },
   { icon: "hugeicons:building-01", href: "/admin/organizations", label: "Organizations" },
+  { icon: "hugeicons:dollar-02", href: "/admin/revenue", label: "Revenue" },
   { icon: "hugeicons:activity-01", href: "/admin/monitoring", label: "Monitoring" }
 ]
 

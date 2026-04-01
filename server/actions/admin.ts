@@ -258,6 +258,91 @@ export async function revokePlan(orgId: string) {
   return { success: true }
 }
 
+// ─── Revenue ────────────────────────────────────────────
+
+export async function getAdminRevenue() {
+  await requireAdmin()
+
+  const now = new Date()
+  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+
+  const { PLANS } = await import("@/lib/plans")
+
+  // All subscriptions with org + members
+  const subscriptions = await prisma.subscription.findMany({
+    include: {
+      org: {
+        include: {
+          memberships: { include: { user: true } },
+          entitlements: true,
+          _count: { select: { jobs: true, usageRecords: true } }
+        }
+      }
+    },
+    orderBy: { createdAt: "desc" }
+  })
+
+  // Compute MRR
+  const activeSubscriptions = subscriptions.filter((s) => s.status === "ACTIVE" || s.status === "TRIALING")
+  let mrr = 0
+  const planBreakdown: Record<string, { count: number; revenue: number }> = {}
+
+  for (const sub of activeSubscriptions) {
+    const plan = PLANS.find((p) => p.key === sub.planKey)
+    if (plan) {
+      mrr += plan.monthlyPrice
+      if (!planBreakdown[plan.key]) planBreakdown[plan.key] = { count: 0, revenue: 0 }
+      planBreakdown[plan.key].count++
+      planBreakdown[plan.key].revenue += plan.monthlyPrice
+    }
+  }
+
+  // Churned this month
+  const churned = subscriptions.filter(
+    (s) => s.status === "CANCELED" && s.updatedAt >= startOfMonth
+  ).length
+
+  // Manual/trial entitlements (non-paying users with access)
+  const manualOrgs = await prisma.entitlement.groupBy({
+    by: ["orgId"],
+    where: { source: { in: ["MANUAL", "TRIAL"] }, OR: [{ expiresAt: null }, { expiresAt: { gt: now } }] }
+  })
+
+  return {
+    mrr,
+    arr: mrr * 12,
+    totalSubscriptions: subscriptions.length,
+    activeCount: activeSubscriptions.length,
+    churnedThisMonth: churned,
+    manualAccessOrgs: manualOrgs.length,
+    planBreakdown: Object.entries(planBreakdown).map(([key, val]) => ({
+      plan: key,
+      name: PLANS.find((p) => p.key === key)?.name || key,
+      ...val
+    })),
+    subscriptions: subscriptions.map((s) => ({
+      id: s.id,
+      orgName: s.org.name,
+      orgSlug: s.org.slug,
+      stripeSubscriptionId: s.stripeSubscriptionId,
+      stripePriceId: s.stripePriceId,
+      planKey: s.planKey,
+      status: s.status,
+      currentPeriodStart: s.currentPeriodStart,
+      currentPeriodEnd: s.currentPeriodEnd,
+      cancelAtPeriodEnd: s.cancelAtPeriodEnd,
+      createdAt: s.createdAt,
+      ownerEmail: s.org.memberships.find((m) => m.role === "OWNER")?.user.email || "—",
+      ownerName: s.org.memberships.find((m) => m.role === "OWNER")?.user.name || "—",
+      memberCount: s.org.memberships.length,
+      jobCount: s.org._count.jobs,
+      usageCount: s.org._count.usageRecords,
+      entitlements: s.org.entitlements.map((e) => e.key),
+      stripeCustomerId: s.org.stripeCustomerId
+    }))
+  }
+}
+
 // ─── Monitoring ─────────────────────────────────────────
 
 export async function getAdminJobs(params: { status?: string; page?: number; limit?: number }) {
