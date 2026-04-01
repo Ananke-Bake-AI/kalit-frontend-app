@@ -20,7 +20,11 @@
     "findMySuite": "Znajdź mój pakiet",
     "recommended": "Rekomendowany pakiet",
     "analyzing": "Analizowanie Twojego zapytania...",
-    "poweredBy": "Napędzany wiodącymi modelami AI, orkiestrowany przez Kalit"
+    "poweredBy": "Napędzany wiodącymi modelami AI, orkiestrowany przez Kalit",
+    "placeholder1": "Zbuduj mi aplikację SaaS z logowaniem, płatnościami i panelem...",
+    "placeholder2": "Stwórz landing page dla mojego startupu AI z cennikiem...",
+    "placeholder3": "Uruchom kampanię marketingową na Instagramie i Google Ads...",
+    "placeholder4": "Przeskanuj moją aplikację pod kątem luk bezpieczeństwa..."
   },
   "suites": {
     "project": "Project",
@@ -182,5 +186,17 @@
     "confirm": "Potwierdź",
     "search": "Szukaj",
     "noResults": "Nie znaleziono wyników."
+  },
+  "settings": {
+    "profileLabel": "Profil",
+    "profileDesc": "Zarządzaj danymi konta i ustawieniami logowania.",
+    "workspaceLabel": "Przestrzeń robocza",
+    "workspaceDesc": "Nazwa przestrzeni, strona i podstawowe informacje.",
+    "teamLabel": "Zespół",
+    "teamDesc": "Członkowie, role i wykorzystanie miejsc.",
+    "billingLabel": "Płatności",
+    "billingDesc": "Zarządzaj planem, subskrypcją i aktualizacjami.",
+    "usageLabel": "Użycie",
+    "usageDesc": "Sprawdź kredyty i ostatnią aktywność."
   }
 }

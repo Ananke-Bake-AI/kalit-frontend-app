@@ -10,7 +10,7 @@ import { Subtitle } from "@/components/subtitle"
 import { AnimatedLine } from "@/components/svg/animated-line"
 import { useAnimatedPlaceholder } from "@/hooks/use-animated-placeholder"
 import { detectSuiteFromPrompt, getHeroPromptSuites, getSuiteDisplayTitle, type SuiteConfig } from "@/lib/suites"
-import { useTranslation } from "@/stores/i18n"
+import { useI18n } from "@/stores/i18n"
 import { useGSAP } from "@gsap/react"
 import clsx from "clsx"
 import gsap from "gsap"
@@ -19,16 +19,17 @@ import { useCallback, useRef, useState } from "react"
 import { HeroCard } from "./card"
 import s from "./hero.module.scss"
 
-const PLACEHOLDERS = [
-  "Build me a SaaS app with auth, billing, and a dashboard...",
-  "Create a landing page for my AI startup with pricing tiers...",
-  "Run a marketing campaign across Instagram and Google Ads...",
-  "Scan my web app for security vulnerabilities and fix them..."
+const PLACEHOLDER_KEYS = [
+  "hero.placeholder1",
+  "hero.placeholder2",
+  "hero.placeholder3",
+  "hero.placeholder4"
 ]
 
 export const Hero = () => {
   const router = useRouter()
-  const t = useTranslation()
+  const { locale, t } = useI18n()
+  const PLACEHOLDERS = PLACEHOLDER_KEYS.map((k) => t(k))
   const [promptValue, setPromptValue] = useState("")
   const [matchedSuite, setMatchedSuite] = useState<SuiteConfig | null>(null)
   const [isThinking, setIsThinking] = useState(false)
@@ -101,7 +102,7 @@ export const Hero = () => {
     <section className={s.hero}>
       <Container>
         <Subtitle>{t("hero.subtitle")}</Subtitle>
-        <div ref={titleRef} className={s.title}>
+        <div ref={titleRef} className={s.title} key={`hero-title-${locale}`}>
           <RevealText tag="h1">
             <span>
               {t("hero.title1")}

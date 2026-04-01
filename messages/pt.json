@@ -20,7 +20,11 @@
     "findMySuite": "Encontrar minha suite",
     "recommended": "Suite recomendada",
     "analyzing": "Analisando sua solicitação...",
-    "poweredBy": "Alimentado pelos melhores modelos de IA, orquestrado pela Kalit"
+    "poweredBy": "Alimentado pelos melhores modelos de IA, orquestrado pela Kalit",
+    "placeholder1": "Crie um SaaS com autenticação, faturamento e painel...",
+    "placeholder2": "Crie uma landing page para minha startup de IA com preços...",
+    "placeholder3": "Lance uma campanha de marketing no Instagram e Google Ads...",
+    "placeholder4": "Escaneie meu app web em busca de vulnerabilidades..."
   },
   "suites": {
     "project": "Project",
@@ -182,5 +186,17 @@
     "confirm": "Confirmar",
     "search": "Buscar",
     "noResults": "Nenhum resultado encontrado."
+  },
+  "settings": {
+    "profileLabel": "Perfil",
+    "profileDesc": "Gerencie os detalhes da sua conta e configurações de login.",
+    "workspaceLabel": "Espaço de trabalho",
+    "workspaceDesc": "Veja o nome do espaço, site e informações básicas.",
+    "teamLabel": "Equipe",
+    "teamDesc": "Veja membros, funções e uso de vagas.",
+    "billingLabel": "Faturamento",
+    "billingDesc": "Gerencie plano, assinatura e upgrades.",
+    "usageLabel": "Uso",
+    "usageDesc": "Veja créditos e atividade recente."
   }
 }

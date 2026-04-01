@@ -3,48 +3,32 @@
 import { Container } from "@/components/container"
 import { Icon } from "@/components/icon"
 import { Link } from "@/components/link"
+import { useTranslation } from "@/stores/i18n"
 import clsx from "clsx"
 import { usePathname } from "next/navigation"
 import { PageHeader } from "@/components/page-header"
 import { PageSection } from "@/components/page-section"
 import s from "./layout.module.scss"
 
-const TABS = [
-  {
-    icon: "hugeicons:user-circle",
-    href: "/settings/profile",
-    label: "Profile",
-    description: "Manage your account details and sign-in settings."
-  },
-  {
-    icon: "hugeicons:building-01",
-    href: "/settings/workspace",
-    label: "Workspace",
-    description: "View your workspace name, website, and basic details."
-  },
-  {
-    icon: "hugeicons:user-group",
-    href: "/settings/team",
-    label: "Team",
-    description: "View members, roles, and seat usage."
-  },
-  {
-    icon: "hugeicons:credit-card",
-    href: "/settings/billing",
-    label: "Billing",
-    description: "Manage your plan, subscription, and upgrades."
-  },
-  {
-    icon: "hugeicons:activity-01",
-    href: "/settings/usage",
-    label: "Usage",
-    description: "View credits and recent activity."
-  }
+const TAB_KEYS = [
+  { icon: "hugeicons:user-circle", href: "/settings/profile", labelKey: "settings.profileLabel", descKey: "settings.profileDesc" },
+  { icon: "hugeicons:building-01", href: "/settings/workspace", labelKey: "settings.workspaceLabel", descKey: "settings.workspaceDesc" },
+  { icon: "hugeicons:user-group", href: "/settings/team", labelKey: "settings.teamLabel", descKey: "settings.teamDesc" },
+  { icon: "hugeicons:credit-card", href: "/settings/billing", labelKey: "settings.billingLabel", descKey: "settings.billingDesc" },
+  { icon: "hugeicons:activity-01", href: "/settings/usage", labelKey: "settings.usageLabel", descKey: "settings.usageDesc" }
 ]
 
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const currentTab = TABS.find((tab) => tab.href === pathname) ?? TABS[0]
+  const t = useTranslation()
+
+  const tabs = TAB_KEYS.map((tab) => ({
+    ...tab,
+    label: t(tab.labelKey),
+    description: t(tab.descKey)
+  }))
+
+  const currentTab = tabs.find((tab) => tab.href === pathname) ?? tabs[0]
 
   return (
     <PageSection>
@@ -53,7 +37,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
 
         <div className={s.shell}>
           <nav className={s.tabs}>
-            {TABS.map((tab) => (
+            {tabs.map((tab) => (
               <Link key={tab.href} href={tab.href} className={clsx(s.tab, pathname === tab.href && s.tabActive)}>
                 <span className={s.tabIcon}>
                   <Icon icon={tab.icon} />

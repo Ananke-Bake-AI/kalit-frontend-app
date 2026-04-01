@@ -20,7 +20,11 @@
     "findMySuite": "スイートを見つける",
     "recommended": "おすすめのスイート",
     "analyzing": "リクエストを分析中...",
-    "poweredBy": "最先端のAIモデルを搭載、Kalitがオーケストレーション"
+    "poweredBy": "最先端のAIモデルを搭載、Kalitがオーケストレーション",
+    "placeholder1": "認証・課金・ダッシュボード付きのSaaSアプリを作って...",
+    "placeholder2": "AI製品のランディングページを料金表付きで作って...",
+    "placeholder3": "InstagramとGoogle Adsでマーケティングキャンペーンを実行して...",
+    "placeholder4": "Webアプリのセキュリティ脆弱性をスキャンして修正して..."
   },
   "suites": {
     "project": "Project",
@@ -182,5 +186,17 @@
     "confirm": "確認",
     "search": "検索",
     "noResults": "結果が見つかりません。"
+  },
+  "settings": {
+    "profileLabel": "プロフィール",
+    "profileDesc": "アカウント情報とログイン設定を管理します。",
+    "workspaceLabel": "ワークスペース",
+    "workspaceDesc": "ワークスペース名、サイト、基本情報を確認します。",
+    "teamLabel": "チーム",
+    "teamDesc": "メンバー、ロール、席数の使用状況を確認します。",
+    "billingLabel": "請求",
+    "billingDesc": "プラン、サブスクリプション、アップグレードを管理します。",
+    "usageLabel": "使用状況",
+    "usageDesc": "クレジットと最近のアクティビティを確認します。"
   }
 }

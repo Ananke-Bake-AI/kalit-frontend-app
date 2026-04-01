@@ -20,7 +20,11 @@
     "findMySuite": "Meine Suite finden",
     "recommended": "Empfohlene Suite",
     "analyzing": "Analyse deiner Anfrage...",
-    "poweredBy": "Angetrieben von führenden KI-Modellen, orchestriert von Kalit"
+    "poweredBy": "Angetrieben von führenden KI-Modellen, orchestriert von Kalit",
+    "placeholder1": "Baue mir eine SaaS-App mit Login, Abrechnung und Dashboard...",
+    "placeholder2": "Erstelle eine Landing Page für mein KI-Startup mit Preisen...",
+    "placeholder3": "Starte eine Marketing-Kampagne auf Instagram und Google Ads...",
+    "placeholder4": "Scanne meine Web-App auf Sicherheitslücken..."
   },
   "suites": {
     "project": "Project",
@@ -182,5 +186,17 @@
     "confirm": "Bestätigen",
     "search": "Suchen",
     "noResults": "Keine Ergebnisse."
+  },
+  "settings": {
+    "profileLabel": "Profil",
+    "profileDesc": "Verwalte deine Kontodaten und Anmeldeeinstellungen.",
+    "workspaceLabel": "Arbeitsbereich",
+    "workspaceDesc": "Name, Website und Grunddaten deines Arbeitsbereichs.",
+    "teamLabel": "Team",
+    "teamDesc": "Mitglieder, Rollen und Platznutzung anzeigen.",
+    "billingLabel": "Abrechnung",
+    "billingDesc": "Plan, Abonnement und Upgrades verwalten.",
+    "usageLabel": "Nutzung",
+    "usageDesc": "Credits und aktuelle Aktivität anzeigen."
   }
 }

@@ -20,7 +20,11 @@
     "findMySuite": "找到适合我的套件",
     "recommended": "推荐套件",
     "analyzing": "正在分析您的需求...",
-    "poweredBy": "由顶尖 AI 模型驱动，Kalit 统一编排"
+    "poweredBy": "由顶尖 AI 模型驱动，Kalit 统一编排",
+    "placeholder1": "帮我构建一个带登录、计费和仪表盘的SaaS应用...",
+    "placeholder2": "为我的AI创业项目创建一个带定价的着陆页...",
+    "placeholder3": "在Instagram和Google Ads上开展营销活动...",
+    "placeholder4": "扫描我的Web应用寻找安全漏洞并修复..."
   },
   "suites": {
     "project": "Project",
@@ -182,5 +186,17 @@
     "confirm": "确认",
     "search": "搜索",
     "noResults": "未找到结果。"
+  },
+  "settings": {
+    "profileLabel": "个人资料",
+    "profileDesc": "管理账户信息和登录设置。",
+    "workspaceLabel": "工作区",
+    "workspaceDesc": "查看工作区名称、网站和基本信息。",
+    "teamLabel": "团队",
+    "teamDesc": "查看成员、角色和席位使用情况。",
+    "billingLabel": "账单",
+    "billingDesc": "管理套餐、订阅和升级。",
+    "usageLabel": "使用情况",
+    "usageDesc": "查看信用额度和最近活动。"
   }
 }

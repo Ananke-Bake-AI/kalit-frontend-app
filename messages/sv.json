@@ -20,7 +20,11 @@
     "findMySuite": "Hitta min svit",
     "recommended": "Rekommenderad svit",
     "analyzing": "Analyserar din förfrågan...",
-    "poweredBy": "Drivs av ledande AI-modeller, orkestrerat av Kalit"
+    "poweredBy": "Drivs av ledande AI-modeller, orkestrerat av Kalit",
+    "placeholder1": "Bygg en SaaS-app med inloggning, fakturering och dashboard...",
+    "placeholder2": "Skapa en landningssida för min AI-startup med priser...",
+    "placeholder3": "Kör en marknadsföringskampanj på Instagram och Google Ads...",
+    "placeholder4": "Skanna min webbapp efter säkerhetsproblem och åtgärda dem..."
   },
   "suites": {
     "project": "Project",
@@ -182,5 +186,17 @@
     "confirm": "Bekräfta",
     "search": "Sök",
     "noResults": "Inga resultat hittades."
+  },
+  "settings": {
+    "profileLabel": "Profil",
+    "profileDesc": "Hantera kontouppgifter och inloggningsinställningar.",
+    "workspaceLabel": "Arbetsyta",
+    "workspaceDesc": "Visa arbetsytans namn, webbplats och grundläggande information.",
+    "teamLabel": "Team",
+    "teamDesc": "Visa medlemmar, roller och platsanvändning.",
+    "billingLabel": "Fakturering",
+    "billingDesc": "Hantera plan, prenumeration och uppgraderingar.",
+    "usageLabel": "Användning",
+    "usageDesc": "Visa krediter och senaste aktivitet."
   }
 }

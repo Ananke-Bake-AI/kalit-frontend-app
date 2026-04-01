@@ -20,7 +20,11 @@
     "findMySuite": "나에게 맞는 스위트 찾기",
     "recommended": "추천 스위트",
     "analyzing": "요청을 분석하고 있습니다...",
-    "poweredBy": "최고의 AI 모델 기반, Kalit이 조율합니다"
+    "poweredBy": "최고의 AI 모델 기반, Kalit이 조율합니다",
+    "placeholder1": "인증, 결제, 대시보드가 있는 SaaS 앱을 만들어줘...",
+    "placeholder2": "AI 스타트업 랜딩 페이지를 가격표와 함께 만들어줘...",
+    "placeholder3": "Instagram과 Google Ads에서 마케팅 캠페인을 실행해줘...",
+    "placeholder4": "내 웹 앱의 보안 취약점을 스캔하고 수정해줘..."
   },
   "suites": {
     "project": "Project",
@@ -182,5 +186,17 @@
     "confirm": "확인",
     "search": "검색",
     "noResults": "결과를 찾을 수 없습니다."
+  },
+  "settings": {
+    "profileLabel": "프로필",
+    "profileDesc": "계정 정보와 로그인 설정을 관리합니다.",
+    "workspaceLabel": "워크스페이스",
+    "workspaceDesc": "워크스페이스 이름, 웹사이트, 기본 정보를 확인합니다.",
+    "teamLabel": "팀",
+    "teamDesc": "멤버, 역할, 좌석 사용 현황을 확인합니다.",
+    "billingLabel": "결제",
+    "billingDesc": "요금제, 구독, 업그레이드를 관리합니다.",
+    "usageLabel": "사용량",
+    "usageDesc": "크레딧과 최근 활동을 확인합니다."
   }
 }

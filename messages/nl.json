@@ -20,7 +20,11 @@
     "findMySuite": "Vind mijn suite",
     "recommended": "Aanbevolen suite",
     "analyzing": "Je verzoek wordt geanalyseerd...",
-    "poweredBy": "Aangedreven door toonaangevende AI-modellen, georkestreerd door Kalit"
+    "poweredBy": "Aangedreven door toonaangevende AI-modellen, georkestreerd door Kalit",
+    "placeholder1": "Bouw een SaaS-app met login, facturering en dashboard...",
+    "placeholder2": "Maak een landingspagina voor mijn AI-startup met prijzen...",
+    "placeholder3": "Start een marketingcampagne op Instagram en Google Ads...",
+    "placeholder4": "Scan mijn webapp op beveiligingsproblemen..."
   },
   "suites": {
     "project": "Project",
@@ -182,5 +186,17 @@
     "confirm": "Bevestigen",
     "search": "Zoeken",
     "noResults": "Geen resultaten gevonden."
+  },
+  "settings": {
+    "profileLabel": "Profiel",
+    "profileDesc": "Beheer je accountgegevens en inlogstellingen.",
+    "workspaceLabel": "Werkruimte",
+    "workspaceDesc": "Bekijk de naam, website en basisgegevens van je werkruimte.",
+    "teamLabel": "Team",
+    "teamDesc": "Bekijk leden, rollen en stoelgebruik.",
+    "billingLabel": "Facturering",
+    "billingDesc": "Beheer plan, abonnement en upgrades.",
+    "usageLabel": "Gebruik",
+    "usageDesc": "Bekijk credits en recente activiteit."
   }
 }

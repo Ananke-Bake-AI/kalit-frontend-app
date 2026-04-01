@@ -20,7 +20,11 @@
     "findMySuite": "Find my suite",
     "recommended": "Recommended suite",
     "analyzing": "Analyzing your request...",
-    "poweredBy": "Powered by leading AI models, orchestrated by Kalit"
+    "poweredBy": "Powered by leading AI models, orchestrated by Kalit",
+    "placeholder1": "Build me a SaaS app with auth, billing, and a dashboard...",
+    "placeholder2": "Create a landing page for my AI startup with pricing tiers...",
+    "placeholder3": "Run a marketing campaign across Instagram and Google Ads...",
+    "placeholder4": "Scan my web app for security vulnerabilities and fix them..."
   },
   "suites": {
     "project": "Project",
@@ -182,5 +186,17 @@
     "confirm": "Confirm",
     "search": "Search",
     "noResults": "No results found."
+  },
+  "settings": {
+    "profileLabel": "Profile",
+    "profileDesc": "Manage your account details and sign-in settings.",
+    "workspaceLabel": "Workspace",
+    "workspaceDesc": "View your workspace name, website, and basic details.",
+    "teamLabel": "Team",
+    "teamDesc": "View members, roles, and seat usage.",
+    "billingLabel": "Billing",
+    "billingDesc": "Manage your plan, subscription, and upgrades.",
+    "usageLabel": "Usage",
+    "usageDesc": "View credits and recent activity."
   }
 }

@@ -20,7 +20,11 @@
     "findMySuite": "Bana uygun paketi bul",
     "recommended": "Önerilen paket",
     "analyzing": "İsteğiniz analiz ediliyor...",
-    "poweredBy": "Önde gelen AI modelleriyle desteklenir, Kalit tarafından yönetilir"
+    "poweredBy": "Önde gelen AI modelleriyle desteklenir, Kalit tarafından yönetilir",
+    "placeholder1": "Giriş, faturalandırma ve panel içeren bir SaaS uygulaması oluştur...",
+    "placeholder2": "AI girişimim için fiyatlandırmalı bir açılış sayfası oluştur...",
+    "placeholder3": "Instagram ve Google Ads'te bir pazarlama kampanyası başlat...",
+    "placeholder4": "Web uygulamamı güvenlik açıkları için tara..."
   },
   "suites": {
     "project": "Project",
@@ -182,5 +186,17 @@
     "confirm": "Onayla",
     "search": "Ara",
     "noResults": "Sonuç bulunamadı."
+  },
+  "settings": {
+    "profileLabel": "Profil",
+    "profileDesc": "Hesap bilgilerinizi ve giriş ayarlarınızı yönetin.",
+    "workspaceLabel": "Çalışma Alanı",
+    "workspaceDesc": "Çalışma alanı adı, site ve temel bilgileri görüntüleyin.",
+    "teamLabel": "Takım",
+    "teamDesc": "Üyeleri, rolleri ve koltuk kullanımını görüntüleyin.",
+    "billingLabel": "Faturalandırma",
+    "billingDesc": "Plan, abonelik ve yükseltmeleri yönetin.",
+    "usageLabel": "Kullanım",
+    "usageDesc": "Kredileri ve son aktiviteyi görüntüleyin."
   }
 }
