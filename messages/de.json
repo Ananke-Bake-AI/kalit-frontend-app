@@ -41,7 +41,8 @@
     "projectDescLong": "Entwickle und deploye komplette Apps aus einem Prompt. KI-Agenten planen, bauen, testen und liefern dein Produkt.",
     "flowDescLong": "Starte Websites und Landing Pages in Minuten. Design, Inhalte, Struktur und Hosting inklusive.",
     "marketingDescLong": "Plane, erstelle, führe aus und optimiere Akquise-Kampagnen über alle Kanäle. Die KI übernimmt die Ausführung.",
-    "pentestDescLong": "Erkenne Schwachstellen, bevor sie teuer werden. KI scannt deine Systeme und schlägt Korrekturen vor."
+    "pentestDescLong": "Erkenne Schwachstellen, bevor sie teuer werden. KI scannt deine Systeme und schlägt Korrekturen vor.",
+    "searchDescLong": "Entdecke Marktchancen, analysiere Wettbewerber und validiere Ideen mit KI-gestützter Recherche."
   },
   "stack": {
     "subtitle": "Kalit Execution Stack",

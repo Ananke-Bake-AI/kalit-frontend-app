@@ -41,7 +41,8 @@
     "projectDescLong": "Sviluppa e distribuisci app complete da un prompt. Gli agenti IA pianificano, sviluppano, testano e consegnano il tuo prodotto.",
     "flowDescLong": "Lancia siti web e landing page in pochi minuti. Design, contenuti, struttura e hosting inclusi.",
     "marketingDescLong": "Pianifica, crea, esegui e ottimizza campagne di acquisizione su tutti i canali. L'IA gestisce l'esecuzione.",
-    "pentestDescLong": "Rileva le vulnerabilità prima che diventino costose. L'IA scansiona i sistemi e propone correzioni."
+    "pentestDescLong": "Rileva le vulnerabilità prima che diventino costose. L'IA scansiona i sistemi e propone correzioni.",
+    "searchDescLong": "Scopri opportunità di mercato, analizza i concorrenti e valida le idee con la ricerca basata sull'IA."
   },
   "stack": {
     "subtitle": "Stack di Esecuzione Kalit",

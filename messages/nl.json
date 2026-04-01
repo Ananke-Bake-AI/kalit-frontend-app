@@ -41,7 +41,8 @@
     "projectDescLong": "Ontwikkel en deploy complete apps vanuit een prompt. AI-agenten plannen, bouwen, testen en leveren je product.",
     "flowDescLong": "Lanceer websites en landingspagina's in minuten. Design, content, structuur en hosting inbegrepen.",
     "marketingDescLong": "Plan, maak, voer uit en optimaliseer acquisitiecampagnes over alle kanalen. AI regelt de uitvoering.",
-    "pentestDescLong": "Detecteer kwetsbaarheden voordat ze duur worden. AI scant je systemen en stelt fixes voor."
+    "pentestDescLong": "Detecteer kwetsbaarheden voordat ze duur worden. AI scant je systemen en stelt fixes voor.",
+    "searchDescLong": "Ontdek marktkansen, analyseer concurrenten en valideer ideeën met AI-onderzoek."
   },
   "stack": {
     "subtitle": "Kalit Executie Stack",

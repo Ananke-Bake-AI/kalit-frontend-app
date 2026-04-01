@@ -71,7 +71,7 @@ export const Stack = () => {
             }
           }}
         >
-          {SUITES.map(({ id, color, title, description }) => (
+          {SUITES.map(({ id, color, title }) => (
             <SwiperSlide key={id} className={s.slide}>
               <div id={id} className={s.item} style={{ "--color": color } as React.CSSProperties}>
                 <div className={s.middle}>
@@ -82,7 +82,7 @@ export const Stack = () => {
                     <span>kalit</span> <strong>{title}</strong>
                   </h3>
                   <Paragraph className={s.paragraph}>
-                    <p>{description}</p>
+                    <p>{t(`suites.${id}DescLong`) !== `suites.${id}DescLong` ? t(`suites.${id}DescLong`) : t(`suites.${id}Desc`)}</p>
                   </Paragraph>
                   <Link href="/stack" className={s.link} aria-label={title.charAt(0).toUpperCase() + title.slice(1)}>
                     <Sprite id="arrow-top-right" viewBox="0 0 20 20" />

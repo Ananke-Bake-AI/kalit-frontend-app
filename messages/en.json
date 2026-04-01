@@ -41,7 +41,8 @@
     "projectDescLong": "Build and deploy full applications from a prompt. AI agents plan, build, test, and ship your product end-to-end.",
     "flowDescLong": "Launch high-converting websites and landing pages in minutes. Design, copy, structure, and hosting included.",
     "marketingDescLong": "Plan, create, run, and optimize acquisition campaigns across channels. AI handles the execution.",
-    "pentestDescLong": "Detect vulnerabilities before they become costly. AI scans your apps and systems, delivers actionable fixes."
+    "pentestDescLong": "Detect vulnerabilities before they become costly. AI scans your apps and systems, delivers actionable fixes.",
+    "searchDescLong": "Discover market opportunities, analyze competitors, and validate ideas with AI-powered research."
   },
   "stack": {
     "subtitle": "Kalit Execution Stack",

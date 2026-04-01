@@ -41,7 +41,8 @@
     "projectDescLong": "Bir prompt ile tam kapsamlı uygulamalar geliştirin ve dağıtın. AI ajanları planlama, geliştirme, test ve teslimattan sorumludur.",
     "flowDescLong": "Dakikalar içinde web siteleri ve açılış sayfaları yayınlayın. Tasarım, içerik, yapı ve barındırma dahil.",
     "marketingDescLong": "Tüm kanallarda müşteri edinme kampanyaları planlayın, oluşturun, yürütün ve optimize edin. AI yürütmeyi üstlenir.",
-    "pentestDescLong": "Güvenlik açıklarını maliyetli hale gelmeden önce tespit edin. AI sistemlerinizi tarar ve düzeltmeler önerir."
+    "pentestDescLong": "Güvenlik açıklarını maliyetli hale gelmeden önce tespit edin. AI sistemlerinizi tarar ve düzeltmeler önerir.",
+    "searchDescLong": "Pazar fırsatlarını keşfedin, rakipleri analiz edin ve yapay zeka destekli araştırmayla fikirleri doğrulayın."
   },
   "stack": {
     "subtitle": "Kalit Yürütme Yığını",

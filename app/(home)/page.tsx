@@ -14,13 +14,14 @@ export default function HomePage() {
   const { locale, t } = useI18n()
 
   return (
-    <div key={locale}>
+    <>
       <Hero />
       <Stack />
       <Architecture />
       <Features />
       <Join />
       <Portfolio
+        key={`portfolio-${locale}`}
         subtitle={t("portfolio.subtitle")}
         heading={
           <>
@@ -33,6 +34,6 @@ export default function HomePage() {
         link="/flow"
       />
       <Choose />
-    </div>
+    </>
   )
 }
