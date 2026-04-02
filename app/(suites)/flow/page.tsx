@@ -8,10 +8,10 @@ import {
   SuiteLandingPlans
 } from "@/components/suite-landing"
 import { Underline } from "@/components/underline"
+import { getServerTranslation } from "@/lib/i18n-server"
 import { MetadataSeo } from "@/lib/metadata"
 import { getSuiteById } from "@/lib/suites"
 import {
-  flowFeatureCards,
   flowGradientColors,
   flowHeroLine,
   flowHeroList,
@@ -32,9 +32,22 @@ export const metadata = MetadataSeo({
   image: "/img/thumbnail-flow.jpg"
 })
 
-export default function FlowPage() {
+export default async function FlowPage() {
   const flowSuite = getSuiteById("flow")
   const suiteAppUrl = flowSuite?.appUrl ?? ""
+  const t = await getServerTranslation()
+
+  const heroTitle = t("suiteLanding.flow.heroTitle").split("\n")
+  const featTitle = t("suiteLanding.flow.featuresTitle").split("\n")
+  const howTitle = t("suiteLanding.flow.howTitle").split("\n")
+  const pricingTitle = t("suiteLanding.pricingTitle").split("\n")
+
+  const featureCards = [
+    { img: "/img/features/flow1.png", title: t("suiteLanding.flow.feat1Title"), text: t("suiteLanding.flow.feat1Desc"), ctaLabel: t("suiteLanding.getStarted") },
+    { img: "/img/features/flow2.png", title: t("suiteLanding.flow.feat2Title"), text: t("suiteLanding.flow.feat2Desc"), ctaLabel: t("suiteLanding.tryFree") },
+    { img: "/img/features/flow3.png", title: t("suiteLanding.flow.feat3Title"), text: t("suiteLanding.flow.feat3Desc"), ctaLabel: t("suiteLanding.learnMore") },
+    { img: "/img/features/flow4.png", title: t("suiteLanding.flow.feat4Title"), text: t("suiteLanding.flow.feat4Desc"), ctaLabel: t("suiteLanding.getStarted") }
+  ]
 
   return (
     <>
@@ -43,96 +56,54 @@ export default function FlowPage() {
         marketingPath={flowMarketingPath}
         gradientColors={flowGradientColors}
         headingTag="h1"
-        headingSubtitle="AI-powered project generation"
-        headingParagraph="Powered by AI, Flow turns your ideas into fully working web projects in seconds."
+        headingSubtitle={t("suiteLanding.flow.heroSubtitle")}
+        headingParagraph={t("suiteLanding.flow.heroParagraph")}
         headingTitle={
           <>
-            Build websites <br />
-            <SuiteLandingHeroStrongLine line={flowHeroLine}>Instantly</SuiteLandingHeroStrongLine>
+            {heroTitle[0]} <br />
+            <SuiteLandingHeroStrongLine line={flowHeroLine}>{heroTitle[1] || "Instantly"}</SuiteLandingHeroStrongLine>
           </>
         }
         listItems={flowHeroList}
-        ctaLabel="Get started"
+        ctaLabel={t("suiteLanding.getStarted")}
         rightSlot={<FlowHeroPrompt suiteAppUrl={suiteAppUrl} marketingPath={flowMarketingPath} />}
       />
       <SuiteLandingFeatures
         suiteAppUrl={suiteAppUrl}
         marketingPath={flowMarketingPath}
-        headingSubtitle="Our features"
-        headingParagraph="From idea to deployed project in minutes. No barriers between your vision and a live website."
-        headingTitle={
-          <>
-            Everything you need
-            <br />
-            to ship faster
-          </>
-        }
-        cards={flowFeatureCards}
+        headingSubtitle={t("suiteLanding.flow.featuresSubtitle")}
+        headingParagraph={t("suiteLanding.flow.featuresParagraph")}
+        headingTitle={<>{featTitle[0]}<br />{featTitle[1]}</>}
+        cards={featureCards}
       />
       <SuiteLandingHow
         accent={2}
         lineStroke={flowHowLine.strokeUrl}
         lineD={flowHowLine.d}
         lineViewBox={flowHowLine.viewBox}
-        headingSubtitle="How it works"
-        headingParagraph="From idea to deployed project in minutes. No barriers between your vision and a live website."
-        headingTitle={
-          <>
-            From concept to launch, <br />
-            effortlessly
-          </>
-        }
+        headingSubtitle={t("suiteLanding.howItWorks")}
+        headingParagraph={t("suiteLanding.flow.howParagraph")}
+        headingTitle={<>{howTitle[0]}<br />{howTitle[1]}</>}
         steps={[
-          {
-            icon: "hugeicons:pencil-edit-02",
-            number: 1,
-            title: "Write your prompt",
-            description:
-              "Describe the web project you want. Be as specific or general as you like — our AI adapts to your input."
-          },
-          {
-            icon: "hugeicons:ai-generative",
-            number: 2,
-            title: "Watch it generate",
-            description: "Our AI creates a complete, working web project based on your prompt."
-          },
-          {
-            icon: "hugeicons:cloud-download",
-            number: 3,
-            title: "Preview & download",
-            description: "Export as a ready-to-deploy package. Take full ownership of your code and host it anywhere."
-          }
+          { icon: "hugeicons:pencil-edit-02", number: 1, title: t("suiteLanding.flow.step1Title"), description: t("suiteLanding.flow.step1Desc") },
+          { icon: "hugeicons:ai-generative", number: 2, title: t("suiteLanding.flow.step2Title"), description: t("suiteLanding.flow.step2Desc") },
+          { icon: "hugeicons:cloud-download", number: 3, title: t("suiteLanding.flow.step3Title"), description: t("suiteLanding.flow.step3Desc") }
         ]}
-        poweredTitle="Powered by leading AI models, orchestrated by Kalit"
+        poweredTitle={t("suiteLanding.poweredByAI")}
       />
       <SuiteLandingPlans
         suiteAppUrl={suiteAppUrl}
         marketingPath={flowMarketingPath}
-        headingSubtitle="Our pricing plans"
-        headingParagraph="Start free, upgrade when you’re ready. No surprises. No hidden fees."
-        headingTitle={
-          <>
-            Simple. Transparent.
-            <br /> Built to scale.
-          </>
-        }
+        headingSubtitle={t("suiteLanding.ourPricing")}
+        headingParagraph={t("suiteLanding.pricingDesc")}
+        headingTitle={<>{pricingTitle.map((l, i) => <span key={i}>{i > 0 && <br />}{l}</span>)}</>}
         plans={flowPlans}
       />
       <Portfolio
         subtitle="Sites built with Flow"
-        heading={
-          <>
-            From idea to live pages, <br />
-            without the grind
-          </>
-        }
-        paragraph={
-          <>
-            Launch <Underline stroke="url(#color-2)">responsive sites</Underline> with AI layout, copy, and structure —
-            ready to publish.
-          </>
-        }
-        buttonText="Start building"
+        heading={<>From idea to live pages, <br />without the grind</>}
+        paragraph={<>Launch <Underline stroke="url(#color-2)">responsive sites</Underline> with AI layout, copy, and structure — ready to publish.</>}
+        buttonText={t("suiteLanding.startBuilding")}
         suiteAppUrl={suiteAppUrl}
         marketingPath={flowMarketingPath}
       />
