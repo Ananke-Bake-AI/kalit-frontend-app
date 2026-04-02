@@ -525,5 +525,19 @@
     "networkError": "Netzwerkfehler. Bitte versuchen Sie es erneut.",
     "ourOffice": "Unser Büro",
     "joinCommunity": "Community beitreten"
+  },
+  "seo": {
+    "homeTitle": "Erstellen, starten, wachsen und absichern mit KI",
+    "homeDescription": "Kalit ist die KI-Suite für Startups und digitale Teams. Erstellen Sie Apps, starten Sie Landingpages, führen Sie Marketingkampagnen durch und sichern Sie Ihr Produkt — alles auf einer Plattform.",
+    "flowTitle": "Kalit Flow — Websites in Minuten erstellen",
+    "flowDescription": "Erstellen Sie hochkonvertierende Websites und Landingpages in wenigen Minuten. Design, Text, Struktur und Hosting inklusive.",
+    "projectTitle": "Kalit Project — Anwendungen mit KI entwickeln",
+    "projectDescription": "Erstellen und deployen Sie vollständige Anwendungen aus einem Prompt. KI-Agenten planen, entwickeln, testen und liefern Ihr Produkt von Anfang bis Ende.",
+    "marketingTitle": "Kalit Marketing — Akquisekampagnen planen, erstellen, durchführen und optimieren",
+    "marketingDescription": "Planen, erstellen, durchführen und optimieren Sie Akquisekampagnen über alle Kanäle. Die KI übernimmt die Ausführung, Sie konzentrieren sich auf das Produkt.",
+    "pentestTitle": "Kalit Pentest — Ihre Anwendungen auf Schwachstellen prüfen",
+    "pentestDescription": "Erkennen Sie Schwachstellen, bevor sie teuer werden. KI scannt Ihre Apps und Systeme, deckt Risiken auf und liefert umsetzbare Lösungen.",
+    "loginTitle": "Anmelden — Kalit AI",
+    "registerTitle": "Konto erstellen — Kalit AI"
   }
 }

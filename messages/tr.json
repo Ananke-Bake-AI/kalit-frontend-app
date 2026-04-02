@@ -525,5 +525,19 @@
     "networkError": "Ağ hatası. Lütfen tekrar deneyin.",
     "ourOffice": "Ofisimiz",
     "joinCommunity": "Topluluğumuza katılın"
+  },
+  "seo": {
+    "homeTitle": "Yapay zeka ile oluşturun, yayınlayın, büyüyün ve güvence altına alın",
+    "homeDescription": "Kalit, girişimler ve dijital ekipler için yapay zeka paketidir. Uygulama geliştirin, açılış sayfaları yayınlayın, pazarlama kampanyaları yürütün ve ürününüzü güvence altına alın — tek platformda.",
+    "flowTitle": "Kalit Flow — Dakikalar içinde web sitesi oluşturun",
+    "flowDescription": "Yüksek dönüşüm oranına sahip web siteleri ve açılış sayfalarını dakikalar içinde yayınlayın. Tasarım, metin, yapı ve barındırma dahil.",
+    "projectTitle": "Kalit Project — Yapay zeka ile uygulama geliştirin",
+    "projectDescription": "Tek bir istemle eksiksiz uygulamalar oluşturup dağıtın. Yapay zeka ajanları planlama, geliştirme, test ve teslimatı uçtan uca gerçekleştirir.",
+    "marketingTitle": "Kalit Marketing — Müşteri kazanım kampanyalarını planlayın, oluşturun, yürütün ve optimize edin",
+    "marketingDescription": "Tüm kanallarda müşteri kazanım kampanyalarını planlayın, oluşturun, yürütün ve optimize edin. Yapay zeka uygulamayı yönetir, siz ürüne odaklanın.",
+    "pentestTitle": "Kalit Pentest — Uygulamalarınızı güvenlik açıklarına karşı tarayın",
+    "pentestDescription": "Güvenlik açıklarını maliyetli hale gelmeden önce tespit edin. Yapay zeka uygulamalarınızı ve sistemlerinizi tarar, riskleri ortaya çıkarır ve uygulanabilir düzeltmeler sunar.",
+    "loginTitle": "Giriş yap — Kalit AI",
+    "registerTitle": "Hesap oluştur — Kalit AI"
   }
 }

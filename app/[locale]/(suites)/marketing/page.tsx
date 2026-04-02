@@ -7,7 +7,7 @@ import {
   SuiteLandingHow,
   SuiteLandingPlans
 } from "@/components/suite-landing"
-import { getServerTranslation } from "@/lib/i18n-server"
+import { getServerTranslation, getTranslationForLocale } from "@/lib/i18n-server"
 import { MetadataSeo } from "@/lib/metadata"
 import { getSuiteById } from "@/lib/suites"
 import {
@@ -25,10 +25,10 @@ export const viewport = {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params
   const locale = isValidLocale(raw) ? raw as Locale : "en"
+  const t = await getTranslationForLocale(locale)
   return MetadataSeo({
-    fullTitle: "Kalit Marketing — Plan, create, run, and optimize acquisition campaigns",
-    description:
-      "Plan, create, run, and optimize acquisition campaigns across channels. AI handles the execution, you focus on the product.",
+    fullTitle: t("seo.marketingTitle"),
+    description: t("seo.marketingDescription"),
     favicon: "/favicon-marketing.svg",
     image: "/img/thumbnail-marketing.jpg",
     locale,

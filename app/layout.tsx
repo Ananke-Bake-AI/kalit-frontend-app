@@ -1,16 +1,8 @@
 import { APP_THEME_COLOR } from "@/lib/config"
 import { DEFAULT_LOCALE } from "@/lib/i18n"
-import { MetadataSeo } from "@/lib/metadata"
 import { headers } from "next/headers"
 import "@/styles/globals.scss"
 import { fonts } from "./fonts"
-
-export const metadata = MetadataSeo({
-  title: "Build, Launch, Grow, and Secure with AI",
-  description:
-    "Kalit is the AI suite for startups and digital teams. Build apps, launch landing pages, run marketing campaigns, and secure your product — all from one platform.",
-  pathname: "/"
-})
 
 export const viewport = {
   themeColor: APP_THEME_COLOR

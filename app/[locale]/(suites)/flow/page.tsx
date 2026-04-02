@@ -9,7 +9,7 @@ import {
 } from "@/components/suite-landing"
 import { Underline } from "@/components/underline"
 import { isValidLocale, type Locale } from "@/lib/i18n"
-import { getServerTranslation } from "@/lib/i18n-server"
+import { getServerTranslation, getTranslationForLocale } from "@/lib/i18n-server"
 import { MetadataSeo } from "@/lib/metadata"
 import { getSuiteById } from "@/lib/suites"
 import {
@@ -27,10 +27,10 @@ export const viewport = {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params
   const locale = isValidLocale(raw) ? raw as Locale : "en"
+  const t = await getTranslationForLocale(locale)
   return MetadataSeo({
-    fullTitle: "Kalit Flow — Build websites in minutes",
-    description:
-      "Launch high-converting websites and landing pages in minutes. Design, copy, structure, and hosting included.",
+    fullTitle: t("seo.flowTitle"),
+    description: t("seo.flowDescription"),
     favicon: "/favicon-flow.svg",
     image: "/img/thumbnail-flow.jpg",
     locale,

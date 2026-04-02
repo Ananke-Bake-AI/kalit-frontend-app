@@ -525,5 +525,19 @@
     "networkError": "Błąd sieci. Spróbuj ponownie.",
     "ourOffice": "Nasze biuro",
     "joinCommunity": "Dołącz do społeczności"
+  },
+  "seo": {
+    "homeTitle": "Twórz, uruchamiaj, rozwijaj i zabezpieczaj z AI",
+    "homeDescription": "Kalit to pakiet AI dla startupów i zespołów cyfrowych. Twórz aplikacje, uruchamiaj landing page, prowadź kampanie marketingowe i zabezpieczaj swój produkt — wszystko z jednej platformy.",
+    "flowTitle": "Kalit Flow — Twórz strony internetowe w kilka minut",
+    "flowDescription": "Uruchamiaj strony internetowe i landing page o wysokiej konwersji w kilka minut. Projekt, tekst, struktura i hosting w zestawie.",
+    "projectTitle": "Kalit Project — Twórz aplikacje z AI",
+    "projectDescription": "Twórz i wdrażaj kompletne aplikacje na podstawie jednego promptu. Agenci AI planują, budują, testują i dostarczają Twój produkt od początku do końca.",
+    "marketingTitle": "Kalit Marketing — Planuj, twórz, uruchamiaj i optymalizuj kampanie pozyskiwania klientów",
+    "marketingDescription": "Planuj, twórz, uruchamiaj i optymalizuj kampanie pozyskiwania klientów we wszystkich kanałach. AI zajmuje się realizacją, Ty skupiasz się na produkcie.",
+    "pentestTitle": "Kalit Pentest — Skanuj swoje aplikacje pod kątem luk w zabezpieczeniach",
+    "pentestDescription": "Wykrywaj luki w zabezpieczeniach, zanim staną się kosztowne. AI skanuje Twoje aplikacje i systemy, odkrywa zagrożenia i dostarcza gotowe do wdrożenia poprawki.",
+    "loginTitle": "Zaloguj się — Kalit AI",
+    "registerTitle": "Utwórz konto — Kalit AI"
   }
 }

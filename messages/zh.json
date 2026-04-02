@@ -525,5 +525,19 @@
     "networkError": "网络错误。请重试。",
     "ourOffice": "我们的办公室",
     "joinCommunity": "加入社区"
+  },
+  "seo": {
+    "homeTitle": "用AI构建、发布、增长和保护",
+    "homeDescription": "Kalit是面向初创企业和数字团队的AI套件。构建应用、发布落地页、运营营销活动、保护产品安全——一个平台全部搞定。",
+    "flowTitle": "Kalit Flow — 几分钟内构建网站",
+    "flowDescription": "几分钟内发布高转化网站和落地页。设计、文案、结构和托管全部包含。",
+    "projectTitle": "Kalit Project — 用AI开发应用",
+    "projectDescription": "通过一条提示词构建和部署完整应用。AI代理负责规划、开发、测试和交付，端到端完成您的产品。",
+    "marketingTitle": "Kalit Marketing — 策划、创建、执行和优化获客活动",
+    "marketingDescription": "跨渠道策划、创建、执行和优化获客活动。AI负责执行，您专注于产品。",
+    "pentestTitle": "Kalit Pentest — 扫描应用漏洞",
+    "pentestDescription": "在漏洞造成损失之前检测它们。AI扫描您的应用和系统，发现风险并提供可执行的修复方案。",
+    "loginTitle": "登录 — Kalit AI",
+    "registerTitle": "创建账户 — Kalit AI"
   }
 }

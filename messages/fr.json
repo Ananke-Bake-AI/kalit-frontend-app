@@ -525,5 +525,19 @@
     "networkError": "Erreur réseau. Veuillez réessayer.",
     "ourOffice": "Notre bureau",
     "joinCommunity": "Rejoindre la communauté"
+  },
+  "seo": {
+    "homeTitle": "Créez, lancez, développez et sécurisez avec l'IA",
+    "homeDescription": "Kalit est la suite IA pour les startups et les équipes digitales. Créez des apps, lancez des landing pages, gérez vos campagnes marketing et sécurisez votre produit — le tout depuis une seule plateforme.",
+    "flowTitle": "Kalit Flow — Créez des sites web en quelques minutes",
+    "flowDescription": "Lancez des sites web et des landing pages à fort taux de conversion en quelques minutes. Design, rédaction, structure et hébergement inclus.",
+    "projectTitle": "Kalit Project — Développez des applications avec l'IA",
+    "projectDescription": "Créez et déployez des applications complètes à partir d'un simple prompt. Les agents IA planifient, développent, testent et livrent votre produit de bout en bout.",
+    "marketingTitle": "Kalit Marketing — Planifiez, créez, lancez et optimisez vos campagnes d'acquisition",
+    "marketingDescription": "Planifiez, créez, lancez et optimisez vos campagnes d'acquisition sur tous les canaux. L'IA gère l'exécution, vous vous concentrez sur le produit.",
+    "pentestTitle": "Kalit Pentest — Analysez vos applications à la recherche de vulnérabilités",
+    "pentestDescription": "Détectez les vulnérabilités avant qu'elles ne deviennent coûteuses. L'IA analyse vos apps et systèmes, identifie les risques et propose des correctifs concrets.",
+    "loginTitle": "Connexion — Kalit AI",
+    "registerTitle": "Créer un compte — Kalit AI"
   }
 }

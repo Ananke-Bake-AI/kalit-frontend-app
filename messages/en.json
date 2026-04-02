@@ -525,5 +525,19 @@
     "networkError": "Network error. Please try again.",
     "ourOffice": "Our office",
     "joinCommunity": "Join our community"
+  },
+  "seo": {
+    "homeTitle": "Build, Launch, Grow, and Secure with AI",
+    "homeDescription": "Kalit is the AI suite for startups and digital teams. Build apps, launch landing pages, run marketing campaigns, and secure your product — all from one platform.",
+    "flowTitle": "Kalit Flow — Build websites in minutes",
+    "flowDescription": "Launch high-converting websites and landing pages in minutes. Design, copy, structure, and hosting included.",
+    "projectTitle": "Kalit Project — Build applications with AI",
+    "projectDescription": "Build and deploy full applications from a prompt. AI agents plan, build, test, and ship your product end-to-end.",
+    "marketingTitle": "Kalit Marketing — Plan, create, run, and optimize acquisition campaigns",
+    "marketingDescription": "Plan, create, run, and optimize acquisition campaigns across channels. AI handles the execution, you focus on the product.",
+    "pentestTitle": "Kalit Pentest — Scan your applications for vulnerabilities",
+    "pentestDescription": "Detect vulnerabilities before they become costly. AI scans your apps and systems, uncovers risks, and delivers actionable fixes.",
+    "loginTitle": "Sign in — Kalit AI",
+    "registerTitle": "Create an account — Kalit AI"
   }
 }

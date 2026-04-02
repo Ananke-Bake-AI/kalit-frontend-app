@@ -525,5 +525,19 @@
     "networkError": "Nätverksfel. Försök igen.",
     "ourOffice": "Vårt kontor",
     "joinCommunity": "Gå med i vår community"
+  },
+  "seo": {
+    "homeTitle": "Bygg, lansera, väx och säkra med AI",
+    "homeDescription": "Kalit är AI-sviten för startups och digitala team. Bygg appar, lansera landningssidor, kör marknadsföringskampanjer och säkra din produkt — allt från en plattform.",
+    "flowTitle": "Kalit Flow — Bygg webbplatser på några minuter",
+    "flowDescription": "Lansera webbplatser och landningssidor med hög konvertering på några minuter. Design, text, struktur och hosting ingår.",
+    "projectTitle": "Kalit Project — Utveckla applikationer med AI",
+    "projectDescription": "Bygg och distribuera kompletta applikationer från en prompt. AI-agenter planerar, bygger, testar och levererar din produkt från början till slut.",
+    "marketingTitle": "Kalit Marketing — Planera, skapa, kör och optimera förvärvskampanjer",
+    "marketingDescription": "Planera, skapa, kör och optimera förvärvskampanjer i alla kanaler. AI sköter genomförandet, du fokuserar på produkten.",
+    "pentestTitle": "Kalit Pentest — Skanna dina applikationer efter sårbarheter",
+    "pentestDescription": "Upptäck sårbarheter innan de blir kostsamma. AI skannar dina appar och system, avslöjar risker och levererar konkreta åtgärder.",
+    "loginTitle": "Logga in — Kalit AI",
+    "registerTitle": "Skapa konto — Kalit AI"
   }
 }

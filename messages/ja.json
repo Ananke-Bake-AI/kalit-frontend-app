@@ -525,5 +525,19 @@
     "networkError": "ネットワークエラー。もう一度お試しください。",
     "ourOffice": "オフィス",
     "joinCommunity": "コミュニティに参加"
+  },
+  "seo": {
+    "homeTitle": "AIで構築、公開、成長、セキュリティ対策を",
+    "homeDescription": "KalitはスタートアップとデジタルチームのためのAIスイートです。アプリの構築、ランディングページの公開、マーケティングキャンペーンの実行、プロダクトのセキュリティ対策まで、すべてをひとつのプラットフォームで。",
+    "flowTitle": "Kalit Flow — 数分でウェブサイトを構築",
+    "flowDescription": "高いコンバージョン率のウェブサイトやランディングページを数分で公開。デザイン、コピー、構成、ホスティングまですべて込み。",
+    "projectTitle": "Kalit Project — AIでアプリケーションを開発",
+    "projectDescription": "プロンプトから完全なアプリケーションを構築・デプロイ。AIエージェントが企画、開発、テスト、納品までをエンドツーエンドで実行します。",
+    "marketingTitle": "Kalit Marketing — 獲得キャンペーンの企画・作成・実行・最適化",
+    "marketingDescription": "あらゆるチャネルで獲得キャンペーンを企画、作成、実行、最適化。AIが実行を担い、あなたはプロダクトに集中できます。",
+    "pentestTitle": "Kalit Pentest — アプリケーションの脆弱性をスキャン",
+    "pentestDescription": "脆弱性を被害が出る前に検出。AIがアプリやシステムをスキャンし、リスクを発見して具体的な修正策を提示します。",
+    "loginTitle": "ログイン — Kalit AI",
+    "registerTitle": "アカウント作成 — Kalit AI"
   }
 }

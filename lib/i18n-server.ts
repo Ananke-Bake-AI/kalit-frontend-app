@@ -20,3 +20,9 @@ export async function localeHref(path: string): Promise<string> {
   const locale = await getServerLocale()
   return localePath(path, locale)
 }
+
+/** Load translation function for a specific locale (for use in generateMetadata). */
+export async function getTranslationForLocale(locale: Locale) {
+  const messages = await loadMessages(locale)
+  return (key: string, params?: Record<string, string | number>) => translate(messages, key, params)
+}

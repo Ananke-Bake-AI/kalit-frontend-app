@@ -9,7 +9,7 @@ import {
   SuiteLandingPlans
 } from "@/components/suite-landing"
 import { Underline } from "@/components/underline"
-import { getServerTranslation } from "@/lib/i18n-server"
+import { getServerTranslation, getTranslationForLocale } from "@/lib/i18n-server"
 import { MetadataSeo } from "@/lib/metadata"
 import { getSuiteById } from "@/lib/suites"
 import {
@@ -28,10 +28,10 @@ export const viewport = {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: raw } = await params
   const locale = isValidLocale(raw) ? raw as Locale : "en"
+  const t = await getTranslationForLocale(locale)
   return MetadataSeo({
-    fullTitle: "Kalit Project — Build applications with AI",
-    description:
-      "Build and deploy full applications from a prompt. AI agents plan, build, test, and ship your product end-to-end.",
+    fullTitle: t("seo.projectTitle"),
+    description: t("seo.projectDescription"),
     favicon: "/favicon-project.svg",
     image: "/img/thumbnail-project.jpg",
     locale,

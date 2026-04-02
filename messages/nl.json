@@ -525,5 +525,19 @@
     "networkError": "Netwerkfout. Probeer het opnieuw.",
     "ourOffice": "Ons kantoor",
     "joinCommunity": "Word lid van onze community"
+  },
+  "seo": {
+    "homeTitle": "Bouw, lanceer, groei en beveilig met AI",
+    "homeDescription": "Kalit is de AI-suite voor startups en digitale teams. Bouw apps, lanceer landingspagina's, voer marketingcampagnes uit en beveilig je product — alles vanuit één platform.",
+    "flowTitle": "Kalit Flow — Bouw websites in enkele minuten",
+    "flowDescription": "Lanceer websites en landingspagina's met hoge conversie in enkele minuten. Design, tekst, structuur en hosting inbegrepen.",
+    "projectTitle": "Kalit Project — Ontwikkel applicaties met AI",
+    "projectDescription": "Bouw en deploy complete applicaties vanuit een prompt. AI-agents plannen, bouwen, testen en leveren je product van begin tot eind.",
+    "marketingTitle": "Kalit Marketing — Plan, creëer, voer uit en optimaliseer acquisitiecampagnes",
+    "marketingDescription": "Plan, creëer, voer uit en optimaliseer acquisitiecampagnes via alle kanalen. AI doet de uitvoering, jij focust op het product.",
+    "pentestTitle": "Kalit Pentest — Scan je applicaties op kwetsbaarheden",
+    "pentestDescription": "Detecteer kwetsbaarheden voordat ze kostbaar worden. AI scant je apps en systemen, ontdekt risico's en levert bruikbare oplossingen.",
+    "loginTitle": "Inloggen — Kalit AI",
+    "registerTitle": "Account aanmaken — Kalit AI"
   }
 }
