@@ -6,6 +6,7 @@ import clsx from "clsx"
 import s from "../auth.module.scss"
 import v from "./verify.module.scss"
 import { SessionRefresh } from "./session-refresh"
+import { DashboardRedirect } from "./dashboard-redirect"
 
 interface Props {
   searchParams: Promise<{ token?: string }>
@@ -74,7 +75,7 @@ export default async function VerifyEmailPage({ searchParams }: Props) {
                     <span>Pentest</span>
                   </div>
                 </div>
-                <Button href="/dashboard">Go to dashboard</Button>
+                <DashboardRedirect />
               </div>
             ) : (
               <div className={v.result}>
