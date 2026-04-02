@@ -4,6 +4,7 @@ import { LOCALE_CONFIG, LOCALES, type Locale } from "@/lib/i18n"
 import { useI18n } from "@/stores/i18n"
 import { useClickOutside } from "@reactuses/core"
 import clsx from "clsx"
+import { useRouter } from "next/navigation"
 import { useRef, useState } from "react"
 import s from "./language-switcher.module.scss"
 
@@ -11,10 +12,18 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   const { locale, setLocale } = useI18n()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+  const router = useRouter()
 
   useClickOutside(ref, () => setOpen(false))
 
   const current = LOCALE_CONFIG[locale]
+
+  const handleSwitch = async (loc: Locale) => {
+    await setLocale(loc)
+    setOpen(false)
+    // Refresh server components to pick up new locale from cookie
+    router.refresh()
+  }
 
   return (
     <div ref={ref} className={clsx(s.root, className)}>
@@ -37,10 +46,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
                 key={loc}
                 type="button"
                 className={clsx(s.option, locale === loc && s.optionActive)}
-                onClick={() => {
-                  setLocale(loc)
-                  setOpen(false)
-                }}
+                onClick={() => handleSwitch(loc)}
               >
                 <span className={s.optionFlag}>{config.flag}</span>
                 <span className={s.optionName}>{config.name}</span>
