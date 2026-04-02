@@ -130,7 +130,7 @@ export const Header = ({ initialSession = null }: HeaderProps) => {
                     </span>
                     <span className={s.dropdownLabel}>{t("nav.billing")}</span>
                   </Link>
-                  {resolvedSession.user.email && (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? "frederick.marinho@gmail.com,nico.style931@gmail.com").split(",").map(e => e.trim().toLowerCase()).includes(resolvedSession.user.email.toLowerCase()) && (
+                  {resolvedSession.user.isAdmin && (
                     <Link href="/admin" className={s.dropdownItem} onClick={() => setMenuOpen(false)}>
                       <span className={s.dropdownIcon}>
                         <Icon icon="hugeicons:shield-01" />

@@ -36,6 +36,7 @@ export default {
         token.onboardingDone = (user as { onboardingDone?: boolean }).onboardingDone ?? false
         token.orgId = (user as { orgId?: string | null }).orgId ?? null
         token.emailVerified = !!(user as { emailVerified?: Date | null }).emailVerified
+        token.isAdmin = (user as { isAdmin?: boolean }).isAdmin ?? false
       }
 
       if (trigger === "update" && session) {
@@ -65,6 +66,7 @@ export default {
         session.user.onboardingDone = token.onboardingDone as boolean
         session.user.orgId = token.orgId as string | null
         ;(session.user as { emailVerified: boolean }).emailVerified = token.emailVerified as boolean
+        session.user.isAdmin = token.isAdmin as boolean
         if (token.name !== undefined) {
           session.user.name = token.name as string | null
         }

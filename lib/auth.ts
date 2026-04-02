@@ -14,14 +14,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // Run the base jwt callback from authConfig
       const token = await authConfig.callbacks!.jwt!(params)
 
-      // Hydrate emailVerified from DB if missing (old sessions) or on update trigger
-      if (token.emailVerified === undefined || params.trigger === "update") {
+      // Hydrate emailVerified/isAdmin from DB if missing (old sessions) or on update trigger
+      if (token.emailVerified === undefined || token.isAdmin === undefined || params.trigger === "update") {
         if (token.email) {
           const dbUser = await prisma.user.findUnique({
             where: { email: token.email },
-            select: { emailVerified: true },
+            select: { emailVerified: true, isAdmin: true },
           })
           token.emailVerified = !!dbUser?.emailVerified
+          token.isAdmin = dbUser?.isAdmin ?? false
         }
       }
 
@@ -64,6 +65,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           image: user.image,
           onboardingDone: user.onboardingDone,
           emailVerified: user.emailVerified,
+          isAdmin: user.isAdmin,
           orgId: user.memberships[0]?.orgId || null
         }
       }

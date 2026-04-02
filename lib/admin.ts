@@ -1,13 +1,16 @@
 import { auth } from "@/lib/auth"
+import { prisma } from "@/lib/prisma"
 import { redirect } from "next/navigation"
-
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS ?? "frederick.marinho@gmail.com,nico.style931@gmail.com")
-  .split(",")
-  .map((e) => e.trim().toLowerCase())
 
 export async function isAdmin(email: string | null | undefined): Promise<boolean> {
   if (!email) return false
-  return ADMIN_EMAILS.includes(email.toLowerCase())
+
+  const user = await prisma.user.findUnique({
+    where: { email: email.toLowerCase() },
+    select: { isAdmin: true },
+  })
+
+  return user?.isAdmin === true
 }
 
 export async function requireAdmin() {

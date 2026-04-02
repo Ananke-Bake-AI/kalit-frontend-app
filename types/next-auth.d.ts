@@ -10,6 +10,7 @@ declare module "next-auth" {
       onboardingDone: boolean
       orgId: string | null
       emailVerified: boolean
+      isAdmin: boolean
     }
   }
 }
@@ -23,5 +24,6 @@ declare module "next-auth/jwt" {
     onboardingDone?: boolean
     orgId?: string | null
     emailVerified?: boolean
+    isAdmin?: boolean
   }
 }

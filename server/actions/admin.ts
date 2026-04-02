@@ -4,6 +4,24 @@ import { requireAdmin } from "@/lib/admin"
 import { prisma } from "@/lib/prisma"
 import type { MembershipRole, EntitlementSource } from "@prisma/client"
 
+// ─── Admin Role ────────────────────────────────────────
+
+export async function toggleAdmin(userId: string, value: boolean) {
+  const session = await requireAdmin()
+
+  // Prevent removing your own admin
+  if (session.user.id === userId && !value) {
+    return { error: "You cannot remove your own admin access" }
+  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { isAdmin: value },
+  })
+
+  return { success: true }
+}
+
 // ─── Campaigns ─────────────────────────────────────────
 
 export async function getAllVerifiedUsers() {

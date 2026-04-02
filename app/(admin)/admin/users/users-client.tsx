@@ -5,7 +5,7 @@ import { Button } from "@/components/button"
 import { Icon } from "@/components/icon"
 import { SurfacePanel } from "@/components/surface-panel"
 import { TextField } from "@/components/text-field"
-import { deleteUser, getAdminUsers, updateUserRole } from "@/server/actions/admin"
+import { deleteUser, getAdminUsers, toggleAdmin, updateUserRole } from "@/server/actions/admin"
 import type { MembershipRole } from "@prisma/client"
 import { useCallback, useState, useTransition } from "react"
 import { toast } from "sonner"
@@ -45,6 +45,18 @@ export function UsersClient({ initialData }: { initialData: UserData }) {
     }
   }
 
+  const handleToggleAdmin = async (userId: string, currentValue: boolean) => {
+    const action = currentValue ? "remove admin from" : "grant admin to"
+    if (!confirm(`${action} this user?`)) return
+    const result = await toggleAdmin(userId, !currentValue)
+    if ("error" in result) {
+      toast.error(result.error as string)
+    } else {
+      toast.success(currentValue ? "Admin access removed" : "Admin access granted")
+      refresh({ search, page: data.page })
+    }
+  }
+
   const handleDelete = async (userId: string, name: string) => {
     if (!confirm(`Delete user "${name}"? This cannot be undone.`)) return
     const result = await deleteUser(userId)
@@ -77,6 +89,7 @@ export function UsersClient({ initialData }: { initialData: UserData }) {
             <span>Email</span>
             <span>Organization</span>
             <span>Role</span>
+            <span>Admin</span>
             <span>Joined</span>
             <span></span>
           </div>
@@ -102,6 +115,16 @@ export function UsersClient({ initialData }: { initialData: UserData }) {
                   </select>
                 ))}
                 {user.memberships.length === 0 && <Badge>No org</Badge>}
+              </span>
+              <span>
+                <button
+                  type="button"
+                  className={user.isAdmin ? s.adminBadgeActive : s.adminBadge}
+                  onClick={() => handleToggleAdmin(user.id, user.isAdmin)}
+                  title={user.isAdmin ? "Remove admin" : "Grant admin"}
+                >
+                  {user.isAdmin ? "ADMIN" : "—"}
+                </button>
               </span>
               <span className={s.date}>{user.createdAt.toLocaleDateString()}</span>
               <span className={s.actions}>
