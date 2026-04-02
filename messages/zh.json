@@ -173,7 +173,11 @@
     "accountCreated": "账户已创建。请登录。",
     "welcomeSetup": "欢迎！让我们设置你的工作空间。",
     "invalidCredentials": "邮箱或密码无效",
-    "signedIn": "已登录"
+    "signedIn": "已登录",
+    "verifyEmail": "请验证您的邮箱地址以访问所有功能。",
+    "resendEmail": "重新发送邮件",
+    "sendingEmail": "发送中...",
+    "verificationSent": "验证邮件已发送！请检查您的收件箱。"
   },
   "dashboard": {
     "title": "控制面板",

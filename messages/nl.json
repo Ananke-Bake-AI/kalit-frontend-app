@@ -173,7 +173,11 @@
     "accountCreated": "Account aangemaakt. Log in.",
     "welcomeSetup": "Welkom! Laten we je workspace instellen.",
     "invalidCredentials": "Ongeldig e-mailadres of wachtwoord",
-    "signedIn": "Ingelogd"
+    "signedIn": "Ingelogd",
+    "verifyEmail": "Verifieer je e-mailadres om toegang te krijgen tot alle functies.",
+    "resendEmail": "E-mail opnieuw versturen",
+    "sendingEmail": "Verzenden...",
+    "verificationSent": "Verificatie-e-mail verzonden! Controleer je inbox."
   },
   "dashboard": {
     "title": "Dashboard",

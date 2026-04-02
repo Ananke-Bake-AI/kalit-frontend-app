@@ -173,7 +173,11 @@
     "accountCreated": "Account created. Please sign in.",
     "welcomeSetup": "Welcome! Let's set up your workspace.",
     "invalidCredentials": "Invalid email or password",
-    "signedIn": "Signed in"
+    "signedIn": "Signed in",
+    "verifyEmail": "Please verify your email address to access all features.",
+    "resendEmail": "Resend email",
+    "sendingEmail": "Sending...",
+    "verificationSent": "Verification email sent! Check your inbox."
   },
   "dashboard": {
     "title": "Dashboard",

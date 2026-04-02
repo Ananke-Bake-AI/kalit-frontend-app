@@ -173,7 +173,11 @@
     "accountCreated": "Konto utworzone. Zaloguj się.",
     "welcomeSetup": "Witamy! Skonfigurujmy Twój workspace.",
     "invalidCredentials": "Nieprawidłowy email lub hasło",
-    "signedIn": "Zalogowano"
+    "signedIn": "Zalogowano",
+    "verifyEmail": "Zweryfikuj swój adres email, aby uzyskać dostęp do wszystkich funkcji.",
+    "resendEmail": "Wyślij ponownie",
+    "sendingEmail": "Wysyłanie...",
+    "verificationSent": "E-mail weryfikacyjny wysłany! Sprawdź skrzynkę odbiorczą."
   },
   "dashboard": {
     "title": "Panel główny",

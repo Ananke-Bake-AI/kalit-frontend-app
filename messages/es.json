@@ -173,7 +173,11 @@
     "accountCreated": "Cuenta creada. Inicia sesión.",
     "welcomeSetup": "¡Bienvenido! Configuremos tu espacio.",
     "invalidCredentials": "Email o contraseña incorrectos",
-    "signedIn": "Sesión iniciada"
+    "signedIn": "Sesión iniciada",
+    "verifyEmail": "Verifica tu dirección de email para acceder a todas las funcionalidades.",
+    "resendEmail": "Reenviar email",
+    "sendingEmail": "Enviando...",
+    "verificationSent": "¡Email de verificación enviado! Revisa tu bandeja de entrada."
   },
   "dashboard": {
     "title": "Panel",

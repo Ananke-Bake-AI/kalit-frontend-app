@@ -173,7 +173,11 @@
     "accountCreated": "Konto erstellt. Bitte anmelden.",
     "welcomeSetup": "Willkommen! Richten wir deinen Workspace ein.",
     "invalidCredentials": "Ungültige E-Mail oder Passwort",
-    "signedIn": "Angemeldet"
+    "signedIn": "Angemeldet",
+    "verifyEmail": "Bitte bestätigen Sie Ihre E-Mail-Adresse, um auf alle Funktionen zuzugreifen.",
+    "resendEmail": "E-Mail erneut senden",
+    "sendingEmail": "Wird gesendet...",
+    "verificationSent": "Bestätigungs-E-Mail gesendet! Prüfen Sie Ihren Posteingang."
   },
   "dashboard": {
     "title": "Dashboard",

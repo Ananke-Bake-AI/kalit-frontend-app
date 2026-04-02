@@ -173,7 +173,11 @@
     "accountCreated": "계정이 생성되었습니다. 로그인해주세요.",
     "welcomeSetup": "환영합니다! 워크스페이스를 설정합시다.",
     "invalidCredentials": "이메일 또는 비밀번호가 올바르지 않습니다",
-    "signedIn": "로그인 완료"
+    "signedIn": "로그인 완료",
+    "verifyEmail": "모든 기능에 액세스하려면 이메일 주소를 인증해주세요.",
+    "resendEmail": "이메일 재전송",
+    "sendingEmail": "전송 중...",
+    "verificationSent": "인증 이메일이 전송되었습니다! 받은편지함을 확인하세요."
   },
   "dashboard": {
     "title": "대시보드",

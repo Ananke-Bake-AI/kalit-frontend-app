@@ -173,7 +173,11 @@
     "accountCreated": "アカウント作成済み。ログインしてください。",
     "welcomeSetup": "ようこそ！ワークスペースを設定しましょう。",
     "invalidCredentials": "メールアドレスまたはパスワードが無効です",
-    "signedIn": "ログイン完了"
+    "signedIn": "ログイン完了",
+    "verifyEmail": "すべての機能にアクセスするにはメールアドレスを確認してください。",
+    "resendEmail": "メールを再送信",
+    "sendingEmail": "送信中...",
+    "verificationSent": "確認メールを送信しました！受信トレイを確認してください。"
   },
   "dashboard": {
     "title": "ダッシュボード",

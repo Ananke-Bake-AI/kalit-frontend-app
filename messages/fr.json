@@ -173,7 +173,11 @@
     "accountCreated": "Compte créé. Veuillez vous connecter.",
     "welcomeSetup": "Bienvenue ! Configurons votre espace.",
     "invalidCredentials": "Email ou mot de passe invalide",
-    "signedIn": "Connecté"
+    "signedIn": "Connecté",
+    "verifyEmail": "Veuillez vérifier votre adresse email pour accéder à toutes les fonctionnalités.",
+    "resendEmail": "Renvoyer l'email",
+    "sendingEmail": "Envoi en cours...",
+    "verificationSent": "Email de vérification envoyé ! Vérifiez votre boîte de réception."
   },
   "dashboard": {
     "title": "Tableau de bord",

@@ -173,7 +173,11 @@
     "accountCreated": "Conta criada. Faça login.",
     "welcomeSetup": "Bem-vindo! Vamos configurar seu workspace.",
     "invalidCredentials": "Email ou senha inválidos",
-    "signedIn": "Conectado"
+    "signedIn": "Conectado",
+    "verifyEmail": "Verifique seu endereço de email para acessar todas as funcionalidades.",
+    "resendEmail": "Reenviar email",
+    "sendingEmail": "Enviando...",
+    "verificationSent": "Email de verificação enviado! Verifique sua caixa de entrada."
   },
   "dashboard": {
     "title": "Painel",

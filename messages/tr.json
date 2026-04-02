@@ -173,7 +173,11 @@
     "accountCreated": "Hesap oluşturuldu. Lütfen giriş yapın.",
     "welcomeSetup": "Hoş geldiniz! Çalışma alanınızı kuralım.",
     "invalidCredentials": "Geçersiz e-posta veya şifre",
-    "signedIn": "Giriş yapıldı"
+    "signedIn": "Giriş yapıldı",
+    "verifyEmail": "Tüm özelliklere erişmek için e-posta adresinizi doğrulayın.",
+    "resendEmail": "E-postayı tekrar gönder",
+    "sendingEmail": "Gönderiliyor...",
+    "verificationSent": "Doğrulama e-postası gönderildi! Gelen kutunuzu kontrol edin."
   },
   "dashboard": {
     "title": "Kontrol Paneli",

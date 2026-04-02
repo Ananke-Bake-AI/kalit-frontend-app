@@ -173,7 +173,11 @@
     "accountCreated": "Konto skapat. Logga in.",
     "welcomeSetup": "Välkommen! Låt oss konfigurera ditt workspace.",
     "invalidCredentials": "Ogiltig e-post eller lösenord",
-    "signedIn": "Inloggad"
+    "signedIn": "Inloggad",
+    "verifyEmail": "Verifiera din e-postadress för att få tillgång till alla funktioner.",
+    "resendEmail": "Skicka e-post igen",
+    "sendingEmail": "Skickar...",
+    "verificationSent": "Verifieringsmail skickat! Kolla din inkorg."
   },
   "dashboard": {
     "title": "Översikt",

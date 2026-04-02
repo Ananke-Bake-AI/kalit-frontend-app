@@ -2,6 +2,7 @@
 
 import { Icon } from "@/components/icon"
 import { resendVerificationEmail } from "@/server/actions/auth"
+import { useTranslation } from "@/stores/i18n"
 import { useSession } from "next-auth/react"
 import type { Session } from "next-auth"
 import { useState } from "react"
@@ -16,6 +17,7 @@ export const EmailBanner = ({ initialSession = null }: EmailBannerProps) => {
   const { data: session, status } = useSession()
   const [dismissed, setDismissed] = useState(false)
   const [sending, setSending] = useState(false)
+  const t = useTranslation()
 
   const resolved = status === "loading" ? initialSession : session
 
@@ -31,7 +33,7 @@ export const EmailBanner = ({ initialSession = null }: EmailBannerProps) => {
     if (result.error) {
       toast.error(result.error)
     } else {
-      toast.success("Verification email sent! Check your inbox.")
+      toast.success(t("auth.verificationSent"))
     }
   }
 
@@ -40,10 +42,10 @@ export const EmailBanner = ({ initialSession = null }: EmailBannerProps) => {
       <div className={s.content}>
         <Icon icon="hugeicons:mail-send-02" />
         <span className={s.text}>
-          Please verify your email address to access all features.
+          {t("auth.verifyEmail")}
         </span>
         <button className={s.resend} onClick={handleResend} disabled={sending}>
-          {sending ? "Sending..." : "Resend email"}
+          {sending ? t("auth.sendingEmail") : t("auth.resendEmail")}
         </button>
       </div>
       <button className={s.close} onClick={() => setDismissed(true)} aria-label="Dismiss">
