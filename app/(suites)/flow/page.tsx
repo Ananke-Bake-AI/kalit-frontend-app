@@ -14,7 +14,6 @@ import { getSuiteById } from "@/lib/suites"
 import {
   flowGradientColors,
   flowHeroLine,
-  flowHeroList,
   flowHowLine,
   flowMarketingPath,
   flowPlans
@@ -42,11 +41,17 @@ export default async function FlowPage() {
   const howTitle = t("suiteLanding.flow.howTitle").split("\n")
   const pricingTitle = t("suiteLanding.pricingTitle").split("\n")
 
+  const heroList = [
+    { icon: "hugeicons:stars", label: t("suiteLanding.flowHeroLabel1") },
+    { icon: "hugeicons:credit-card-not-accept", label: t("suiteLanding.flowHeroLabel2") },
+    { icon: "hugeicons:token-circle", label: t("suiteLanding.flowHeroLabel3") }
+  ]
+
   const featureCards = [
-    { img: "/img/features/flow1.png", title: t("suiteLanding.flow.feat1Title"), text: t("suiteLanding.flow.feat1Desc"), ctaLabel: t("suiteLanding.getStarted") },
-    { img: "/img/features/flow2.png", title: t("suiteLanding.flow.feat2Title"), text: t("suiteLanding.flow.feat2Desc"), ctaLabel: t("suiteLanding.tryFree") },
-    { img: "/img/features/flow3.png", title: t("suiteLanding.flow.feat3Title"), text: t("suiteLanding.flow.feat3Desc"), ctaLabel: t("suiteLanding.learnMore") },
-    { img: "/img/features/flow4.png", title: t("suiteLanding.flow.feat4Title"), text: t("suiteLanding.flow.feat4Desc"), ctaLabel: t("suiteLanding.getStarted") }
+    { img: "/img/features/flow1.png", title: t("suiteLanding.flowFeat1Title"), text: t("suiteLanding.flowFeat1Desc"), ctaLabel: t("suiteLanding.startBuilding") },
+    { img: "/img/features/flow2.png", title: t("suiteLanding.flowFeat2Title"), text: t("suiteLanding.flowFeat2Desc"), ctaLabel: t("suiteLanding.startBuilding") },
+    { img: "/img/features/flow3.png", title: t("suiteLanding.flowFeat3Title"), text: t("suiteLanding.flowFeat3Desc"), ctaLabel: t("suiteLanding.startBuilding") },
+    { img: "/img/features/flow4.png", title: t("suiteLanding.flowFeat4Title"), text: t("suiteLanding.flowFeat4Desc"), ctaLabel: t("suiteLanding.startBuilding") }
   ]
 
   return (
@@ -64,7 +69,7 @@ export default async function FlowPage() {
             <SuiteLandingHeroStrongLine line={flowHeroLine}>{heroTitle[1] || "Instantly"}</SuiteLandingHeroStrongLine>
           </>
         }
-        listItems={flowHeroList}
+        listItems={heroList}
         ctaLabel={t("suiteLanding.getStarted")}
         rightSlot={<FlowHeroPrompt suiteAppUrl={suiteAppUrl} marketingPath={flowMarketingPath} />}
       />

@@ -12,7 +12,6 @@ import { getSuiteById } from "@/lib/suites"
 import {
   marketingEnterpriseMailHref,
   marketingGradientColors,
-  marketingHeroList,
   marketingHowLine,
   marketingMarketingPath
 } from "./landing-data"
@@ -123,6 +122,12 @@ export default async function MarketingPage() {
     }
   ]
 
+  const heroList = [
+    { icon: "hugeicons:keyframes-multiple", label: t("suiteLanding.marketingHeroLabel1") },
+    { icon: "hugeicons:ai-browser", label: t("suiteLanding.marketingHeroLabel2") },
+    { icon: "hugeicons:timeline-event", label: t("suiteLanding.marketingHeroLabel3") }
+  ]
+
   const titleParts = t("suiteLanding.marketing.heroTitle").split("\n")
   const featTitleParts = t("suiteLanding.marketing.featuresTitle").split("\n")
   const howTitleParts = t("suiteLanding.marketing.howTitle").split("\n")
@@ -142,7 +147,7 @@ export default async function MarketingPage() {
             {titleParts[1] && <><br />{titleParts[1]}</>}
           </>
         }
-        listItems={marketingHeroList}
+        listItems={heroList}
         ctaLabel={t("suiteLanding.startCampaign")}
         rightSlot={<MarketingHeroPrompt suiteAppUrl={suiteAppUrl} marketingPath={marketingMarketingPath} />}
       />

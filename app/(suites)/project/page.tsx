@@ -12,10 +12,8 @@ import { getServerTranslation } from "@/lib/i18n-server"
 import { MetadataSeo } from "@/lib/metadata"
 import { getSuiteById } from "@/lib/suites"
 import {
-  projectFeatureCards,
   projectGradientColors,
   projectHeroLine,
-  projectHeroList,
   projectHowLine,
   projectMarketingPath,
   projectPlans
@@ -44,6 +42,19 @@ export default async function ProjectPage() {
   const howTitle = t("suiteLanding.project.howTitle").split("\n")
   const pricingTitle = t("suiteLanding.pricingTitle").split("\n")
 
+  const heroList = [
+    { icon: "hugeicons:database-setting", label: t("suiteLanding.projectHeroLabel1") },
+    { icon: "hugeicons:server-stack-02", label: t("suiteLanding.projectHeroLabel2") },
+    { icon: "hugeicons:workflow-square-02", label: t("suiteLanding.projectHeroLabel3") }
+  ]
+
+  const featureCards = [
+    { img: "/img/features/project1.png", title: t("suiteLanding.projectFeat1Title"), text: t("suiteLanding.projectFeat1Desc"), ctaLabel: t("suiteLanding.startProject") },
+    { img: "/img/features/project2.png", title: t("suiteLanding.projectFeat2Title"), text: t("suiteLanding.projectFeat2Desc"), ctaLabel: t("suiteLanding.startProject") },
+    { img: "/img/features/project3.png", title: t("suiteLanding.projectFeat3Title"), text: t("suiteLanding.projectFeat3Desc"), ctaLabel: t("suiteLanding.startProject") },
+    { img: "/img/features/project4.png", title: t("suiteLanding.projectFeat4Title"), text: t("suiteLanding.projectFeat4Desc"), ctaLabel: t("suiteLanding.startProject") }
+  ]
+
   return (
     <>
       <SuiteLandingHero
@@ -60,7 +71,7 @@ export default async function ProjectPage() {
             <br /> <SuiteLandingHeroStrongLine line={projectHeroLine}>{heroTitle[1] || "apps"}</SuiteLandingHeroStrongLine>
           </>
         }
-        listItems={projectHeroList}
+        listItems={heroList}
         ctaLabel={t("suiteLanding.startBuilding")}
         rightSlot={<ProjectHeroPrompt suiteAppUrl={suiteAppUrl} marketingPath={projectMarketingPath} />}
       />
@@ -70,7 +81,7 @@ export default async function ProjectPage() {
         headingSubtitle={t("suiteLanding.project.featuresSubtitle")}
         headingParagraph={t("suiteLanding.project.featuresParagraph")}
         headingTitle={<>{featTitle[0]}<br />{featTitle[1]}</>}
-        cards={projectFeatureCards}
+        cards={featureCards}
       />
       <SuiteLandingHow
         accent={4}
