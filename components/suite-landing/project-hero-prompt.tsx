@@ -5,17 +5,11 @@ import { Icon } from "@/components/icon"
 import { useAnimatedPlaceholder } from "@/hooks/use-animated-placeholder"
 import { suiteEntryUrl, suiteMarketingLoginHref } from "@/lib/suite-marketing-entry"
 import { PROJECT_MARKETING_PATH } from "@/lib/suite-marketing-paths"
+import { useTranslation } from "@/stores/i18n"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useCallback, useRef, useState } from "react"
 import s from "./suite-landing-hero.module.scss"
-
-const PLACEHOLDERS = [
-  "Deploy a Next.js app with Postgres and auth to production...",
-  "Ship a REST API with CI, staging, and one-click rollback...",
-  "Monorepo with frontend, workers, and Redis — production ready...",
-  "Add preview environments for every pull request automatically..."
-]
 
 const BUTTONS = [
   { icon: "hugeicons:rocket-01", label: "SaaS App" },
@@ -33,11 +27,20 @@ export interface ProjectHeroPromptProps {
 export function ProjectHeroPrompt({ suiteAppUrl, marketingPath = PROJECT_MARKETING_PATH }: ProjectHeroPromptProps) {
   const router = useRouter()
   const { status } = useSession()
+  const t = useTranslation()
   const [promptValue, setPromptValue] = useState("")
   const promptRef = useRef<HTMLTextAreaElement | null>(null)
+
+  const placeholders = [
+    t("suiteLanding.projectPlaceholder1"),
+    t("suiteLanding.projectPlaceholder2"),
+    t("suiteLanding.projectPlaceholder3"),
+    t("suiteLanding.projectPlaceholder4")
+  ]
+
   const { handleFocus, handleBlur } = useAnimatedPlaceholder(promptRef, {
-    phrases: PLACEHOLDERS,
-    focusedPlaceholder: "What do you want to build and ship today?"
+    phrases: placeholders,
+    focusedPlaceholder: t("suiteLanding.projectPlaceholder")
   })
 
   const handleSubmit = useCallback(() => {
@@ -64,13 +67,13 @@ export function ProjectHeroPrompt({ suiteAppUrl, marketingPath = PROJECT_MARKETI
         layout="flush"
         textareaRef={promptRef}
         value={promptValue}
-        placeholder="What do you want to build and ship today?"
+        placeholder={t("suiteLanding.projectPlaceholder")}
         onChange={(e) => setPromptValue(e.target.value)}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
         onSend={handleSubmit}
-        sendLabel="Ship app"
+        sendLabel={t("suiteLanding.projectSendLabel")}
         sendLogoId="project"
         showBlurBackground={false}
       />
@@ -83,8 +86,7 @@ export function ProjectHeroPrompt({ suiteAppUrl, marketingPath = PROJECT_MARKETI
         ))}
       </div>
       <p className={s.mention}>
-        Describe your stack or paste a repo — Kalit provisions builds, deploys, and monitoring so you stay focused on
-        product code.
+        {t("suiteLanding.projectMention")}
       </p>
     </>
   )

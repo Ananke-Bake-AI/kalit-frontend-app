@@ -5,17 +5,11 @@ import { Icon } from "@/components/icon"
 import { useAnimatedPlaceholder } from "@/hooks/use-animated-placeholder"
 import { suiteEntryUrl, suiteMarketingLoginHref } from "@/lib/suite-marketing-entry"
 import { MARKETING_MARKETING_PATH } from "@/lib/suite-marketing-paths"
+import { useTranslation } from "@/stores/i18n"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { useCallback, useRef, useState } from "react"
 import s from "./suite-landing-hero.module.scss"
-
-const PLACEHOLDERS = [
-  "Summer sale campaign for my e-commerce store on Meta and Google...",
-  "LinkedIn lead-gen ads for a B2B SaaS with a free trial CTA...",
-  "Retargeting funnel for cart abandoners across Instagram and TikTok...",
-  "Launch a product teaser video campaign on multiple platforms..."
-]
 
 const BUTTONS = [
   { icon: "hugeicons:user-ai", label: "Lead generation" },
@@ -35,11 +29,20 @@ export function MarketingHeroPrompt({
 }: MarketingHeroPromptProps) {
   const router = useRouter()
   const { status } = useSession()
+  const t = useTranslation()
   const [promptValue, setPromptValue] = useState("")
   const promptRef = useRef<HTMLTextAreaElement | null>(null)
+
+  const placeholders = [
+    t("suiteLanding.marketingPlaceholder1"),
+    t("suiteLanding.marketingPlaceholder2"),
+    t("suiteLanding.marketingPlaceholder3"),
+    t("suiteLanding.marketingPlaceholder4")
+  ]
+
   const { handleFocus, handleBlur } = useAnimatedPlaceholder(promptRef, {
-    phrases: PLACEHOLDERS,
-    focusedPlaceholder: "What would you like to create today?"
+    phrases: placeholders,
+    focusedPlaceholder: t("suiteLanding.marketingPlaceholder")
   })
 
   const handleSubmit = useCallback(() => {
@@ -66,13 +69,13 @@ export function MarketingHeroPrompt({
         layout="flush"
         textareaRef={promptRef}
         value={promptValue}
-        placeholder="What would you like to create today?"
+        placeholder={t("suiteLanding.marketingPlaceholder")}
         onChange={(e) => setPromptValue(e.target.value)}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
         onSend={handleSubmit}
-        sendLabel="Create campaign"
+        sendLabel={t("suiteLanding.marketingSendLabel")}
         sendLogoId="marketing"
         showBlurBackground={false}
       />
@@ -85,8 +88,7 @@ export function MarketingHeroPrompt({
         ))}
       </div>
       <p className={s.mention}>
-        Describe your product. Kalit Marketing generates visuals, copy, targeting, and launches optimized campaigns
-        automatically. No setup. Just results.
+        {t("suiteLanding.marketingMention")}
       </p>
     </>
   )

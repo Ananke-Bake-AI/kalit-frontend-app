@@ -5,17 +5,11 @@ import { Icon } from "@/components/icon"
 import { useAnimatedPlaceholder } from "@/hooks/use-animated-placeholder"
 import { FLOW_MARKETING_PATH } from "@/lib/flow-suite-entry"
 import { suiteEntryUrl, suiteMarketingLoginHref } from "@/lib/suite-marketing-entry"
+import { useTranslation } from "@/stores/i18n"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { useCallback, useRef, useState } from "react"
 import s from "./suite-landing-hero.module.scss"
-
-const PLACEHOLDERS = [
-  "A landing page for my product with hero, features, and pricing...",
-  "A portfolio with project grid, about section, and contact form...",
-  "A simple marketing site with newsletter signup and blog...",
-  "An event page with schedule, speakers, and registration CTA..."
-]
 
 const BUTTONS = [
   { icon: "hugeicons:rocket-01", label: "Startup" },
@@ -33,11 +27,20 @@ export interface FlowHeroPromptProps {
 export function FlowHeroPrompt({ suiteAppUrl, marketingPath = FLOW_MARKETING_PATH }: FlowHeroPromptProps) {
   const router = useRouter()
   const { status } = useSession()
+  const t = useTranslation()
   const [promptValue, setPromptValue] = useState("")
   const promptRef = useRef<HTMLTextAreaElement | null>(null)
+
+  const placeholders = [
+    t("suiteLanding.flowPlaceholder1"),
+    t("suiteLanding.flowPlaceholder2"),
+    t("suiteLanding.flowPlaceholder3"),
+    t("suiteLanding.flowPlaceholder4")
+  ]
+
   const { handleFocus, handleBlur } = useAnimatedPlaceholder(promptRef, {
-    phrases: PLACEHOLDERS,
-    focusedPlaceholder: "Describe the site you want to build..."
+    phrases: placeholders,
+    focusedPlaceholder: t("suiteLanding.flowPlaceholder")
   })
 
   const handleSubmit = useCallback(async () => {
@@ -45,7 +48,6 @@ export function FlowHeroPrompt({ suiteAppUrl, marketingPath = FLOW_MARKETING_PAT
     if (!trimmed) return
     if (status === "loading") return
     if (status === "authenticated") {
-      // Get SSO token so the user is auto-logged into Flow
       try {
         const res = await fetch("/api/suite/token", {
           method: "POST",
@@ -59,7 +61,7 @@ export function FlowHeroPrompt({ suiteAppUrl, marketingPath = FLOW_MARKETING_PAT
           return
         }
       } catch {
-        // Fallback to direct URL without SSO
+        // Fallback
       }
       window.open(suiteEntryUrl(suiteAppUrl, { prompt: trimmed }), "_blank")
       return
@@ -80,13 +82,13 @@ export function FlowHeroPrompt({ suiteAppUrl, marketingPath = FLOW_MARKETING_PAT
         layout="flush"
         textareaRef={promptRef}
         value={promptValue}
-        placeholder="Describe the site you want to build..."
+        placeholder={t("suiteLanding.flowPlaceholder")}
         onChange={(e) => setPromptValue(e.target.value)}
         onFocus={handleFocus}
         onBlur={handleBlur}
         onKeyDown={handleKeyDown}
         onSend={handleSubmit}
-        sendLabel="Start building"
+        sendLabel={t("suiteLanding.flowSendLabel")}
         sendLogoId="flow"
         showBlurBackground={false}
       />
@@ -99,8 +101,7 @@ export function FlowHeroPrompt({ suiteAppUrl, marketingPath = FLOW_MARKETING_PAT
         ))}
       </div>
       <p className={s.mention}>
-        Describe it. Drop your files. Flow generates, previews, and packages your project automatically. No friction. No
-        code. Just results.
+        {t("suiteLanding.flowMention")}
       </p>
     </>
   )
