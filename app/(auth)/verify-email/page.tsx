@@ -24,8 +24,10 @@ function VerifyEmailContent() {
   const { update } = useSession()
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading")
   const [message, setMessage] = useState("")
+  const [ran, setRan] = useState(false)
 
   useEffect(() => {
+    if (ran) return
     if (!token) {
       setStatus("error")
       setMessage("Invalid verification link.")
@@ -33,6 +35,7 @@ function VerifyEmailContent() {
       return
     }
 
+    setRan(true)
     verifyEmail(token).then(async (result) => {
       if (result.error) {
         setStatus("error")
@@ -45,7 +48,8 @@ function VerifyEmailContent() {
         await update({})
       }
     })
-  }, [token, update])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token])
 
   return (
     <section className={s.page}>
