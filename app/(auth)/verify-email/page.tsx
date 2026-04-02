@@ -1,8 +1,11 @@
 import { Button } from "@/components/button"
 import { Container } from "@/components/container"
+import { Icon } from "@/components/icon"
 import { prisma } from "@/lib/prisma"
-import s from "../auth.module.scss"
 import clsx from "clsx"
+import s from "../auth.module.scss"
+import v from "./verify.module.scss"
+import { SessionRefresh } from "./session-refresh"
 
 interface Props {
   searchParams: Promise<{ token?: string }>
@@ -43,19 +46,45 @@ export default async function VerifyEmailPage({ searchParams }: Props) {
         <div className={s.narrow}>
           <div className={clsx(s.card, s.cardCentered)}>
             {status === "success" ? (
-              <>
-                <h1 className={s.stateTitle}>Email verified</h1>
-                <p className={s.stateTextSpaced}>
-                  Your email has been verified. You can now use all features of Kalit.
+              <div className={v.result}>
+                <SessionRefresh />
+                <div className={v.iconSuccess}>
+                  <Icon icon="hugeicons:checkmark-circle-03" />
+                </div>
+                <h1 className={v.title}>Email verified</h1>
+                <p className={v.text}>
+                  Your email has been successfully verified.<br />
+                  You now have full access to all Kalit features.
                 </p>
+                <div className={v.features}>
+                  <div className={v.feature}>
+                    <Icon icon="hugeicons:code" />
+                    <span>Project</span>
+                  </div>
+                  <div className={v.feature}>
+                    <Icon icon="hugeicons:global" />
+                    <span>Flow</span>
+                  </div>
+                  <div className={v.feature}>
+                    <Icon icon="hugeicons:megaphone-01" />
+                    <span>Marketing</span>
+                  </div>
+                  <div className={v.feature}>
+                    <Icon icon="hugeicons:shield-01" />
+                    <span>Pentest</span>
+                  </div>
+                </div>
                 <Button href="/dashboard">Go to dashboard</Button>
-              </>
+              </div>
             ) : (
-              <>
-                <h1 className={s.stateTitle}>Verification failed</h1>
-                <p className={s.stateTextSpaced}>{message}</p>
-                <Button href="/login">Back to sign in</Button>
-              </>
+              <div className={v.result}>
+                <div className={v.iconError}>
+                  <Icon icon="hugeicons:cancel-circle" />
+                </div>
+                <h1 className={v.title}>Verification failed</h1>
+                <p className={v.text}>{message}</p>
+                <Button href="/login" variant="secondary">Back to sign in</Button>
+              </div>
             )}
           </div>
         </div>
