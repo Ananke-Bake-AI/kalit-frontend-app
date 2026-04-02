@@ -40,11 +40,8 @@ function emailLayout(content: string) {
           <!-- Header -->
           <tr>
             <td align="center" style="padding-bottom: 32px;">
-              <a href="${APP_URL}" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
-                <svg width="32" height="32" viewBox="0 0 82 82" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M71.8779 81.977C71.8779 64.9236 58.0534 51.0991 41 51.0991C23.9466 51.0991 10.1221 64.9236 10.1221 81.977V0.0436401M71.8779 0.0646362C71.8779 17.118 58.0534 30.9426 41 30.9426" stroke="#1a1a2e" stroke-width="6"/>
-                </svg>
-                <span style="font-size: 20px; font-weight: 700; color: #1a1a2e; letter-spacing: -0.02em;">kalit</span>
+              <a href="${APP_URL}" style="text-decoration: none; display: inline-block;">
+                <img src="${APP_URL}/email-logo.png" width="120" height="40" alt="Kalit AI" style="display: block; border: 0;" />
               </a>
             </td>
           </tr>
