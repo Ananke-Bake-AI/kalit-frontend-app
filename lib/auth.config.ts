@@ -64,7 +64,7 @@ export default {
         session.user.id = token.userId as string
         session.user.onboardingDone = token.onboardingDone as boolean
         session.user.orgId = token.orgId as string | null
-        session.user.emailVerified = token.emailVerified as boolean
+        ;(session.user as { emailVerified: boolean }).emailVerified = token.emailVerified as boolean
         if (token.name !== undefined) {
           session.user.name = token.name as string | null
         }
