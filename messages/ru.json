@@ -46,7 +46,12 @@
     "flowDescLong": "Запускайте сайты и лендинги за минуты. Дизайн, контент, структура и хостинг включены.",
     "marketingDescLong": "Планируйте, создавайте, запускайте и оптимизируйте кампании по привлечению клиентов. AI выполняет работу.",
     "pentestDescLong": "Обнаруживайте уязвимости до того, как они станут дорогостоящими. AI сканирует системы и предлагает исправления.",
-    "searchDescLong": "Находите рыночные возможности, анализируйте конкурентов и валидируйте идеи с помощью AI-исследований."
+    "searchDescLong": "Находите рыночные возможности, анализируйте конкурентов и валидируйте идеи с помощью AI-исследований.",
+    "pentestSmall": "Find and fix vulnerabilities automatically.",
+    "flowSmall": "Websites and landing pages in minutes.",
+    "marketingSmall": "Autonomous campaigns and growth.",
+    "projectSmall": "From prompt to deployed app.",
+    "searchSmall": "R&D intelligence for entrepreneurs."
   },
   "stack": {
     "subtitle": "Стек исполнения Kalit",

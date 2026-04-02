@@ -46,7 +46,12 @@
     "flowDescLong": "Uruchom strony i landing page w kilka minut. Design, treść, struktura i hosting w cenie.",
     "marketingDescLong": "Planuj, twórz, realizuj i optymalizuj kampanie pozyskiwania klientów. AI zajmuje się realizacją.",
     "pentestDescLong": "Wykrywaj luki zanim staną się kosztowne. AI skanuje systemy i proponuje poprawki.",
-    "searchDescLong": "Odkrywaj szanse rynkowe, analizuj konkurencję i waliduj pomysły dzięki badaniom wspieranym przez AI."
+    "searchDescLong": "Odkrywaj szanse rynkowe, analizuj konkurencję i waliduj pomysły dzięki badaniom wspieranym przez AI.",
+    "pentestSmall": "Find and fix vulnerabilities automatically.",
+    "flowSmall": "Websites and landing pages in minutes.",
+    "marketingSmall": "Autonomous campaigns and growth.",
+    "projectSmall": "From prompt to deployed app.",
+    "searchSmall": "R&D intelligence for entrepreneurs."
   },
   "stack": {
     "subtitle": "Stos Wykonawczy Kalit",

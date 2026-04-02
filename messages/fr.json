@@ -46,7 +46,12 @@
     "flowDescLong": "Lancez des sites web et landing pages en quelques minutes. Design, contenu, structure et hébergement inclus.",
     "marketingDescLong": "Planifiez, créez, exécutez et optimisez des campagnes d'acquisition sur tous les canaux. L'IA gère l'exécution.",
     "pentestDescLong": "Détectez les vulnérabilités avant qu'elles ne coûtent cher. L'IA scanne vos systèmes et propose des correctifs.",
-    "searchDescLong": "Découvrez les opportunités de marché, analysez la concurrence et validez vos idées grâce à la recherche assistée par l'IA."
+    "searchDescLong": "Découvrez les opportunités de marché, analysez la concurrence et validez vos idées grâce à la recherche assistée par l'IA.",
+    "pentestSmall": "Détectez et corrigez les failles automatiquement.",
+    "flowSmall": "Sites web et landing pages en quelques minutes.",
+    "marketingSmall": "Campagnes autonomes et croissance.",
+    "projectSmall": "Du prompt à l'app déployée.",
+    "searchSmall": "Intelligence R&D pour entrepreneurs."
   },
   "stack": {
     "subtitle": "Stack d'exécution Kalit",

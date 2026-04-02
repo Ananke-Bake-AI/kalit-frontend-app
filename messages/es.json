@@ -46,7 +46,12 @@
     "flowDescLong": "Lanza sitios web y landing pages en minutos. Diseño, contenido, estructura y hosting incluidos.",
     "marketingDescLong": "Planifica, crea, ejecuta y optimiza campañas de adquisición en todos los canales. La IA gestiona la ejecución.",
     "pentestDescLong": "Detecta vulnerabilidades antes de que sean costosas. La IA escanea tus sistemas y propone correcciones.",
-    "searchDescLong": "Descubre oportunidades de mercado, analiza competidores y valida ideas con investigación impulsada por IA."
+    "searchDescLong": "Descubre oportunidades de mercado, analiza competidores y valida ideas con investigación impulsada por IA.",
+    "pentestSmall": "Detecta y corrige vulnerabilidades automáticamente.",
+    "flowSmall": "Sitios web y landing pages en minutos.",
+    "marketingSmall": "Campañas autónomas y crecimiento.",
+    "projectSmall": "Del prompt a la app desplegada.",
+    "searchSmall": "Inteligencia I+D para emprendedores."
   },
   "stack": {
     "subtitle": "Stack de ejecución Kalit",

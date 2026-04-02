@@ -46,7 +46,12 @@
     "flowDescLong": "Lanceer websites en landingspagina's in minuten. Design, content, structuur en hosting inbegrepen.",
     "marketingDescLong": "Plan, maak, voer uit en optimaliseer acquisitiecampagnes over alle kanalen. AI regelt de uitvoering.",
     "pentestDescLong": "Detecteer kwetsbaarheden voordat ze duur worden. AI scant je systemen en stelt fixes voor.",
-    "searchDescLong": "Ontdek marktkansen, analyseer concurrenten en valideer ideeën met AI-onderzoek."
+    "searchDescLong": "Ontdek marktkansen, analyseer concurrenten en valideer ideeën met AI-onderzoek.",
+    "pentestSmall": "Find and fix vulnerabilities automatically.",
+    "flowSmall": "Websites and landing pages in minutes.",
+    "marketingSmall": "Autonomous campaigns and growth.",
+    "projectSmall": "From prompt to deployed app.",
+    "searchSmall": "R&D intelligence for entrepreneurs."
   },
   "stack": {
     "subtitle": "Kalit Executie Stack",

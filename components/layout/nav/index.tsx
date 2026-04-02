@@ -39,7 +39,7 @@ export const Nav = () => {
             onMouseLeave={() => setSubOpen(false)}
             onClick={() => setSubOpen(false)}
           >
-            {SUITES.map(({ id, title, color, smallDescription }) => (
+            {SUITES.map(({ id, title, color }) => (
               <li key={id} style={{ "--color": color } as React.CSSProperties}>
                 <Link href={`/${id}`}>
                   <div className={s.logo}>
@@ -47,7 +47,7 @@ export const Nav = () => {
                   </div>
                   <span className={s.content}>
                     <strong>{title}</strong>
-                    <p>{smallDescription}</p>
+                    <p>{t(`suites.${id}Small`)}</p>
                   </span>
                 </Link>
               </li>

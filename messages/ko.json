@@ -46,7 +46,12 @@
     "flowDescLong": "몇 분 만에 웹사이트와 랜딩 페이지를 출시합니다. 디자인, 카피, 구조, 호스팅 포함.",
     "marketingDescLong": "모든 채널에서 고객 확보 캠페인을 계획, 생성, 실행, 최적화합니다. AI가 실행을 담당합니다.",
     "pentestDescLong": "비용이 발생하기 전에 취약점을 감지합니다. AI가 시스템을 스캔하고 수정을 제안합니다.",
-    "searchDescLong": "AI 기반 리서치로 시장 기회를 발견하고, 경쟁사를 분석하고, 아이디어를 검증합니다."
+    "searchDescLong": "AI 기반 리서치로 시장 기회를 발견하고, 경쟁사를 분석하고, 아이디어를 검증합니다.",
+    "pentestSmall": "Find and fix vulnerabilities automatically.",
+    "flowSmall": "Websites and landing pages in minutes.",
+    "marketingSmall": "Autonomous campaigns and growth.",
+    "projectSmall": "From prompt to deployed app.",
+    "searchSmall": "R&D intelligence for entrepreneurs."
   },
   "stack": {
     "subtitle": "Kalit 실행 스택",

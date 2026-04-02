@@ -46,7 +46,12 @@
     "flowDescLong": "几分钟内发布网站和落地页。设计、文案、结构和托管全部包含。",
     "marketingDescLong": "跨渠道规划、创建、执行和优化获客活动。AI负责执行。",
     "pentestDescLong": "在漏洞造成损失之前发现它们。AI扫描您的系统并提供修复建议。",
-    "searchDescLong": "通过AI研究发现市场机会、分析竞争对手、验证创意。"
+    "searchDescLong": "通过AI研究发现市场机会、分析竞争对手、验证创意。",
+    "pentestSmall": "Find and fix vulnerabilities automatically.",
+    "flowSmall": "Websites and landing pages in minutes.",
+    "marketingSmall": "Autonomous campaigns and growth.",
+    "projectSmall": "From prompt to deployed app.",
+    "searchSmall": "R&D intelligence for entrepreneurs."
   },
   "stack": {
     "subtitle": "Kalit 执行栈",

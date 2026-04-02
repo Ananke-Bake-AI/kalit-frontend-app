@@ -5,6 +5,7 @@ import { Container } from "@/components/container"
 import { Logo } from "@/components/logo"
 import { TextField } from "@/components/text-field"
 import { SUITES } from "@/lib/suites"
+import { useTranslation } from "@/stores/i18n"
 import clsx from "clsx"
 import { Link } from "@/components/link"
 import { signIn } from "next-auth/react"
@@ -32,6 +33,7 @@ export default function LoginPage() {
 function LoginForm() {
   const searchParams = useSearchParams()
   const callbackUrl = getSafeCallbackUrl(searchParams.get("callbackUrl"))
+  const t = useTranslation()
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -68,8 +70,8 @@ function LoginForm() {
           <div className={s.showcase}>
             <div className={s.showcaseHeader}>
               <span className={s.kicker}>Kalit</span>
-              <h1>Sign in to your workspace.</h1>
-              <p>Pick up where you left off across product, launch, growth, and security.</p>
+              <h1>{t("auth.signInTitle")}</h1>
+              <p>{t("auth.signInDesc")}</p>
             </div>
 
             <div className={s.highlights}>
@@ -85,7 +87,7 @@ function LoginForm() {
                     </span>
                     <span>Kalit {suite.title}</span>
                   </div>
-                  <p className={s.highlightText}>{suite.smallDescription}</p>
+                  <p className={s.highlightText}>{t(`suites.${suite.id}Small`)}</p>
                 </div>
               ))}
             </div>
@@ -93,14 +95,14 @@ function LoginForm() {
 
           <div className={s.card}>
             <div className={s.header}>
-              <h1>Sign in</h1>
-              <p>Use your email or continue with Google or GitHub.</p>
+              <h1>{t("auth.signIn")}</h1>
+              <p>{t("auth.signInSubtitle")}</p>
             </div>
 
             <form onSubmit={handleSubmit} className={clsx(s.form, loading && s.loading)}>
               <TextField
                 id="email"
-                label="Email"
+                label={t("auth.email")}
                 type="email"
                 placeholder="you@example.com"
                 value={email}
@@ -111,7 +113,7 @@ function LoginForm() {
 
               <TextField
                 id="password"
-                label="Password"
+                label={t("auth.password")}
                 type="password"
                 placeholder="••••••••"
                 value={password}
@@ -121,17 +123,17 @@ function LoginForm() {
               />
 
               <p className={clsx(s.footer, s.footerInline)}>
-                <Link href="/forgot-password">Forgot password?</Link>
+                <Link href="/forgot-password">{t("auth.forgotPassword")}</Link>
               </p>
 
               <div className={s.submit}>
                 <Button type="submit" disabled={loading}>
-                  {loading ? "Signing in..." : "Continue"}
+                  {loading ? t("common.loading") : t("auth.continue")}
                 </Button>
               </div>
 
               <div className={s.divider}>
-                <span>or continue with</span>
+                <span>{t("auth.orContinueWith")}</span>
               </div>
 
               <div className={s.oauth}>
@@ -144,7 +146,7 @@ function LoginForm() {
               </div>
 
               <p className={s.footer}>
-                Don&apos;t have an account? <Link href="/register">Create one</Link>
+                {t("auth.noAccount")} <Link href="/register">{t("auth.createOne")}</Link>
               </p>
             </form>
           </div>

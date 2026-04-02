@@ -46,7 +46,12 @@
     "flowDescLong": "أطلق مواقع وصفحات هبوط في دقائق. التصميم والمحتوى والهيكل والاستضافة مشمولة.",
     "marketingDescLong": "خطط وأنشئ ونفّذ وحسّن حملات اكتساب العملاء عبر جميع القنوات. الذكاء الاصطناعي يتولى التنفيذ.",
     "pentestDescLong": "اكتشف الثغرات قبل أن تصبح مكلفة. الذكاء الاصطناعي يفحص أنظمتك ويقترح إصلاحات.",
-    "searchDescLong": "اكتشف فرص السوق وحلل المنافسين وتحقق من الأفكار باستخدام البحث المدعوم بالذكاء الاصطناعي."
+    "searchDescLong": "اكتشف فرص السوق وحلل المنافسين وتحقق من الأفكار باستخدام البحث المدعوم بالذكاء الاصطناعي.",
+    "pentestSmall": "Find and fix vulnerabilities automatically.",
+    "flowSmall": "Websites and landing pages in minutes.",
+    "marketingSmall": "Autonomous campaigns and growth.",
+    "projectSmall": "From prompt to deployed app.",
+    "searchSmall": "R&D intelligence for entrepreneurs."
   },
   "stack": {
     "subtitle": "حزمة التنفيذ في Kalit",

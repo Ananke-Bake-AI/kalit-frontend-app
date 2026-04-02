@@ -46,7 +46,12 @@
     "flowDescLong": "Starte Websites und Landing Pages in Minuten. Design, Inhalte, Struktur und Hosting inklusive.",
     "marketingDescLong": "Plane, erstelle, führe aus und optimiere Akquise-Kampagnen über alle Kanäle. Die KI übernimmt die Ausführung.",
     "pentestDescLong": "Erkenne Schwachstellen, bevor sie teuer werden. KI scannt deine Systeme und schlägt Korrekturen vor.",
-    "searchDescLong": "Entdecke Marktchancen, analysiere Wettbewerber und validiere Ideen mit KI-gestützter Recherche."
+    "searchDescLong": "Entdecke Marktchancen, analysiere Wettbewerber und validiere Ideen mit KI-gestützter Recherche.",
+    "pentestSmall": "Schwachstellen automatisch finden und beheben.",
+    "flowSmall": "Websites und Landing Pages in Minuten.",
+    "marketingSmall": "Autonome Kampagnen und Wachstum.",
+    "projectSmall": "Vom Prompt zur deployed App.",
+    "searchSmall": "F&E-Intelligenz für Gründer."
   },
   "stack": {
     "subtitle": "Kalit Execution Stack",

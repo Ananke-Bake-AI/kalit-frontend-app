@@ -46,7 +46,12 @@
     "flowDescLong": "Lansera webbplatser och landningssidor på minuter. Design, innehåll, struktur och hosting ingår.",
     "marketingDescLong": "Planera, skapa, kör och optimera kundanskaffningskampanjer över alla kanaler. AI sköter exekveringen.",
     "pentestDescLong": "Upptäck sårbarheter innan de blir kostsamma. AI skannar dina system och föreslår åtgärder.",
-    "searchDescLong": "Upptäck marknadsmöjligheter, analysera konkurrenter och validera idéer med AI-driven forskning."
+    "searchDescLong": "Upptäck marknadsmöjligheter, analysera konkurrenter och validera idéer med AI-driven forskning.",
+    "pentestSmall": "Find and fix vulnerabilities automatically.",
+    "flowSmall": "Websites and landing pages in minutes.",
+    "marketingSmall": "Autonomous campaigns and growth.",
+    "projectSmall": "From prompt to deployed app.",
+    "searchSmall": "R&D intelligence for entrepreneurs."
   },
   "stack": {
     "subtitle": "Kalits exekveringsstack",

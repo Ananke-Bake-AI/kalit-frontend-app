@@ -5,6 +5,7 @@ import { Container } from "@/components/container"
 import { Logo } from "@/components/logo"
 import { TextField } from "@/components/text-field"
 import { SUITES } from "@/lib/suites"
+import { useTranslation } from "@/stores/i18n"
 import { completeOnboarding } from "@/server/actions/onboarding"
 import clsx from "clsx"
 import { useSession } from "next-auth/react"
@@ -32,6 +33,7 @@ const notes = [
 export default function SetupPage() {
   const router = useRouter()
   const { update } = useSession()
+  const t = useTranslation()
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [orgName, setOrgName] = useState("")
@@ -155,7 +157,7 @@ export default function SetupPage() {
                         <Logo id={suite.id} />
                       </div>
                       <span className={s.name}>Kalit {suite.title}</span>
-                      <span className={s.desc}>{suite.smallDescription}</span>
+                      <span className={s.desc}>{t(`suites.${suite.id}Small`)}</span>
                     </button>
                   ))}
                 </div>

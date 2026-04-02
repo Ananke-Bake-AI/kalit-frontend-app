@@ -46,7 +46,12 @@
     "flowDescLong": "Dakikalar içinde web siteleri ve açılış sayfaları yayınlayın. Tasarım, içerik, yapı ve barındırma dahil.",
     "marketingDescLong": "Tüm kanallarda müşteri edinme kampanyaları planlayın, oluşturun, yürütün ve optimize edin. AI yürütmeyi üstlenir.",
     "pentestDescLong": "Güvenlik açıklarını maliyetli hale gelmeden önce tespit edin. AI sistemlerinizi tarar ve düzeltmeler önerir.",
-    "searchDescLong": "Pazar fırsatlarını keşfedin, rakipleri analiz edin ve yapay zeka destekli araştırmayla fikirleri doğrulayın."
+    "searchDescLong": "Pazar fırsatlarını keşfedin, rakipleri analiz edin ve yapay zeka destekli araştırmayla fikirleri doğrulayın.",
+    "pentestSmall": "Find and fix vulnerabilities automatically.",
+    "flowSmall": "Websites and landing pages in minutes.",
+    "marketingSmall": "Autonomous campaigns and growth.",
+    "projectSmall": "From prompt to deployed app.",
+    "searchSmall": "R&D intelligence for entrepreneurs."
   },
   "stack": {
     "subtitle": "Kalit Yürütme Yığını",

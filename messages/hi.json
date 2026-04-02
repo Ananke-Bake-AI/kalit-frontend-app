@@ -46,7 +46,12 @@
     "flowDescLong": "मिनटों में वेबसाइट और लैंडिंग पेज लॉन्च करें। डिज़ाइन, कंटेंट, स्ट्रक्चर और होस्टिंग शामिल।",
     "marketingDescLong": "सभी चैनलों पर ग्राहक अधिग्रहण अभियान योजना बनाएँ, बनाएँ, चलाएँ और अनुकूलित करें। AI निष्पादन संभालता है।",
     "pentestDescLong": "कमजोरियों को महँगा होने से पहले पहचानें। AI आपके सिस्टम स्कैन करता है और सुधार सुझाता है।",
-    "searchDescLong": "AI-संचालित रिसर्च से बाज़ार के अवसर खोजें, प्रतिस्पर्धियों का विश्लेषण करें और आइडिया सत्यापित करें।"
+    "searchDescLong": "AI-संचालित रिसर्च से बाज़ार के अवसर खोजें, प्रतिस्पर्धियों का विश्लेषण करें और आइडिया सत्यापित करें।",
+    "pentestSmall": "Find and fix vulnerabilities automatically.",
+    "flowSmall": "Websites and landing pages in minutes.",
+    "marketingSmall": "Autonomous campaigns and growth.",
+    "projectSmall": "From prompt to deployed app.",
+    "searchSmall": "R&D intelligence for entrepreneurs."
   },
   "stack": {
     "subtitle": "Kalit एक्सीक्यूशन स्टैक",
