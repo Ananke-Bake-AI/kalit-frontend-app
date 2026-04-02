@@ -108,9 +108,9 @@ export default async function ProjectPage() {
         sectionId="pricing"
       />
       <Portfolio
-        subtitle="Kalit Portfolio"
-        heading={<>Let your imagination run wild, <Underline stroke="url(#color-4-accent)">Kalit will create it</Underline></>}
-        paragraph={<>Join over <Underline stroke="url(#color-4)">+10,000 developers</Underline> building the future on Kalit.</>}
+        subtitle={t("suiteLanding.projectPortfolioSubtitle")}
+        heading={<>{t("suiteLanding.projectPortfolioHeadingPre")} <Underline stroke="url(#color-4-accent)">{t("suiteLanding.projectPortfolioHeadingBold")}</Underline></>}
+        paragraph={<>{t("suiteLanding.projectPortfolioParagraphPre")} <Underline stroke="url(#color-4)">{t("suiteLanding.projectPortfolioParagraphBold")}</Underline> {t("suiteLanding.projectPortfolioParagraphPost")}</>}
         buttonText={t("suiteLanding.tryFree")}
         suiteAppUrl={suiteAppUrl}
         marketingPath={projectMarketingPath}

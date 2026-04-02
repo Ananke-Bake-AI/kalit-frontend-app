@@ -51,11 +51,11 @@ function LoginForm() {
     setLoading(false)
 
     if (result?.error) {
-      toast.error("Invalid email or password")
+      toast.error(t("auth.invalidCredentials"))
       return
     }
 
-    toast.success("Signed in")
+    toast.success(t("auth.signedIn"))
     window.location.assign(callbackUrl)
   }
 

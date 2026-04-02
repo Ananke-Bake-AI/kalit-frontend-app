@@ -5,7 +5,7 @@ import { useI18n } from "@/stores/i18n"
 import { useClickOutside } from "@reactuses/core"
 import clsx from "clsx"
 import { useRouter } from "next/navigation"
-import { useRef, useState } from "react"
+import { useRef, useState, useTransition } from "react"
 import s from "./language-switcher.module.scss"
 
 export function LanguageSwitcher({ className }: { className?: string }) {
@@ -13,6 +13,7 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const router = useRouter()
+  const [, startTransition] = useTransition()
 
   useClickOutside(ref, () => setOpen(false))
 
@@ -21,8 +22,10 @@ export function LanguageSwitcher({ className }: { className?: string }) {
   const handleSwitch = async (loc: Locale) => {
     await setLocale(loc)
     setOpen(false)
-    // Refresh server components to pick up new locale from cookie
-    router.refresh()
+    // Refresh server components in a transition so React coordinates the update
+    startTransition(() => {
+      router.refresh()
+    })
   }
 
   return (

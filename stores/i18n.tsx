@@ -1,7 +1,7 @@
 "use client"
 
 import { COOKIE_NAME, DEFAULT_LOCALE, loadMessages, t as translate, type Locale } from "@/lib/i18n"
-import { createContext, useCallback, useContext, useEffect, useState } from "react"
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react"
 
 type Messages = Record<string, unknown>
 
@@ -29,10 +29,18 @@ export function I18nProvider({
   const [locale, setLocaleState] = useState<Locale>(initialLocale)
   const [messages, setMessages] = useState<Messages>(initialMessages)
 
+  // Sync state from server props after router.refresh() delivers new locale.
+  // This ensures locale state and server-rendered text update at the same time,
+  // preventing GSAP-animated headings from remounting with stale text.
+  useEffect(() => {
+    if (initialLocale !== locale) {
+      setLocaleState(initialLocale)
+      setMessages(initialMessages)
+    }
+  }, [initialLocale, initialMessages])
+
   const setLocale = useCallback(async (newLocale: Locale) => {
-    const newMessages = await loadMessages(newLocale)
-    setMessages(newMessages)
-    setLocaleState(newLocale)
+    // Set cookie and HTML lang immediately so router.refresh() picks up the new locale
     document.cookie = `${COOKIE_NAME}=${newLocale};path=/;max-age=${60 * 60 * 24 * 365};samesite=lax`
     document.documentElement.lang = newLocale
   }, [])

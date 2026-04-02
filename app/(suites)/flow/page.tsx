@@ -105,9 +105,9 @@ export default async function FlowPage() {
         plans={flowPlans}
       />
       <Portfolio
-        subtitle="Sites built with Flow"
-        heading={<>From idea to live pages, <br />without the grind</>}
-        paragraph={<>Launch <Underline stroke="url(#color-2)">responsive sites</Underline> with AI layout, copy, and structure — ready to publish.</>}
+        subtitle={t("suiteLanding.flowPortfolioSubtitle")}
+        heading={<>{t("suiteLanding.flowPortfolioHeadingPre")} <br /><Underline stroke="url(#color-2)">{t("suiteLanding.flowPortfolioHeadingBold")}</Underline></>}
+        paragraph={<>{t("suiteLanding.flowPortfolioParagraphPre")} <Underline stroke="url(#color-2)">{t("suiteLanding.flowPortfolioParagraphBold")}</Underline> {t("suiteLanding.flowPortfolioParagraphPost")}</>}
         buttonText={t("suiteLanding.startBuilding")}
         suiteAppUrl={suiteAppUrl}
         marketingPath={flowMarketingPath}

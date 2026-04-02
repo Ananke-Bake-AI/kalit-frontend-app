@@ -5,6 +5,7 @@ import { Container } from "@/components/container"
 import { Link } from "@/components/link"
 import { TextField } from "@/components/text-field"
 import { register } from "@/server/actions/auth"
+import { useTranslation } from "@/stores/i18n"
 import clsx from "clsx"
 import { signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
@@ -12,18 +13,19 @@ import { useState } from "react"
 import { toast } from "sonner"
 import s from "../auth.module.scss"
 
-const audiences = [
-  { title: "Founders", text: "Turn an idea into product, site, and growth faster." },
-  { title: "Non-technical teams", text: "Use Kalit to launch without hiring a full team first." },
-  { title: "Developers", text: "Move faster on apps, workflows, and execution." }
-]
-
 export default function RegisterPage() {
   const router = useRouter()
+  const t = useTranslation()
   const [loading, setLoading] = useState(false)
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+
+  const audiences = [
+    { title: t("auth.audienceFounders"), text: t("auth.audienceFoundersDesc") },
+    { title: t("auth.audienceTeams"), text: t("auth.audienceTeamsDesc") },
+    { title: t("auth.audienceDevs"), text: t("auth.audienceDevsDesc") }
+  ]
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -46,12 +48,12 @@ export default function RegisterPage() {
     setLoading(false)
 
     if (signInResult?.error) {
-      toast.error("Account created. Please sign in.")
+      toast.error(t("auth.accountCreated"))
       router.push("/login")
       return
     }
 
-    toast.success("Welcome! Let's set up your workspace.")
+    toast.success(t("auth.welcomeSetup"))
     window.location.assign("/setup")
   }
 
@@ -60,14 +62,14 @@ export default function RegisterPage() {
   }
 
   return (
-    <section className={s.page} aria-label="Sign up">
+    <section className={s.page} aria-label={t("auth.registerCardTitle")}>
       <Container>
         <div className={s.shell}>
           <div className={s.showcase}>
             <div className={s.showcaseHeader}>
-              <span className={s.kicker}>Get started</span>
-              <h1>Bring your idea to market with Kalit.</h1>
-              <p>Create an account, set up your workspace, and choose the suite that fits your goal.</p>
+              <span className={s.kicker}>{t("auth.registerKicker")}</span>
+              <h1>{t("auth.registerTitle")}</h1>
+              <p>{t("auth.registerSubtitle")}</p>
             </div>
 
             <div className={s.highlights}>
@@ -84,16 +86,16 @@ export default function RegisterPage() {
 
           <div className={s.card}>
             <div className={s.header}>
-              <h1>Create account</h1>
-              <p>Free to start. Choose your workspace and first suite after signup.</p>
+              <h1>{t("auth.registerCardTitle")}</h1>
+              <p>{t("auth.registerCardDesc")}</p>
             </div>
 
             <form onSubmit={handleSubmit} className={clsx(s.form, loading && s.loading)}>
               <TextField
                 id="name"
-                label="Name"
+                label={t("auth.name")}
                 type="text"
-                placeholder="Your name"
+                placeholder={t("auth.namePlaceholder")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
@@ -102,9 +104,9 @@ export default function RegisterPage() {
 
               <TextField
                 id="email"
-                label="Email"
+                label={t("auth.email")}
                 type="email"
-                placeholder="you@example.com"
+                placeholder={t("auth.emailPlaceholder")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -113,9 +115,9 @@ export default function RegisterPage() {
 
               <TextField
                 id="password"
-                label="Password"
+                label={t("auth.password")}
                 type="password"
-                placeholder="Minimum 8 characters"
+                placeholder={t("auth.passwordPlaceholder")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -125,12 +127,12 @@ export default function RegisterPage() {
 
               <div className={s.submit}>
                 <Button type="submit" disabled={loading}>
-                  {loading ? "Creating account..." : "Create account"}
+                  {loading ? t("auth.creatingAccount") : t("auth.createAccount")}
                 </Button>
               </div>
 
               <div className={s.divider}>
-                <span>or continue with</span>
+                <span>{t("auth.orContinueWith")}</span>
               </div>
 
               <div className={s.oauth}>
@@ -143,7 +145,7 @@ export default function RegisterPage() {
               </div>
 
               <p className={s.footer}>
-                Already have an account? <Link href="/login">Sign in</Link>
+                {t("auth.alreadyHaveAccount")} <Link href="/login">{t("auth.signInLink")}</Link>
               </p>
             </form>
           </div>
