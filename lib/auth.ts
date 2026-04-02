@@ -14,8 +14,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // Run the base jwt callback from authConfig
       const token = await authConfig.callbacks!.jwt!(params)
 
-      // Hydrate emailVerified/isAdmin from DB if missing (old sessions) or on update trigger
-      if (token.emailVerified === undefined || token.isAdmin === undefined || params.trigger === "update") {
+      // Always re-check DB when emailVerified is falsy (user may have just verified)
+      // or when isAdmin is missing, or on explicit session update trigger
+      if (!token.emailVerified || token.isAdmin === undefined || params.trigger === "update") {
         if (token.email) {
           const dbUser = await prisma.user.findUnique({
             where: { email: token.email },
