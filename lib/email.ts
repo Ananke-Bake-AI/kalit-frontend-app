@@ -31,15 +31,11 @@ function ctaButton(href: string, label: string) {
 </v:roundrect>
 <![endif]-->
 <!--[if !mso]><!-->
-<table role="presentation" cellpadding="0" cellspacing="0" style="margin: 0;">
-  <tr>
-    <td style="border-radius: 8px; background-color: #8200DF; background: linear-gradient(135deg, #8200DF, #2F44FF);">
-      <a href="${href}" style="display: inline-block; padding: 10px 22px; color: #ffffff; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 8px;">
-        ${label}
-      </a>
-    </td>
-  </tr>
-</table>
+<div style="margin: 0;">
+  <a href="${href}" style="display: inline-block; padding: 10px 22px; color: #ffffff; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 8px; background-color: #8200DF; background: linear-gradient(135deg, #8200DF, #2F44FF);">
+    ${label}
+  </a>
+</div>
 <!--<![endif]-->`
 }
 
