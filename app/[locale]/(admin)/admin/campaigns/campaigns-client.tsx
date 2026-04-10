@@ -95,9 +95,10 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
   const previewBody = body
     .replace(/\{\{name\}\}/g, "Frederick")
     .replace(/\{\{email\}\}/g, "frederick@example.com")
-    .replace(/\[button:(.+?)\|(.+?)\]/g, '<div style="margin: 16px 0;"><span style="display: inline-block; padding: 10px 22px; background: linear-gradient(135deg, #8200DF, #2F44FF); color: white; border-radius: 10px; font-weight: 600; font-size: 14px;">$1</span></div>')
-    .replace(/\[link:(.+?)\|(.+?)\]/g, '<a style="color: #8200DF; text-decoration: underline;">$1</a>')
+    .replace(/\[button:(.+?)\|(.+?)\]/g, '<table role="presentation" cellpadding="0" cellspacing="0" style="margin: 16px 0;"><tr><td style="border-radius: 10px; background: linear-gradient(135deg, #8200DF, #2F44FF);"><a href="$2" style="display: inline-block; padding: 14px 28px; color: #ffffff; font-size: 15px; font-weight: 600; text-decoration: none; border-radius: 10px;">$1</a></td></tr></table>')
+    .replace(/\[link:(.+?)\|(.+?)\]/g, '<a href="$2" style="color: #8200DF; text-decoration: underline;">$1</a>')
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/\n\n/g, '</p><p style="color: #374151; font-size: 15px; line-height: 1.7; margin: 0 0 12px;">')
     .replace(/\n/g, "<br />")
 
   const handleSend = () => {
@@ -326,12 +327,13 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
                 <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#1a1a2e", margin: "0 0 16px" }}>{subject}</h1>
                 <div
                   style={{ color: "#374151", fontSize: "15px", lineHeight: 1.7 }}
-                  dangerouslySetInnerHTML={{ __html: previewBody }}
+                  dangerouslySetInnerHTML={{ __html: `<p style="color: #374151; font-size: 15px; line-height: 1.7; margin: 0 0 12px;">${previewBody}</p>` }}
                 />
               </div>
               <div className={s.previewFooter}>
                 <p>Kalit AI — Build, Launch, Grow, Secure</p>
                 <p>Merkle Tech Labs LTD.</p>
+                <p style={{ marginTop: 8 }}><a href="#" style={{ color: "#d1d5db", textDecoration: "underline", fontSize: "11px" }}>Unsubscribe</a></p>
               </div>
             </div>
           </div>
