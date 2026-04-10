@@ -7,7 +7,7 @@ export const socials = [
   {
     name: "Instagram",
     icon: "hugeicons:instagram",
-    url: "https://discord.gg/kalit-ai"
+    url: "https://discord.gg/b3cvdcQBAs"
   },
   {
     name: "Linkedin",
@@ -22,6 +22,6 @@ export const socials = [
   {
     name: "Discord",
     icon: "hugeicons:discord",
-    url: "https://discord.gg/kalit-ai"
+    url: "https://discord.gg/b3cvdcQBAs"
   }
 ]

@@ -59,7 +59,7 @@ export default function SupportPage() {
               Join our Discord server to connect with other Kalit AI users, share tips, get
               community support, and stay updated on new features.
             </p>
-            <Link href="https://discord.gg/kalit-ai" className={s.cardLink}>
+            <Link href="https://discord.gg/b3cvdcQBAs" className={s.cardLink}>
               Join Discord
             </Link>
           </div>

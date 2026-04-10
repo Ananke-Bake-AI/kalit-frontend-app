@@ -101,7 +101,7 @@ function emailLayout(content: string) {
                   <td style="color: #d1d5db;">&middot;</td>
                   <td style="padding: 0 8px;"><a href="https://x.com/kalit_ai" style="color: #6b7280; font-size: 12px; text-decoration: none;">X</a></td>
                   <td style="color: #d1d5db;">&middot;</td>
-                  <td style="padding: 0 8px;"><a href="https://discord.gg/kalit-ai" style="color: #6b7280; font-size: 12px; text-decoration: none;">Discord</a></td>
+                  <td style="padding: 0 8px;"><a href="https://discord.gg/b3cvdcQBAs" style="color: #6b7280; font-size: 12px; text-decoration: none;">Discord</a></td>
                   <td style="color: #d1d5db;">&middot;</td>
                   <td style="padding: 0 8px;"><a href="https://www.linkedin.com/company/kalit-ai" style="color: #6b7280; font-size: 12px; text-decoration: none;">LinkedIn</a></td>
                 </tr>
