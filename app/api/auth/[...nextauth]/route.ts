@@ -1,4 +1,5 @@
 import { handlers } from "@/lib/auth"
+import { NextRequest } from "next/server"
 
 export const POST = handlers.POST
 
@@ -6,14 +7,14 @@ export const POST = handlers.POST
 // GitHub sends iss=https://github.com/login/oauth (RFC 9207) but
 // @auth/core@0.41 validates it against a hardcoded fallback issuer
 // ("https://authjs.dev") for non-OIDC providers, causing a mismatch.
-export async function GET(req: Request) {
-  const url = new URL(req.url)
-  if (url.searchParams.has("iss")) {
+export async function GET(req: NextRequest) {
+  if (req.nextUrl.searchParams.has("iss")) {
+    const url = req.nextUrl.clone()
     url.searchParams.delete("iss")
-    req = new Request(url, {
+    return handlers.GET(new NextRequest(url, {
       method: req.method,
       headers: req.headers,
-    })
+    }))
   }
-  return handlers.GET(req as any)
+  return handlers.GET(req)
 }
