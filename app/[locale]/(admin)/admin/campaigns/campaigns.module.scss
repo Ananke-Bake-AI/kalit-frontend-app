@@ -356,6 +356,59 @@
   font-weight: 500;
 }
 
+// ─── Compose Language Bar ────────────────────────────────
+
+.composeLangBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--size-3);
+  flex-wrap: wrap;
+}
+
+.langCount {
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.editingBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--size-2);
+  padding: var(--size-3) var(--size-4);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  background: oklch(from #8200df l c h / 0.04);
+  border: 1px solid oklch(from #8200df l c h / 0.1);
+  border-radius: var(--radius-2);
+
+  svg {
+    color: #8200df;
+    flex-shrink: 0;
+  }
+
+  strong {
+    color: var(--text);
+  }
+}
+
+.editingBannerAction {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--color-error, #ef4444);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  white-space: nowrap;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
 // ─── Compose Form ───────────────────────────────────────
 
 .form {

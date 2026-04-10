@@ -12,7 +12,8 @@ import { toast } from "sonner"
 import s from "./campaigns.module.scss"
 
 type Stats = Awaited<ReturnType<typeof getCampaignStats>>
-type Translations = Record<string, { subject: string; body: string }>
+type LangContent = { subject: string; body: string }
+type Translations = Record<string, LangContent>
 
 const TAGS = [
   { tag: "{{name}}", label: "User name", desc: "Recipient's name (or \"there\" if empty)" },
@@ -37,7 +38,7 @@ function formatPreview(raw: string) {
   return raw
     .replace(/\{\{name\}\}/g, "Frederick")
     .replace(/\{\{email\}\}/g, "frederick@example.com")
-    .replace(/\[button:(.+?)\|(.+?)\]/g, '<table role="presentation" cellpadding="0" cellspacing="0" style="margin: 16px 0;"><tr><td style="border-radius: 8px; background: linear-gradient(135deg, #8200DF, #2F44FF);"><a href="$2" style="display: inline-block; padding: 10px 22px; color: #ffffff; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 8px;">$1</a></td></tr></table>')
+    .replace(/\[button:(.+?)\|(.+?)\]/g, '<div style="margin: 16px 0;"><a href="$2" style="display: inline-block; padding: 10px 22px; color: #ffffff; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 8px; background: linear-gradient(135deg, #8200DF, #2F44FF); white-space: nowrap;">$1</a></div>')
     .replace(/\[link:(.+?)\|(.+?)\]/g, '<a href="$2" style="color: #8200DF; text-decoration: underline;">$1</a>')
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/\n\n/g, '</p><p style="color: #374151; font-size: 15px; line-height: 1.7; margin: 0 0 12px;">')
@@ -46,34 +47,60 @@ function formatPreview(raw: string) {
 
 export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
   const [stats] = useState(initialStats)
-  const [subject, setSubject] = useState("")
-  const [body, setBody] = useState("")
-  const [showPreview, setShowPreview] = useState(false)
   const [isPending, startTransition] = useTransition()
   const [result, setResult] = useState<{ sent: number; total: number; errors: string[] } | null>(null)
+
+  // All content keyed by language code. English is always the source.
+  const [content, setContent] = useState<Translations>({ en: { subject: "", body: "" } })
+  const [editLang, setEditLang] = useState("en")
+  const [showPreview, setShowPreview] = useState(false)
 
   // AI assistant state
   const [aiOpen, setAiOpen] = useState(false)
   const [aiPrompt, setAiPrompt] = useState("")
   const [aiLoading, setAiLoading] = useState(false)
-  const [aiResult, setAiResult] = useState<{ subject: string; body: string } | null>(null)
+  const [aiResult, setAiResult] = useState<LangContent | null>(null)
   const [aiError, setAiError] = useState("")
   const aiInputRef = useRef<HTMLTextAreaElement>(null)
 
-  // Translations state
-  const [translations, setTranslations] = useState<Translations>({})
+  // Translation state
   const [translating, setTranslating] = useState(false)
-  const [previewLang, setPreviewLang] = useState("en")
 
-  const canSend = subject.trim().length > 0 && body.trim().length > 0
-
-  // Languages that have active users (excluding English which is the default)
+  // Derived
+  const en = content.en
+  const cur = content[editLang] || en
+  const canSend = en.subject.trim().length > 0 && en.body.trim().length > 0
   const otherLanguages = stats.languages.filter((l) => l.code !== "en")
-  const hasTranslations = Object.keys(translations).length > 0
+  const translatedLangs = Object.keys(content).filter((k) => k !== "en")
+  const hasTranslations = translatedLangs.length > 0
+
+  // ─── Helpers ────────────────────────────────────────────
+
+  const updateContent = (lang: string, field: "subject" | "body", value: string) => {
+    setContent((prev) => ({
+      ...prev,
+      [lang]: { ...prev[lang], [field]: value },
+    }))
+  }
 
   const insertTag = (tag: string) => {
-    setBody((prev) => prev + tag)
+    updateContent(editLang, "body", cur.body + tag)
   }
+
+  const switchLang = (lang: string) => {
+    setEditLang(lang)
+  }
+
+  const removeTranslation = (lang: string) => {
+    setContent((prev) => {
+      const next = { ...prev }
+      delete next[lang]
+      return next
+    })
+    if (editLang === lang) setEditLang("en")
+  }
+
+  // ─── AI Generation ─────────────────────────────────────
 
   const generateWithAi = useCallback(async (prompt: string, refine = false) => {
     if (!prompt.trim()) return
@@ -87,7 +114,7 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt,
-          ...(refine ? { currentSubject: subject, currentBody: body } : {}),
+          ...(refine ? { currentSubject: en.subject, currentBody: en.body } : {}),
         }),
       })
 
@@ -103,17 +130,19 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
     } finally {
       setAiLoading(false)
     }
-  }, [subject, body])
+  }, [en.subject, en.body])
 
   const applyAiResult = () => {
     if (!aiResult) return
-    setSubject(aiResult.subject)
-    setBody(aiResult.body)
+    // Apply to English, clear translations since source changed
+    setContent({ en: { subject: aiResult.subject, body: aiResult.body } })
+    setEditLang("en")
     setAiResult(null)
     setAiPrompt("")
-    setTranslations({}) // Clear old translations when content changes
     toast.success("AI content applied")
   }
+
+  // ─── Translations ──────────────────────────────────────
 
   const generateTranslations = async () => {
     if (!canSend || otherLanguages.length === 0) return
@@ -130,8 +159,8 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           translate: {
-            sourceSubject: subject,
-            sourceBody: body,
+            sourceSubject: en.subject,
+            sourceBody: en.body,
             targetLanguages,
           },
         }),
@@ -143,8 +172,10 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
         return
       }
 
-      setTranslations(data.translations || {})
-      const count = Object.keys(data.translations || {}).length
+      const newTranslations = data.translations || {}
+      setContent((prev) => ({ ...prev, ...newTranslations }))
+
+      const count = Object.keys(newTranslations).length
       const errors = data.errors?.length || 0
       toast.success(`Generated ${count} translation${count !== 1 ? "s" : ""}${errors ? ` (${errors} failed)` : ""}`)
     } catch {
@@ -154,23 +185,18 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
     }
   }
 
-  // Get content for preview based on selected language
-  const previewSubject = previewLang === "en" ? subject : (translations[previewLang]?.subject || subject)
-  const previewBodyRaw = previewLang === "en" ? body : (translations[previewLang]?.body || body)
-  const previewBody = formatPreview(previewBodyRaw)
+  // ─── Send ──────────────────────────────────────────────
 
   const handleSend = () => {
     if (!canSend) return
 
-    const langInfo = hasTranslations
-      ? ` (${Object.keys(translations).length + 1} languages)`
-      : ""
-    if (!confirm(`You are about to send this email to ${stats.verifiedUsers} verified users${langInfo}. Continue?`)) return
+    const langCount = Object.keys(content).length
+    const langInfo = langCount > 1 ? ` in ${langCount} languages` : ""
+    if (!confirm(`Send this campaign to ${stats.verifiedUsers} verified users${langInfo}?`)) return
 
     setResult(null)
     startTransition(async () => {
-      const allTranslations: Translations = { en: { subject, body }, ...translations }
-      const res = await sendCampaign(subject, body, allTranslations)
+      const res = await sendCampaign(en.subject, en.body, content)
       if ("error" in res) {
         toast.error(res.error as string)
       } else {
@@ -179,6 +205,13 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
       }
     })
   }
+
+  // ─── Preview data ──────────────────────────────────────
+
+  const previewContent = content[editLang] || en
+  const previewBody = formatPreview(previewContent.body)
+
+  // ─── Render ────────────────────────────────────────────
 
   return (
     <>
@@ -206,13 +239,13 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
       <SurfacePanel
         spaced
         title="AI Assistant"
-        subtitle="Describe what you want and let AI draft your campaign"
+        subtitle="Describe your email and let AI draft it in English"
       >
         {!aiOpen ? (
           <button className={s.aiToggle} onClick={() => { setAiOpen(true); setTimeout(() => aiInputRef.current?.focus(), 50) }}>
             <Icon icon="hugeicons:magic-wand-01" />
             <span>Write with AI</span>
-            <span className={s.aiToggleHint}>Describe your email and generate subject + body instantly</span>
+            <span className={s.aiToggleHint}>Generate subject + body, then edit and translate</span>
           </button>
         ) : (
           <div className={s.aiPanel}>
@@ -221,7 +254,7 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
                 ref={aiInputRef}
                 className={s.aiInput}
                 rows={3}
-                placeholder="e.g. Announce our new AI Flow feature that lets users automate workflows with intelligent agents. Include a CTA to try it."
+                placeholder="e.g. Announce our new AI Flow feature that lets users automate workflows with intelligent agents. Include a CTA to try it at https://kalit.ai/dashboard"
                 value={aiPrompt}
                 onChange={(e) => setAiPrompt(e.target.value)}
                 onKeyDown={(e) => {
@@ -246,14 +279,14 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
                   ))}
                 </div>
                 <div className={s.aiButtons}>
-                  {(subject || body) && (
+                  {canSend && (
                     <Button
                       variant="secondary"
                       onClick={() => generateWithAi(aiPrompt, true)}
                       disabled={aiLoading || !aiPrompt.trim()}
                     >
                       <Icon icon="hugeicons:edit-02" />
-                      Refine current
+                      Refine
                     </Button>
                   )}
                   <Button
@@ -286,7 +319,7 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
                     </Button>
                     <Button variant="primary" onClick={applyAiResult}>
                       <Icon icon="hugeicons:checkmark-circle-02" />
-                      Apply to campaign
+                      Apply
                     </Button>
                   </div>
                 </div>
@@ -307,14 +340,73 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
       </SurfacePanel>
 
       {/* Compose */}
-      <SurfacePanel spaced title="Compose Campaign" subtitle="Emails use the branded Kalit template automatically">
+      <SurfacePanel spaced title="Compose Campaign" subtitle="Edit the English version or switch to a translation">
         <div className={s.form}>
+          {/* Language tabs */}
+          <div className={s.composeLangBar}>
+            <div className={s.langTabs}>
+              {/* English (always first) */}
+              <button
+                className={`${s.langTab} ${editLang === "en" ? s.langTabActive : ""}`}
+                onClick={() => switchLang("en")}
+              >
+                <span className={s.langFlag}>{LOCALE_CONFIG.en.flag}</span>
+                <span>English</span>
+                <span className={s.langCount}>{stats.languages.find((l) => l.code === "en")?.count || 0}</span>
+              </button>
+
+              {/* Translated languages */}
+              {translatedLangs.map((code) => {
+                const cfg = LOCALE_CONFIG[code as Locale]
+                const count = stats.languages.find((l) => l.code === code)?.count || 0
+                return (
+                  <button
+                    key={code}
+                    className={`${s.langTab} ${editLang === code ? s.langTabActive : ""}`}
+                    onClick={() => switchLang(code)}
+                  >
+                    <span className={s.langFlag}>{cfg?.flag}</span>
+                    <span>{cfg?.name || code}</span>
+                    <span className={s.langCount}>{count}</span>
+                  </button>
+                )
+              })}
+            </div>
+
+            {/* Translation actions */}
+            {otherLanguages.length > 0 && canSend && (
+              <Button
+                variant="secondary"
+                onClick={generateTranslations}
+                disabled={translating}
+                circle={translating}
+              >
+                <Icon icon="hugeicons:translate" />
+                {translating ? "Translating..." : hasTranslations ? "Retranslate" : "Translate"}
+              </Button>
+            )}
+          </div>
+
+          {/* Editing indicator for non-English */}
+          {editLang !== "en" && (
+            <div className={s.editingBanner}>
+              <Icon icon="hugeicons:edit-02" />
+              <span>
+                Editing <strong>{LOCALE_CONFIG[editLang as Locale]?.name || editLang}</strong> version
+                — {stats.languages.find((l) => l.code === editLang)?.count || 0} recipients
+              </span>
+              <button className={s.editingBannerAction} onClick={() => removeTranslation(editLang)}>
+                Remove translation
+              </button>
+            </div>
+          )}
+
           <div className={s.field}>
             <label className={s.label}>Subject</label>
             <TextField
               placeholder="e.g. New feature: AI Flow is here!"
-              value={subject}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setSubject(e.target.value); setTranslations({}) }}
+              value={cur.subject}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateContent(editLang, "subject", e.target.value)}
             />
           </div>
 
@@ -337,61 +429,16 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
             <textarea
               className={s.textarea}
               rows={12}
-              placeholder={"Hi {{name}},\n\nWe're excited to announce a brand new feature on Kalit!\n\n**AI Flow** is now available — automate your workflows with intelligent agents.\n\n[button:Try it now|https://kalit.ai/flow]\n\nLet us know what you think!\nThe Kalit Team"}
-              value={body}
-              onChange={(e) => { setBody(e.target.value); setTranslations({}) }}
+              placeholder={"Hi {{name}},\n\nWe're excited to announce a brand new feature on Kalit!\n\n**AI Flow** is now available — automate your workflows with intelligent agents.\n\n[button:Try it now|https://kalit.ai/dashboard]\n\nLet us know what you think!\nThe Kalit Team"}
+              value={cur.body}
+              onChange={(e) => updateContent(editLang, "body", e.target.value)}
             />
           </div>
-
-          {/* Translations */}
-          {otherLanguages.length > 0 && canSend && (
-            <div className={s.translationsSection}>
-              <div className={s.translationsHeader}>
-                <div>
-                  <span className={s.label}>Translations</span>
-                  <span className={s.translationsHint}>
-                    {hasTranslations
-                      ? `${Object.keys(translations).length} language${Object.keys(translations).length !== 1 ? "s" : ""} ready`
-                      : `${otherLanguages.length} other language${otherLanguages.length !== 1 ? "s" : ""} detected`}
-                  </span>
-                </div>
-                <Button
-                  variant="secondary"
-                  onClick={generateTranslations}
-                  disabled={translating}
-                  circle={translating}
-                >
-                  <Icon icon="hugeicons:translate" />
-                  {translating ? "Translating..." : hasTranslations ? "Regenerate" : "Generate translations"}
-                </Button>
-              </div>
-
-              {hasTranslations && (
-                <div className={s.langTabs}>
-                  {stats.languages.map((l) => {
-                    const cfg = LOCALE_CONFIG[l.code as Locale]
-                    const isReady = l.code === "en" || translations[l.code]
-                    return (
-                      <button
-                        key={l.code}
-                        className={`${s.langTab} ${previewLang === l.code ? s.langTabActive : ""} ${!isReady ? s.langTabMissing : ""}`}
-                        onClick={() => setPreviewLang(l.code)}
-                      >
-                        <span className={s.langFlag}>{cfg?.flag}</span>
-                        <span>{cfg?.name || l.code}</span>
-                        <Badge variant={isReady ? "success" : "white"}>{l.count}</Badge>
-                      </button>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
-          )}
 
           <div className={s.actions}>
             <Button
               variant="secondary"
-              onClick={() => { setShowPreview(!showPreview); setPreviewLang("en") }}
+              onClick={() => setShowPreview(!showPreview)}
               disabled={!canSend}
             >
               <Icon icon="hugeicons:eye" />
@@ -405,7 +452,9 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
               circle={isPending}
             >
               <Icon icon="hugeicons:mail-send-02" />
-              {isPending ? "Sending..." : `Send to ${stats.verifiedUsers} users`}
+              {isPending
+                ? "Sending..."
+                : `Send to ${stats.verifiedUsers} users${hasTranslations ? ` (${Object.keys(content).length} langs)` : ""}`}
             </Button>
           </div>
         </div>
@@ -413,26 +462,7 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
 
       {/* Preview */}
       {showPreview && canSend && (
-        <SurfacePanel spaced title="Email Preview" subtitle="Preview with sample data — actual emails will be personalized per user">
-          {/* Language preview tabs */}
-          {hasTranslations && (
-            <div className={s.previewLangBar}>
-              {stats.languages.map((l) => {
-                const cfg = LOCALE_CONFIG[l.code as Locale]
-                const isReady = l.code === "en" || translations[l.code]
-                if (!isReady) return null
-                return (
-                  <button
-                    key={l.code}
-                    className={`${s.previewLangBtn} ${previewLang === l.code ? s.previewLangBtnActive : ""}`}
-                    onClick={() => setPreviewLang(l.code)}
-                  >
-                    {cfg?.flag} {cfg?.name || l.code}
-                  </button>
-                )
-              })}
-            </div>
-          )}
+        <SurfacePanel spaced title="Email Preview" subtitle={`Previewing ${LOCALE_CONFIG[editLang as Locale]?.name || "English"} version`}>
           <div className={s.previewFrame}>
             <div className={s.previewMeta}>
               <div className={s.previewMetaRow}>
@@ -442,20 +472,18 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
               <div className={s.previewMetaRow}>
                 <span className={s.previewMetaLabel}>To</span>
                 <span>
-                  {previewLang === "en"
-                    ? `${stats.languages.find((l) => l.code === "en")?.count || stats.verifiedUsers} users`
-                    : `${stats.languages.find((l) => l.code === previewLang)?.count || 0} ${LOCALE_CONFIG[previewLang as Locale]?.name || previewLang} users`}
+                  {stats.languages.find((l) => l.code === editLang)?.count || 0} {LOCALE_CONFIG[editLang as Locale]?.name || editLang} users
                 </span>
               </div>
               <div className={s.previewMetaRow}>
                 <span className={s.previewMetaLabel}>Subject</span>
-                <span className={s.previewSubject}>{previewSubject}</span>
+                <span className={s.previewSubject}>{previewContent.subject}</span>
               </div>
             </div>
             <div className={s.previewBody}>
               <div className={s.previewAccent} />
               <div className={s.previewContent}>
-                <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#1a1a2e", margin: "0 0 16px" }}>{previewSubject}</h1>
+                <h1 style={{ fontSize: "22px", fontWeight: 700, color: "#1a1a2e", margin: "0 0 16px" }}>{previewContent.subject}</h1>
                 <div
                   style={{ color: "#374151", fontSize: "15px", lineHeight: 1.7 }}
                   dangerouslySetInnerHTML={{ __html: `<p style="color: #374151; font-size: 15px; line-height: 1.7; margin: 0 0 12px;">${previewBody}</p>` }}
@@ -485,7 +513,7 @@ export function CampaignsClient({ initialStats }: { initialStats: Stats }) {
             {hasTranslations && (
               <div className={s.resultItem}>
                 <span className={s.resultLabel}>Languages</span>
-                <span>{Object.keys(translations).length + 1}</span>
+                <span>{Object.keys(content).length}</span>
               </div>
             )}
             {result.errors.length > 0 && (
