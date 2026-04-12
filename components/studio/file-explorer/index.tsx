@@ -30,7 +30,7 @@ interface ProjectStatus {
 
 interface FileExplorerProps {
   sessionId: string | null
-  onPreviewFile?: (file: { url: string; name: string }) => void
+  onPreviewFile?: (file: { url: string; name: string }, images?: { url: string; name: string }[]) => void
 }
 
 // ---------------------------------------------------------------------------
@@ -61,6 +61,20 @@ function countFiles(nodes: FileNode[]): number {
     else if (!n.isDir) c++
   }
   return c
+}
+
+// Flatten the tree into a linear list of images in display order so the
+// preview modal can step prev/next through all image siblings in the session.
+function collectImages(nodes: FileNode[]): { url: string; name: string }[] {
+  const out: { url: string; name: string }[] = []
+  const walk = (ns: FileNode[]) => {
+    for (const n of ns) {
+      if (n.isDir && n.children) walk(n.children)
+      else if (!n.isDir && n.url && isImg(n.name)) out.push({ url: n.url, name: n.name })
+    }
+  }
+  walk(nodes)
+  return out
 }
 
 const PHASE_CONFIG_KEYS: Record<string, { color: string; key: string; pulse?: boolean }> = {
@@ -320,7 +334,7 @@ export function FileExplorer({ sessionId, onPreviewFile }: FileExplorerProps) {
                   expanded={expanded}
                   onToggle={toggle}
                   onDelete={deleteFile}
-                  onPreview={onPreviewFile}
+                  onPreview={(f) => onPreviewFile?.(f, collectImages(tree))}
                 />
               ))
             )}

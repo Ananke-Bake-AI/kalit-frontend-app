@@ -1,0 +1,22 @@
+@use "@/styles/mixins" as *;
+
+// Studio is a single-viewport surface: one 100dvh block, no document scroll,
+// no footer. Long chats scroll inside the internal message list. The Kalit
+// header + email banner sit above <main> unless focus mode is active, in
+// which case the entire viewport is dedicated to the studio.
+.root {
+  height: 100dvh;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--body);
+  overflow: hidden;
+}
+
+.main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}

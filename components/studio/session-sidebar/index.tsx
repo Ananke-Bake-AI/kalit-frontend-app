@@ -5,7 +5,6 @@ import { useStudioStore } from "@/stores/studio"
 import { useI18n } from "@/stores/i18n"
 import { brokerFetch } from "@/lib/broker-direct"
 import { Icon } from "@/components/icon"
-import type { ChatSession } from "@/types/studio"
 import clsx from "clsx"
 import s from "./session-sidebar.module.scss"
 
@@ -20,32 +19,11 @@ export function SessionSidebar({ onSessionSelect }: SessionSidebarProps) {
     activeSessionId,
     deleteConfirm,
     setDeleteConfirm,
-    addSession,
     removeSession,
     setActiveSessionId,
     setMessages,
     quota,
   } = useStudioStore()
-
-  const handleNewChat = useCallback(async () => {
-    try {
-      const res = await brokerFetch("/api/broker/sessions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "minimax-m2.7:cloud" }),
-      })
-      if (res.ok) {
-        const data = await res.json()
-        const session: ChatSession = data.session
-        addSession(session)
-        setActiveSessionId(session.id)
-        setMessages([])
-        onSessionSelect(session.id)
-      }
-    } catch {
-      // silent
-    }
-  }, [addSession, setActiveSessionId, setMessages, onSessionSelect])
 
   const handleDelete = useCallback(async (id: string) => {
     try {
@@ -74,14 +52,6 @@ export function SessionSidebar({ onSessionSelect }: SessionSidebarProps) {
 
   return (
     <div className={s.container}>
-      {/* Header */}
-      <div className={s.header}>
-        <span className={s.logo}>{t("studio.title")}</span>
-        <button className={s.newChat} onClick={handleNewChat} title={t("studio.newChat")}>
-          <Icon icon="hugeicons:edit-02" />
-        </button>
-      </div>
-
       {/* Session list */}
       <div className={s.list}>
         {sessions.length === 0 && (

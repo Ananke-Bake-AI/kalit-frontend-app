@@ -39,7 +39,8 @@ function formatElapsed(startedAt: string | null): string {
   return `${sec}s`
 }
 
-function truncate(text: string, max: number): string {
+function truncate(text: string | null | undefined, max: number): string {
+  if (!text) return ""
   return text.length <= max ? text : text.slice(0, max) + "\u2026"
 }
 
@@ -215,7 +216,7 @@ export function ProjectWidget({ projectId, onCompleted }: ProjectWidgetProps) {
 
   // ── Pending / Processing ──
   void now
-  const hasTasks = data.tasks !== null && data.tasks.total > 0
+  const hasTasks = !!data.tasks && data.tasks.total > 0
   const pct = hasTasks && data.tasks ? Math.min(100, Math.round((data.tasks.done / data.tasks.total) * 100)) : 0
 
   return (
@@ -232,7 +233,7 @@ export function ProjectWidget({ projectId, onCompleted }: ProjectWidgetProps) {
         </span>
       </div>
 
-      {data.phase !== null && <PhaseIndicator phase={data.phase} />}
+      {data.phase && <PhaseIndicator phase={data.phase} />}
 
       {hasTasks && data.tasks && (
         <div className={s.progressWrap}>

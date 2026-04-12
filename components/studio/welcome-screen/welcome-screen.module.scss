@@ -1,21 +1,26 @@
 @use "@/styles/mixins" as *;
 @use "@/styles/app-glass" as *;
 
+// Welcome container fills the available chat-area height. When all five suite
+// groups don't fit in a single viewport (common on short screens) we allow
+// the content to scroll internally rather than overflow the layout.
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   flex: 1;
-  padding: var(--size-8);
-  gap: var(--size-10);
-  max-width: 720px;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--size-5) var(--size-5) var(--size-4);
+  gap: var(--size-4);
+  max-width: 780px;
   margin: 0 auto;
   width: 100%;
 
   @include max($responsive) {
-    padding: var(--size-5);
-    gap: var(--size-6);
+    padding: var(--size-4) var(--size-4) var(--size-3);
+    gap: var(--size-3);
   }
 }
 
@@ -23,23 +28,23 @@
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: var(--size-3);
+  gap: var(--size-2);
 }
 
 .title {
   font-family: var(--font-heading);
-  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-size: clamp(1.2rem, 2.4vw, 1.65rem);
   color: var(--text);
   line-height: 1.2;
 }
 
 .subtitle {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
   font-weight: 300;
   max-width: 420px;
   margin: 0 auto;
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 // ── Suite groups ────────────────────────────────────────
@@ -47,14 +52,14 @@
 .suites {
   display: flex;
   flex-direction: column;
-  gap: var(--size-6);
+  gap: var(--size-4);
   width: 100%;
 }
 
 .suiteGroup {
   display: flex;
   flex-direction: column;
-  gap: var(--size-3);
+  gap: var(--size-2);
 }
 
 .suiteHeader {
@@ -65,14 +70,14 @@
 
 .suiteName {
   font-family: var(--font-heading);
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   color: var(--suite-color, var(--text));
   text-transform: capitalize;
 }
 
 .promptList {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: var(--size-2);
 
   @include max($responsive) {
@@ -84,8 +89,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--size-3);
-  padding: 0.75rem 1rem;
+  gap: var(--size-2);
+  padding: 0.55rem 0.8rem;
   background-color: oklch(from var(--suite-color, var(--text)) l c h / 0.06);
   @include cornerShape(var(--radius-3));
   text-align: left;
@@ -95,15 +100,15 @@
   position: relative;
 
   span {
-    font-size: 0.83rem;
+    font-size: 0.78rem;
     color: var(--text);
     font-weight: 400;
-    line-height: 1.4;
+    line-height: 1.35;
   }
 
   :global(svg) {
     flex-shrink: 0;
-    font-size: 1.1em;
+    font-size: 1em;
     color: oklch(from var(--suite-color, var(--text)) l c h / 0.5);
     transition: color var(--transition-link);
   }

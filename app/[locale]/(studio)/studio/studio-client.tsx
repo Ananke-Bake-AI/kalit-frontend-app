@@ -14,6 +14,7 @@ import { WelcomeScreen } from "@/components/studio/welcome-screen"
 import { MessageList } from "@/components/studio/message-list"
 import { FileExplorer } from "@/components/studio/file-explorer"
 import { FilePreviewModal } from "@/components/studio/file-preview-modal"
+import { useStudioFocus } from "@/app/[locale]/(studio)/studio-focus-context"
 import type { ChatSession, StreamSegment, UploadedFile } from "@/types/studio"
 import type { SuiteId } from "@/lib/suites"
 import s from "./studio.module.scss"
@@ -22,6 +23,7 @@ export function StudioClient() {
   const searchParams = useSearchParams()
   const { locale, t } = useI18n()
   const setPage = useAppStore((s) => s.setPage)
+  const { focusMode, toggleFocus } = useStudioFocus()
 
   const {
     sessions,
@@ -419,6 +421,32 @@ export function StudioClient() {
     setSidebarOpen(!useStudioStore.getState().sidebarOpen)
   }, [setSidebarOpen])
 
+  // ── Create a new chat session ───────────────────────────
+
+  const handleNewChat = useCallback(async () => {
+    try {
+      const res = await brokerFetch("/api/broker/sessions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model: "minimax-m2.7:cloud" }),
+      })
+      if (res.ok) {
+        const data = await res.json()
+        const session: ChatSession = data.session
+        addSession(session)
+        setActiveSessionId(session.id)
+        setMessages([])
+        const url = new URL(window.location.href)
+        url.searchParams.set("session", session.id)
+        url.searchParams.delete("prompt")
+        url.searchParams.delete("suite")
+        window.history.replaceState(null, "", url.toString())
+      }
+    } catch {
+      // silent
+    }
+  }, [addSession, setActiveSessionId, setMessages])
+
   // ── Toggle right panel (file explorer) ──────────────────
 
   const handleRightPanelToggle = useCallback(() => {
@@ -427,9 +455,15 @@ export function StudioClient() {
 
   // ── Preview file handler ────────────────────────────────
 
-  const handlePreviewFile = useCallback((file: { url: string; name: string }) => {
-    setPreviewFile(file)
-  }, [setPreviewFile])
+  const [previewImages, setPreviewImages] = useState<{ url: string; name: string }[]>([])
+
+  const handlePreviewFile = useCallback(
+    (file: { url: string; name: string }, images?: { url: string; name: string }[]) => {
+      setPreviewFile(file)
+      setPreviewImages(images || [])
+    },
+    [setPreviewFile],
+  )
 
   // ── Render ──────────────────────────────────────────────
 
@@ -469,25 +503,40 @@ export function StudioClient() {
         ) : undefined
       }
     >
-      {/* Top bar (mobile menu toggle) */}
+      {/* Top bar — branding + session title + right-panel toggle */}
       <div className={s.topBar}>
-        <button className={s.menuBtn} onClick={handleMenuToggle}>
-          <span /><span /><span />
-        </button>
+        <div className={s.topLeft}>
+          <button className={s.menuBtn} onClick={handleMenuToggle} title={t("studio.newChat")}>
+            <span /><span /><span />
+          </button>
+          <span className={s.brand}>{t("studio.title")}</span>
+          <button className={s.newChatBtn} onClick={handleNewChat} title={t("studio.newChat")}>
+            <Icon icon="hugeicons:edit-02" />
+          </button>
+        </div>
         {activeSessionId && (
           <span className={s.topTitle}>
             {sessions.find((sess) => sess.id === activeSessionId)?.title || t("studio.newConversation")}
           </span>
         )}
-        {activeSessionId && (
+        <div className={s.topRight}>
           <button
             className={s.panelToggle}
-            onClick={handleRightPanelToggle}
-            title={rightPanelOpen ? t("studio.hideFiles") : t("studio.showFiles")}
+            onClick={toggleFocus}
+            title={focusMode ? t("studio.exitFocus") : t("studio.focusMode")}
           >
-            <Icon icon={rightPanelOpen ? "hugeicons:sidebar-right" : "hugeicons:source-code"} />
+            <Icon icon={focusMode ? "hugeicons:minimize-02" : "hugeicons:maximize-02"} />
           </button>
-        )}
+          {activeSessionId && (
+            <button
+              className={s.panelToggle}
+              onClick={handleRightPanelToggle}
+              title={rightPanelOpen ? t("studio.hideFiles") : t("studio.showFiles")}
+            >
+              <Icon icon={rightPanelOpen ? "hugeicons:sidebar-right" : "hugeicons:source-code"} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Content area */}
@@ -527,7 +576,8 @@ export function StudioClient() {
         <FilePreviewModal
           url={previewFile.url}
           name={previewFile.name}
-          onClose={() => setPreviewFile(null)}
+          items={previewImages}
+          onClose={() => { setPreviewFile(null); setPreviewImages([]) }}
         />
       )}
     </ChatLayout>

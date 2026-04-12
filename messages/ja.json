@@ -585,6 +585,8 @@
     "toolSearch": "Searching",
     "close": "Close",
     "download": "Download",
+    "previous": "Previous",
+    "next": "Next",
     "cancel": "Cancel",
     "confirm": "Confirm",
     "projectNotFound": "Project not found.",
@@ -747,6 +749,8 @@
     "loadingStudio": "Loading Studio...",
     "hideFiles": "Hide files",
     "showFiles": "Show files",
+    "focusMode": "Enter focus mode",
+    "exitFocus": "Exit focus mode",
     "downloadFailed": "Download failed"
   },
   "seo": {

@@ -1,56 +1,137 @@
 @use "@/styles/mixins" as *;
 
+// Modal must sit above the sticky Kalit Header (z-index: 900) and
+// NextTopLoader. 9999 keeps it on top of any app chrome.
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: oklch(0 0 0 / 0.8);
+  background: oklch(0 0 0 / 0.85);
   @include backdrop(24px);
+  padding: var(--size-4);
 }
 
 .container {
   position: relative;
   max-width: 90vw;
-  max-height: 90vh;
+  max-height: 82vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--size-3);
 }
 
+// ── Close (top-right, inside overlay so it's always visible) ───────────
+
 .closeBtn {
   position: absolute;
-  top: -40px;
-  right: 0;
-  color: oklch(1 0 0 / 0.6);
-  font-size: 1.4rem;
-  transition: color var(--transition-link);
+  top: var(--size-4);
+  right: var(--size-4);
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-rounded);
+  background: oklch(1 0 0 / 0.08);
+  color: oklch(1 0 0 / 0.85);
+  font-size: 1.1rem;
+  transition:
+    background-color var(--transition-link),
+    color var(--transition-link),
+    transform var(--transition-scale);
+  z-index: 2;
 
   @include is-hover {
+    background: oklch(1 0 0 / 0.18);
     color: oklch(1 0 0 / 1);
+  }
+
+  &:active {
+    transform: scale(0.92);
   }
 }
 
+// ── Prev / Next navigation ─────────────────────────────────────────────
+
+.navBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-rounded);
+  background: oklch(1 0 0 / 0.08);
+  color: oklch(1 0 0 / 0.85);
+  font-size: 1.25rem;
+  transition:
+    background-color var(--transition-link),
+    color var(--transition-link),
+    transform var(--transition-scale);
+  z-index: 2;
+
+  @include is-hover {
+    background: oklch(1 0 0 / 0.18);
+    color: oklch(1 0 0 / 1);
+  }
+
+  &:active {
+    transform: translateY(-50%) scale(0.92);
+  }
+
+  @include max($responsive) {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+}
+
+.navPrev {
+  left: var(--size-4);
+}
+
+.navNext {
+  right: var(--size-4);
+}
+
+// ── Image ──────────────────────────────────────────────────────────────
+
 .image {
   max-width: 100%;
-  max-height: 80vh;
+  max-height: 72vh;
   object-fit: contain;
   border-radius: var(--radius-3);
   box-shadow: 0 25px 60px oklch(0 0 0 / 0.5);
 }
 
+// ── Footer (filename + counter + download) ─────────────────────────────
+
 .footer {
   display: flex;
   align-items: center;
   gap: var(--size-3);
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .fileName {
   font-size: 0.85rem;
   color: oklch(1 0 0 / 0.8);
+  @include ellipsis;
+  max-width: 60vw;
+}
+
+.counter {
+  font-size: 0.75rem;
+  color: oklch(1 0 0 / 0.55);
+  font-variant-numeric: tabular-nums;
+  padding: 0.15em 0.55em;
+  background: oklch(1 0 0 / 0.08);
+  border-radius: var(--radius-rounded);
 }
 
 .downloadBtn {

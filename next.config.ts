@@ -7,12 +7,19 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     const brokerUrl = (process.env.BROKER_URL || "http://localhost:9000").replace(/\/+$/, "")
-    return [
-      {
-        source: "/api/broker/:path*",
-        destination: `${brokerUrl}/api/flow/:path*`
-      }
-    ]
+    // Use `fallback` so Next.js filesystem routes (including dynamic catch-all
+    // ones like /api/broker/find-assets/[...path]) take priority. With the
+    // default `afterFiles`, dynamic routes lose to :path* rewrites.
+    return {
+      beforeFiles: [],
+      afterFiles: [],
+      fallback: [
+        {
+          source: "/api/broker/:path*",
+          destination: `${brokerUrl}/api/flow/:path*`
+        }
+      ]
+    }
   },
   async headers() {
     return [

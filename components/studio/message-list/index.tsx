@@ -21,7 +21,6 @@ export function MessageList({ onStop, onPreviewFile, onRefreshMessages }: Messag
   const error = useStudioStore((s) => s.error)
 
   const scrollRef = useRef<HTMLDivElement>(null)
-  const bottomRef = useRef<HTMLDivElement>(null)
   const userScrolledUp = useRef(false)
 
   // ── Smart scroll: don't force if user scrolled up ────
@@ -32,19 +31,29 @@ export function MessageList({ onStop, onPreviewFile, onRefreshMessages }: Messag
     userScrolledUp.current = distanceFromBottom > 80
   }, [])
 
-  // ── Auto-scroll on new content ───────────────────────
+  // ── Auto-scroll on new content — scroll ONLY the chat container,
+  //    never the document (scrollIntoView bubbles up to ancestors).
   useEffect(() => {
     if (userScrolledUp.current) return
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" })
+    const el = scrollRef.current
+    if (!el) return
+    // Double-rAF: wait for layout to settle after DOM mutations
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        if (userScrolledUp.current) return
+        el.scrollTo({ top: el.scrollHeight, behavior: "smooth" })
+      })
+    })
   }, [messages, streamSegments, isStreaming])
 
   // ── Reset scroll lock when session changes ───────────
   const activeSessionId = useStudioStore((s) => s.activeSessionId)
   useEffect(() => {
     userScrolledUp.current = false
-    // Scroll to bottom immediately on session change
     requestAnimationFrame(() => {
-      bottomRef.current?.scrollIntoView({ behavior: "instant" })
+      const el = scrollRef.current
+      if (!el) return
+      el.scrollTop = el.scrollHeight
     })
   }, [activeSessionId])
 
@@ -87,8 +96,6 @@ export function MessageList({ onStop, onPreviewFile, onRefreshMessages }: Messag
         {error && (
           <div className={s.error}>{error}</div>
         )}
-
-        <div ref={bottomRef} />
       </div>
     </div>
   )

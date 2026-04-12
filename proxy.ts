@@ -81,14 +81,6 @@ export const proxy = auth((req) => {
     }
   }
 
-  // Authenticated users landing on home → redirect to Studio
-  if (barePath === "/" && isAuthenticated) {
-    if (!session?.user?.onboardingDone) {
-      return NextResponse.redirect(new URL(localePath("/setup", locale), req.url))
-    }
-    return NextResponse.redirect(new URL(localePath("/studio", locale), req.url))
-  }
-
   return localeRewrite(req, pathname, locale)
 })
 

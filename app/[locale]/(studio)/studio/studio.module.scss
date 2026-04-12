@@ -8,8 +8,8 @@
 .shell {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 6rem);
-  min-height: calc(100dvh - 6rem);
+  flex: 1;
+  min-height: 0;
   background: var(--body);
 }
 
@@ -61,21 +61,76 @@
   animation: spin 0.8s linear infinite;
 }
 
-// ── Top bar (mobile) ────────────────────────────────────
+// ── Top bar ─────────────────────────────────────────────
+//
+// Sits directly under the global Kalit header (or at the very top of the
+// viewport when focus mode hides it). The glass background + bottom border
+// creates an intentional, designed edge instead of an abrupt gray gap.
 
 .topBar {
   display: flex;
   align-items: center;
   gap: var(--size-3);
   padding: var(--size-3) var(--size-5);
-  border-bottom: 1px solid oklch(from var(--text) l c h / 0.04);
+  border-bottom: 1px solid oklch(from var(--text) l c h / 0.07);
+  background: linear-gradient(
+    to bottom,
+    oklch(from var(--text) l c h / 0.015),
+    transparent
+  );
   min-height: 3rem;
 
   @include min($responsiveNav) {
-    // Still show title on desktop, hide hamburger
+    // Hamburger is mobile-only; brand + new-chat remain visible on desktop
     .menuBtn {
       display: none;
     }
+  }
+}
+
+.topRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--size-1);
+  flex-shrink: 0;
+}
+
+.topLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--size-2);
+  flex-shrink: 0;
+}
+
+.brand {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  color: var(--text);
+  line-height: 1;
+}
+
+.newChatBtn {
+  --s: 1.9rem;
+  width: var(--s);
+  height: var(--s);
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-rounded);
+  color: var(--text-secondary);
+  font-size: 1em;
+  transition:
+    background-color var(--transition-link),
+    color var(--transition-link),
+    transform var(--transition-scale);
+
+  @include is-hover {
+    background-color: oklch(from var(--text) l c h / 0.08);
+    color: var(--text);
+  }
+
+  &:active {
+    transform: scale(0.9);
   }
 }
 
@@ -97,15 +152,15 @@
 }
 
 .topTitle {
-  font-size: 0.85rem;
-  color: var(--text);
-  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 400;
   @include ellipsis;
   flex: 1;
+  text-align: center;
 }
 
 .panelToggle {
-  margin-left: auto;
   display: flex;
   align-items: center;
   justify-content: center;

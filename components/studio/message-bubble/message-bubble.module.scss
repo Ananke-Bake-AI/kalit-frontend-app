@@ -19,7 +19,10 @@
 .bubbleUser {
   max-width: 75%;
   padding: 0.7rem 1rem;
-  background: var(--gradient-primary-radial, var(--gradient-radial-1));
+  // Use the darker half of the brand palette (blue -> purple). The default
+  // radial gradient starts with color-1 (oklch 0.83 yellow-green) which has
+  // insufficient contrast for white text.
+  background: linear-gradient(135deg, var(--color-3), var(--color-4));
   color: var(--white);
   @include cornerShape(var(--radius-3));
   border-bottom-right-radius: var(--size-1);

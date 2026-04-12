@@ -35,8 +35,11 @@
   font-size: 0.9rem;
   resize: none;
   max-height: 160px;
-  min-height: 1.4em;
+  // Match the 2rem button height so single-line text vertically centers with
+  // the attach/send buttons. Symmetric padding + content line = 2rem total.
+  min-height: 2rem;
   line-height: 1.5;
+  padding: 0.33rem 0;
   color: var(--text);
   @include no-scrollbar;
 
