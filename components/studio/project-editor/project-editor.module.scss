@@ -87,16 +87,53 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
+  gap: var(--size-1-5);
   height: 2rem;
+  padding: 0 var(--size-2-5);
   border-radius: var(--radius-4);
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid oklch(from var(--text) l c h / 0.08);
   transition: all var(--transition-link);
+
+  :global(svg) {
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
 
   @include is-hover {
     color: var(--text);
-    background: oklch(from var(--text) l c h / 0.06);
+    background: oklch(from var(--text) l c h / 0.05);
+    border-color: oklch(from var(--text) l c h / 0.14);
+  }
+
+  @include max($responsive) {
+    padding: 0;
+    width: 2rem;
+
+    .btnLabel {
+      display: none;
+    }
+  }
+}
+
+.btnLabel {
+  white-space: nowrap;
+}
+
+.headerBtnPrimary {
+  composes: headerBtn;
+  color: oklch(1 0 0);
+  background: linear-gradient(135deg, var(--color-2), var(--color-3));
+  border-color: transparent;
+  box-shadow: 0 1px 2px oklch(from var(--color-3) l c h / 0.2);
+
+  @include is-hover {
+    color: oklch(1 0 0);
+    background: linear-gradient(135deg, var(--color-2), var(--color-3));
+    filter: brightness(1.08);
+    border-color: transparent;
   }
 }
 
@@ -106,6 +143,7 @@
   @include is-hover {
     color: var(--color-3);
     background: oklch(from var(--color-3) l c h / 0.08);
+    border-color: oklch(from var(--color-3) l c h / 0.2);
   }
 }
 

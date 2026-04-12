@@ -3,6 +3,7 @@
 import type { Session } from "next-auth"
 import type { ReactNode } from "react"
 import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
 
 import NextTopLoader from "nextjs-toploader"
 import { Header } from "@/components/layout/header"
@@ -22,15 +23,24 @@ const FOCUS_STORAGE_KEY = "studio-focus-mode"
 
 function StudioShellInner({ children, session }: { children: ReactNode; session: Session | null }) {
   const { focusMode } = useStudioFocus()
+  const pathname = usePathname() || ""
+
+  // Project editor + publish pages render their own fullscreen chrome
+  // (position: fixed; inset: 0) with a dedicated header and back button.
+  // Showing the global Kalit header on top would overlap that chrome,
+  // so we treat project routes as implicit focus mode.
+  const isProjectRoute = /\/studio\/project\//.test(pathname)
+  const hideSiteChrome = focusMode || isProjectRoute
 
   return (
-    <div className={s.root} data-focus={focusMode || undefined}>
+    <div className={s.root} data-focus={hideSiteChrome || undefined}>
       <SyncAppPageFromRoute />
       {/* Studio is a single locked viewport with no footer — long chats
           scroll inside the message list, not the page. A focus-mode toggle
           lets the user hide the global Kalit header for a true full-screen
-          studio experience. */}
-      {!focusMode && (
+          studio experience. Project routes are always chrome-free because
+          the editor renders its own fullscreen shell. */}
+      {!hideSiteChrome && (
         <>
           <Header initialSession={session} />
           <EmailBanner initialSession={session} />

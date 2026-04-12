@@ -144,6 +144,82 @@
   color: var(--text);
 }
 
+// ── Mode toggle ─────────────────────────────────────────
+
+.modeToggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--size-3);
+  padding: 0.6rem 0.7rem;
+  border-radius: var(--radius-4);
+  background: oklch(from var(--text) l c h / 0.04);
+  transition:
+    background-color var(--transition-link),
+    transform var(--transition-scale);
+  text-align: left;
+
+  @include is-hover {
+    background: oklch(from var(--text) l c h / 0.07);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.switch {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 1.15rem;
+  border-radius: var(--radius-rounded);
+  background: oklch(from var(--text) l c h / 0.15);
+  position: relative;
+  transition: background-color 0.2s var(--cubic);
+
+  &Active {
+    background: var(--color-5);
+  }
+}
+
+.switchThumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: calc(1.15rem - 4px);
+  height: calc(1.15rem - 4px);
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: 0 1px 3px oklch(0 0 0 / 0.2);
+  transition: transform 0.2s var(--cubic);
+
+  &Active {
+    transform: translateX(calc(2rem - 1.15rem));
+  }
+}
+
+.modeLabels {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.modeName {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text);
+  @include ellipsis;
+}
+
+.modeDesc {
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  opacity: 0.75;
+  @include ellipsis;
+}
+
 // ── Quota footer ────────────────────────────────────────
 
 .footer {
@@ -151,7 +227,7 @@
   border-top: 1px solid oklch(from var(--text) l c h / 0.06);
   display: flex;
   flex-direction: column;
-  gap: var(--size-2);
+  gap: var(--size-3);
 }
 
 .quotaBar {

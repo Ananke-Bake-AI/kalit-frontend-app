@@ -12,6 +12,8 @@ interface SessionSidebarProps {
   onSessionSelect: (id: string) => void
 }
 
+const PROGRESS_MODE_KEY = "kalit_studio_progress_mode"
+
 export function SessionSidebar({ onSessionSelect }: SessionSidebarProps) {
   const { t } = useI18n()
   const {
@@ -23,6 +25,8 @@ export function SessionSidebar({ onSessionSelect }: SessionSidebarProps) {
     setActiveSessionId,
     setMessages,
     quota,
+    progressMode,
+    setProgressMode,
   } = useStudioStore()
 
   const handleDelete = useCallback(async (id: string) => {
@@ -49,6 +53,25 @@ export function SessionSidebar({ onSessionSelect }: SessionSidebarProps) {
       useStudioStore.getState().setSidebarOpen(false)
     }
   }, [setActiveSessionId, onSessionSelect])
+
+  const handleToggleProgressMode = useCallback(() => {
+    const next = progressMode === "expert" ? "default" : "expert"
+    setProgressMode(next)
+    try {
+      window.localStorage.setItem(PROGRESS_MODE_KEY, next)
+    } catch {
+      // silent
+    }
+    if (activeSessionId) {
+      brokerFetch(`/api/broker/sessions/${activeSessionId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ progressMode: next }),
+      }).catch(() => {
+        // silent
+      })
+    }
+  }, [progressMode, setProgressMode, activeSessionId])
 
   return (
     <div className={s.container}>
@@ -101,21 +124,42 @@ export function SessionSidebar({ onSessionSelect }: SessionSidebarProps) {
         ))}
       </div>
 
-      {/* Quota footer */}
-      {quota && (
-        <div className={s.footer}>
-          <div className={s.quotaBar}>
-            <div
-              className={s.quotaFill}
-              style={{ width: `${Math.min(quota.percentage, 100)}%` }}
-            />
-          </div>
-          <span className={s.quotaText}>
-            {quota.remainingCredits} / {quota.creditsPerMonth} {t("studio.credits")}
+      {/* Footer: mode toggle + quota */}
+      <div className={s.footer}>
+        <button
+          type="button"
+          className={s.modeToggle}
+          onClick={handleToggleProgressMode}
+          title={progressMode === "expert" ? t("studio.expertModeDesc") : t("studio.simpleModeDesc")}
+        >
+          <span className={clsx(s.switch, progressMode === "expert" && s.switchActive)}>
+            <span className={clsx(s.switchThumb, progressMode === "expert" && s.switchThumbActive)} />
           </span>
-          <span className={s.quotaPlan}>{quota.plan}</span>
-        </div>
-      )}
+          <span className={s.modeLabels}>
+            <span className={s.modeName}>
+              {progressMode === "expert" ? t("studio.expertMode") : t("studio.simpleMode")}
+            </span>
+            <span className={s.modeDesc}>
+              {progressMode === "expert" ? t("studio.expertModeDesc") : t("studio.simpleModeDesc")}
+            </span>
+          </span>
+        </button>
+
+        {quota && (
+          <>
+            <div className={s.quotaBar}>
+              <div
+                className={s.quotaFill}
+                style={{ width: `${Math.min(quota.percentage, 100)}%` }}
+              />
+            </div>
+            <span className={s.quotaText}>
+              {quota.remainingCredits} / {quota.creditsPerMonth} {t("studio.credits")}
+            </span>
+            <span className={s.quotaPlan}>{quota.plan}</span>
+          </>
+        )}
+      </div>
     </div>
   )
 }

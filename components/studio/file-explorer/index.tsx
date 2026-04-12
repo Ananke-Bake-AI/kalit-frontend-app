@@ -194,6 +194,12 @@ function ProjectSection({ project, flowProjectId }: { project: ProjectStatus; fl
             {t("studio.project")}
           </a>
         )}
+        {flowProjectId && (
+          <a href={`/studio/project/${flowProjectId}/publish`} className={s.actionLinkPrimary}>
+            <Icon icon="hugeicons:rocket-01" />
+            {t("studio.publish")}
+          </a>
+        )}
         {project.deployUrl && (
           <a href={project.deployUrl} target="_blank" rel="noopener noreferrer" className={s.actionLink}>
             <Icon icon="hugeicons:globe-02" />

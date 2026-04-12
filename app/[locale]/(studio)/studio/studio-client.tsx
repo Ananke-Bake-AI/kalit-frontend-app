@@ -19,6 +19,8 @@ import type { ChatSession, StreamSegment, UploadedFile } from "@/types/studio"
 import type { SuiteId } from "@/lib/suites"
 import s from "./studio.module.scss"
 
+const PROGRESS_MODE_KEY = "kalit_studio_progress_mode"
+
 export function StudioClient() {
   const searchParams = useSearchParams()
   const { locale, t } = useI18n()
@@ -51,6 +53,8 @@ export function StudioClient() {
     setPreviewFile,
     rightPanelOpen,
     setRightPanelOpen,
+    progressMode,
+    setProgressMode,
   } = useStudioStore()
 
   const [ready, setReady] = useState(false)
@@ -59,6 +63,20 @@ export function StudioClient() {
   const activeSessionRef = useRef<string | null>(activeSessionId)
   const abortRef = useRef<AbortController | null>(null)
   activeSessionRef.current = activeSessionId
+
+  // ── Hydrate progressMode from localStorage ──────────────
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    try {
+      const saved = window.localStorage.getItem(PROGRESS_MODE_KEY)
+      if (saved === "expert" || saved === "default") {
+        setProgressMode(saved)
+      }
+    } catch {
+      // silent
+    }
+  }, [setProgressMode])
 
   // ── Sync locale + suite from URL params ─────────────────
 
@@ -236,11 +254,13 @@ export function StudioClient() {
     })
 
     let streamText = ""
+    let watchdog: ReturnType<typeof setInterval> | null = null
 
     try {
       const body: Record<string, unknown> = {
         message,
         language: locale,
+        progressMode,
         requestId: `req-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       }
       if (files && files.length > 0) body.files = files
@@ -264,6 +284,20 @@ export function StudioClient() {
       let buffer = ""
       let thinking = ""
       const segments: StreamSegment[] = []
+
+      // Watchdog: broker sends `: keepalive\n\n` every 15s. If we go 45s
+      // without any bytes (including keepalives), the connection is dead —
+      // abort so the finally-block can reload from the broker's persisted
+      // state. This catches silent stalls from Next.js rewrites / dev server
+      // / proxies that keep the socket open but drop data.
+      let lastByteAt = Date.now()
+      watchdog = setInterval(() => {
+        if (Date.now() - lastByteAt > 45_000) {
+          if (watchdog) clearInterval(watchdog)
+          watchdog = null
+          controller.abort()
+        }
+      }, 5_000)
 
       const pushText = (chunk: string) => {
         const last = segments[segments.length - 1]
@@ -291,6 +325,9 @@ export function StudioClient() {
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
+
+        // Any bytes received (event, keepalive, anything) = connection alive
+        lastByteAt = Date.now()
 
         buffer += decoder.decode(value, { stream: true })
         const parts = buffer.split("\n\n")
@@ -380,27 +417,38 @@ export function StudioClient() {
         }
       }
 
-      // Stream finished — refresh data
-      if (!controller.signal.aborted) {
-        setActiveWidgets([])
-        await fetchMessages(activeSessionId)
-        fetchSessions()
-        fetchQuota()
-      }
+      // Stream finished cleanly — state sync happens in finally so that
+      // all termination paths (success, error, abort, dropped connection)
+      // reconcile against the broker's persisted state.
     } catch (err) {
       if ((err as Error)?.name !== "AbortError") {
         if (streamText.length > 0) {
-          console.warn("[Studio] SSE connection dropped, partial content preserved")
+          console.warn("[Studio] SSE connection dropped, reloading from broker")
         } else {
           setError(err instanceof Error ? err.message : t("studio.connectionError"))
         }
       }
     } finally {
+      if (watchdog) clearInterval(watchdog)
+      // Always reload from broker: it persists segments continuously after
+      // every event (text, tool, progress…) and keeps processing even if the
+      // client disconnects. This guarantees the UI shows the latest saved
+      // state regardless of how the stream terminated.
+      if (activeSessionRef.current === activeSessionId) {
+        setActiveWidgets([])
+        try {
+          await fetchMessages(activeSessionId)
+        } catch {
+          // silent — keep whatever we have
+        }
+        fetchSessions()
+        fetchQuota()
+      }
       resetStream()
       abortRef.current = null
     }
   }, [
-    activeSessionId, isStreaming, locale, addMessage,
+    activeSessionId, isStreaming, locale, progressMode, addMessage,
     setError, setIsStreaming, setStreamSegments, setStreamThinking,
     resetStream, setActiveWidgets, addActiveWidget,
     fetchMessages, fetchSessions, fetchQuota,

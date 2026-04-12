@@ -707,6 +707,16 @@ export function ProjectEditor() {
 
         <div className={s.headerActions}>
           {pageState === "preview" && (
+            <button
+              className={s.headerBtnHotfix}
+              onClick={() => setShowHotfix(true)}
+              title={t("studio.hotfix")}
+            >
+              <Icon icon="hugeicons:wrench-01" />
+              <span className={s.btnLabel}>{t("studio.hotfix")}</span>
+            </button>
+          )}
+          {(pageState === "preview" || pageState === "polling") && (
             <>
               <button
                 className={s.headerBtn}
@@ -714,22 +724,16 @@ export function ProjectEditor() {
                 title={t("studio.download")}
               >
                 <Icon icon="hugeicons:download-04" />
+                <span className={s.btnLabel}>{t("studio.download")}</span>
               </button>
               <Link
                 href={`/studio/project/${id}/publish`}
-                className={s.headerBtn}
+                className={s.headerBtnPrimary}
                 title={t("studio.publish")}
               >
                 <Icon icon="hugeicons:rocket-01" />
+                <span className={s.btnLabel}>{t("studio.publish")}</span>
               </Link>
-              <span className={s.headerSep} />
-              <button
-                className={s.headerBtnHotfix}
-                onClick={() => setShowHotfix(true)}
-                title={t("studio.hotfix")}
-              >
-                <Icon icon="hugeicons:wrench-01" />
-              </button>
             </>
           )}
         </div>

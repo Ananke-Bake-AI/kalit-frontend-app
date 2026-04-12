@@ -303,6 +303,21 @@
   }
 }
 
+.actionLinkPrimary {
+  composes: actionLink;
+  color: oklch(1 0 0);
+  background: linear-gradient(135deg, var(--color-2), var(--color-3));
+  border-color: transparent;
+  font-weight: 500;
+  box-shadow: 0 1px 2px oklch(from var(--color-3) l c h / 0.25);
+
+  @include is-hover {
+    color: oklch(1 0 0);
+    background: linear-gradient(135deg, var(--color-2), var(--color-3));
+    filter: brightness(1.08);
+  }
+}
+
 // ── Info tab ───────────────────────────────────────────
 
 .infoSection {
