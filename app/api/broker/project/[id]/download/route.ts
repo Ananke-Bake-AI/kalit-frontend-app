@@ -11,9 +11,16 @@ export async function GET(
   if ("error" in result) return result.error
 
   const res = await brokerProxy(`project/${id}/download`, result.token)
-  const data = await res.json().catch(() => ({}))
+  const body = (await res.json().catch(() => ({}))) as {
+    success?: boolean
+    data?: unknown
+    error?: string
+  }
+  // Broker wraps its payload as { success, data: {...fields} }. Unwrap once so
+  // clients see a single-level { success, data: {...fields} }.
+  const payload = body && typeof body === "object" && "data" in body ? body.data : body
   return NextResponse.json(
-    res.ok ? { success: true, data } : { success: false, error: (data as { error?: string }).error || "Failed" },
+    res.ok ? { success: true, data: payload } : { success: false, error: body?.error || "Failed" },
     { status: res.status },
   )
 }
