@@ -6,12 +6,52 @@ import { Logo } from "@/components/logo"
 import { Icon } from "@/components/icon"
 import s from "./welcome-screen.module.scss"
 
-const QUICK_PROMPT_KEYS: { suite: SuiteId; keys: string[] }[] = [
-  { suite: "flow", keys: ["studio.promptFlow1", "studio.promptFlow2", "studio.promptFlow3"] },
-  { suite: "project", keys: ["studio.promptProject1", "studio.promptProject2", "studio.promptProject3"] },
-  { suite: "marketing", keys: ["studio.promptMarketing1", "studio.promptMarketing2"] },
-  { suite: "pentest", keys: ["studio.promptPentest1", "studio.promptPentest2"] },
-  { suite: "search", keys: ["studio.promptSearch1", "studio.promptSearch2"] },
+// Each entry: short `labelKey` for the card UI + richer `promptKey` that
+// gets prefilled into the chat input when the card is clicked. The prefill
+// reads as a partial sentence the user can continue (e.g. "Build a portfolio
+// website to showcase my "), so the assistant gets enough context but the
+// user still drives the specifics.
+const QUICK_PROMPT_KEYS: {
+  suite: SuiteId
+  entries: { labelKey: string; promptKey: string }[]
+}[] = [
+  {
+    suite: "flow",
+    entries: [
+      { labelKey: "studio.promptFlow1", promptKey: "studio.promptFlow1Prompt" },
+      { labelKey: "studio.promptFlow2", promptKey: "studio.promptFlow2Prompt" },
+      { labelKey: "studio.promptFlow3", promptKey: "studio.promptFlow3Prompt" },
+    ],
+  },
+  {
+    suite: "project",
+    entries: [
+      { labelKey: "studio.promptProject1", promptKey: "studio.promptProject1Prompt" },
+      { labelKey: "studio.promptProject2", promptKey: "studio.promptProject2Prompt" },
+      { labelKey: "studio.promptProject3", promptKey: "studio.promptProject3Prompt" },
+    ],
+  },
+  {
+    suite: "marketing",
+    entries: [
+      { labelKey: "studio.promptMarketing1", promptKey: "studio.promptMarketing1Prompt" },
+      { labelKey: "studio.promptMarketing2", promptKey: "studio.promptMarketing2Prompt" },
+    ],
+  },
+  {
+    suite: "pentest",
+    entries: [
+      { labelKey: "studio.promptPentest1", promptKey: "studio.promptPentest1Prompt" },
+      { labelKey: "studio.promptPentest2", promptKey: "studio.promptPentest2Prompt" },
+    ],
+  },
+  {
+    suite: "search",
+    entries: [
+      { labelKey: "studio.promptSearch1", promptKey: "studio.promptSearch1Prompt" },
+      { labelKey: "studio.promptSearch2", promptKey: "studio.promptSearch2Prompt" },
+    ],
+  },
 ]
 
 interface WelcomeScreenProps {
@@ -33,7 +73,7 @@ export function WelcomeScreen({ onPromptSelect, activeSuite }: WelcomeScreenProp
       </div>
 
       <div className={s.suites}>
-        {suitesToShow.map(({ suite, keys }) => {
+        {suitesToShow.map(({ suite, entries }) => {
           const config = SUITES.find((c) => c.id === suite)
           if (!config) return null
 
@@ -44,20 +84,17 @@ export function WelcomeScreen({ onPromptSelect, activeSuite }: WelcomeScreenProp
                 <span className={s.suiteName}>{config.title}</span>
               </div>
               <div className={s.promptList}>
-                {keys.map((key) => {
-                  const prompt = t(key)
-                  return (
-                    <button
-                      key={key}
-                      className={s.promptCard}
-                      style={{ "--suite-color": config.color } as React.CSSProperties}
-                      onClick={() => onPromptSelect(prompt, suite)}
-                    >
-                      <span>{prompt}</span>
-                      <Icon icon="hugeicons:arrow-right-01" />
-                    </button>
-                  )
-                })}
+                {entries.map(({ labelKey, promptKey }) => (
+                  <button
+                    key={labelKey}
+                    className={s.promptCard}
+                    style={{ "--suite-color": config.color } as React.CSSProperties}
+                    onClick={() => onPromptSelect(t(promptKey), suite)}
+                  >
+                    <span>{t(labelKey)}</span>
+                    <Icon icon="hugeicons:arrow-right-01" />
+                  </button>
+                ))}
               </div>
             </div>
           )

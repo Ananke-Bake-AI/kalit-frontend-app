@@ -59,6 +59,7 @@ export function StudioClient() {
 
   const [ready, setReady] = useState(false)
   const [connectionError, setConnectionError] = useState<string | null>(null)
+  const [chatPrefill, setChatPrefill] = useState<{ text: string; nonce: number } | null>(null)
   const pendingPromptRef = useRef<string | null>(null)
   const activeSessionRef = useRef<string | null>(activeSessionId)
   const abortRef = useRef<AbortController | null>(null)
@@ -202,38 +203,53 @@ export function StudioClient() {
     window.history.replaceState(null, "", url.toString())
   }, [setActiveSessionId])
 
-  // ── Create session from welcome prompt ──────────────────
+  // ── Welcome prompt click: prefill chat input, don't auto-send ──
+  //
+  // The user picks a suggestion to seed an enriched starter sentence; they
+  // then add their own context before pressing Send. Session is created
+  // lazily inside handleSend so empty drafts don't pollute the sidebar.
 
-  const handleWelcomePrompt = useCallback(async (prompt: string, suiteId?: SuiteId) => {
+  const handleWelcomePrompt = useCallback((prompt: string, suiteId?: SuiteId) => {
     if (suiteId) setPage(suiteId)
-
-    try {
-      const res = await brokerFetch("/api/broker/sessions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: "minimax-m2.7:cloud" }),
-      })
-      if (res.ok) {
-        const data = await res.json()
-        const session: ChatSession = data.session
-        addSession(session)
-        setActiveSessionId(session.id)
-        setMessages([])
-        pendingPromptRef.current = prompt
-
-        const url = new URL(window.location.href)
-        url.searchParams.set("session", session.id)
-        window.history.replaceState(null, "", url.toString())
-      }
-    } catch {
-      // silent
-    }
-  }, [setPage, addSession, setActiveSessionId, setMessages])
+    setChatPrefill({ text: prompt, nonce: Date.now() })
+  }, [setPage])
 
   // ── Send message with full SSE streaming ────────────────
 
   const handleSend = useCallback(async (message: string, files?: UploadedFile[]) => {
-    if (!activeSessionId || isStreaming) return
+    if (isStreaming) return
+
+    // Lazy session creation: when the user composes from the welcome screen
+    // we don't have an activeSessionId yet. Create one here so empty drafts
+    // don't pile up in the sidebar.
+    let sessionId = activeSessionId
+    if (!sessionId) {
+      try {
+        const createRes = await brokerFetch("/api/broker/sessions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ model: "minimax-m2.7:cloud" }),
+        })
+        if (!createRes.ok) {
+          setError(t("studio.connectionError"))
+          return
+        }
+        const createData = await createRes.json()
+        const session: ChatSession = createData.session
+        addSession(session)
+        setActiveSessionId(session.id)
+        setMessages([])
+        sessionId = session.id
+        activeSessionRef.current = session.id
+        const url = new URL(window.location.href)
+        url.searchParams.set("session", session.id)
+        url.searchParams.delete("prompt")
+        window.history.replaceState(null, "", url.toString())
+      } catch {
+        setError(t("studio.connectionError"))
+        return
+      }
+    }
 
     setError(null)
     setIsStreaming(true)
@@ -265,7 +281,7 @@ export function StudioClient() {
       }
       if (files && files.length > 0) body.files = files
 
-      const res = await brokerFetch(`/api/broker/sessions/${activeSessionId}/messages`, {
+      const res = await brokerFetch(`/api/broker/sessions/${sessionId}/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -434,10 +450,10 @@ export function StudioClient() {
       // every event (text, tool, progress…) and keeps processing even if the
       // client disconnects. This guarantees the UI shows the latest saved
       // state regardless of how the stream terminated.
-      if (activeSessionRef.current === activeSessionId) {
+      if (sessionId && activeSessionRef.current === sessionId) {
         setActiveWidgets([])
         try {
-          await fetchMessages(activeSessionId)
+          await fetchMessages(sessionId)
         } catch {
           // silent — keep whatever we have
         }
@@ -449,6 +465,7 @@ export function StudioClient() {
     }
   }, [
     activeSessionId, isStreaming, locale, progressMode, addMessage,
+    addSession, setActiveSessionId, setMessages, t,
     setError, setIsStreaming, setStreamSegments, setStreamThinking,
     resetStream, setActiveWidgets, addActiveWidget,
     fetchMessages, fetchSessions, fetchQuota,
@@ -611,13 +628,9 @@ export function StudioClient() {
         )}
       </div>
 
-      {/* Chat input */}
-      {activeSessionId && (
-        <ChatInput
-          onSend={handleSend}
-          disabled={!activeSessionId}
-        />
-      )}
+      {/* Chat input — always available so users can type from the welcome
+          screen; session is created lazily in handleSend on first send. */}
+      <ChatInput onSend={handleSend} prefill={chatPrefill} />
 
       {/* File preview modal */}
       {previewFile && (

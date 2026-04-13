@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useRef, useState, type KeyboardEvent } from "react"
+import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react"
 import { useStudioStore } from "@/stores/studio"
 import { useI18n } from "@/stores/i18n"
 import { brokerFetch } from "@/lib/broker-direct"
@@ -22,9 +22,15 @@ const AT_COMMAND_DEFS: { name: string; descKey: string; hint: string }[] = [
 interface ChatInputProps {
   onSend: (message: string, files?: UploadedFile[]) => void
   disabled?: boolean
+  /**
+   * When set, the textarea content is replaced with `text` and focused. The
+   * `nonce` field forces re-application even when the same text is selected
+   * twice in a row (e.g. clicking the same suggestion card again).
+   */
+  prefill?: { text: string; nonce: number } | null
 }
 
-export function ChatInput({ onSend, disabled }: ChatInputProps) {
+export function ChatInput({ onSend, disabled, prefill }: ChatInputProps) {
   const { t } = useI18n()
   const [input, setInput] = useState("")
   const {
@@ -40,6 +46,21 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
 
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+
+  // Apply prefill from welcome-screen suggestion cards. Cursor lands at the
+  // end so the user can immediately continue the sentence.
+  useEffect(() => {
+    if (!prefill) return
+    setInput(prefill.text)
+    setAtMenu(null)
+    requestAnimationFrame(() => {
+      const el = inputRef.current
+      if (!el) return
+      el.focus()
+      const len = prefill.text.length
+      el.setSelectionRange(len, len)
+    })
+  }, [prefill, setAtMenu])
 
   const filteredCommands = atMenu
     ? AT_COMMAND_DEFS.filter((cmd) =>
@@ -185,7 +206,7 @@ export function ChatInput({ onSend, disabled }: ChatInputProps) {
         <button
           className={s.attachBtn}
           onClick={() => fileInputRef.current?.click()}
-          disabled={isDisabled || isUploading}
+          disabled={isDisabled || isUploading || !activeSessionId}
           title={t("studio.attachFile")}
         >
           <Icon icon={isUploading ? "hugeicons:loading-03" : "hugeicons:attachment-02"} />
