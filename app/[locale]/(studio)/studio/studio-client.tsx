@@ -66,6 +66,7 @@ export function StudioClient() {
     notifySound,
     setNotifyTitle,
     setNotifySound,
+    setImportedRepo,
   } = useStudioStore()
 
   const [ready, setReady] = useState(false)
@@ -209,6 +210,45 @@ export function StudioClient() {
     })
   }, [activeSessionId, setMessages, setMessagesLoading, fetchMessages])
 
+  // ── Hydrate imported repo state for the active session ──
+
+  useEffect(() => {
+    if (!activeSessionId) {
+      setImportedRepo(null)
+      return
+    }
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await brokerFetch(`/api/broker/sessions/${activeSessionId}/attach-repo`)
+        if (!res.ok) return
+        const data = (await res.json().catch(() => ({}))) as {
+          attached?: boolean
+          url?: string
+          username?: string
+          branch?: string
+          hasToken?: boolean
+        }
+        if (cancelled) return
+        if (data?.attached && data.url) {
+          setImportedRepo({
+            url: data.url,
+            username: data.username || null,
+            branch: data.branch || null,
+            hasToken: !!data.hasToken,
+          })
+        } else {
+          setImportedRepo(null)
+        }
+      } catch {
+        // silent — surface via modal on user action instead
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [activeSessionId, setImportedRepo])
+
   // ── Auto-send pending prompt ────────────────────────────
 
   useEffect(() => {
@@ -240,6 +280,40 @@ export function StudioClient() {
     setChatPrefill({ text: prompt, nonce: Date.now() })
   }, [setPage])
 
+  // ── Ensure a session exists (lazy creation) ─────────────
+  //
+  // Used by handleSend (on first Send) and by the import-repo flow (so users
+  // can attach a repo from the welcome screen before typing anything).
+
+  const ensureSession = useCallback(async (): Promise<string | null> => {
+    if (activeSessionRef.current) return activeSessionRef.current
+    try {
+      const createRes = await brokerFetch("/api/broker/sessions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ model: "minimax-m2.7:cloud" }),
+      })
+      if (!createRes.ok) {
+        setError(t("studio.connectionError"))
+        return null
+      }
+      const createData = await createRes.json()
+      const session: ChatSession = createData.session
+      addSession(session)
+      setActiveSessionId(session.id)
+      setMessages([])
+      activeSessionRef.current = session.id
+      const url = new URL(window.location.href)
+      url.searchParams.set("session", session.id)
+      url.searchParams.delete("prompt")
+      window.history.replaceState(null, "", url.toString())
+      return session.id
+    } catch {
+      setError(t("studio.connectionError"))
+      return null
+    }
+  }, [addSession, setActiveSessionId, setMessages, setError, t])
+
   // ── Send message with full SSE streaming ────────────────
 
   const handleSend = useCallback(async (message: string, files?: UploadedFile[]) => {
@@ -250,31 +324,8 @@ export function StudioClient() {
     // don't pile up in the sidebar.
     let sessionId = activeSessionId
     if (!sessionId) {
-      try {
-        const createRes = await brokerFetch("/api/broker/sessions", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ model: "minimax-m2.7:cloud" }),
-        })
-        if (!createRes.ok) {
-          setError(t("studio.connectionError"))
-          return
-        }
-        const createData = await createRes.json()
-        const session: ChatSession = createData.session
-        addSession(session)
-        setActiveSessionId(session.id)
-        setMessages([])
-        sessionId = session.id
-        activeSessionRef.current = session.id
-        const url = new URL(window.location.href)
-        url.searchParams.set("session", session.id)
-        url.searchParams.delete("prompt")
-        window.history.replaceState(null, "", url.toString())
-      } catch {
-        setError(t("studio.connectionError"))
-        return
-      }
+      sessionId = await ensureSession()
+      if (!sessionId) return
     }
 
     setError(null)
@@ -761,6 +812,7 @@ export function StudioClient() {
           <WelcomeScreen
             onPromptSelect={handleWelcomePrompt}
             activeSuite={searchParams.get("suite") as SuiteId | null}
+            onEnsureSession={ensureSession}
           />
         ) : (
           <div className={s.messageArea}>
@@ -781,7 +833,7 @@ export function StudioClient() {
 
       {/* Chat input — always available so users can type from the welcome
           screen; session is created lazily in handleSend on first send. */}
-      <ChatInput onSend={handleSend} prefill={chatPrefill} />
+      <ChatInput onSend={handleSend} prefill={chatPrefill} onEnsureSession={ensureSession} />
 
       {/* File preview modal */}
       {previewFile && (

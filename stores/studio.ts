@@ -49,6 +49,12 @@ interface StudioStore {
   isUploading: boolean
   setIsUploading: (uploading: boolean) => void
 
+  // Imported git repo for the active session (populated from broker).
+  // `url` is always safe to display; the token itself is never surfaced
+  // back to the client — `hasToken` is just a flag.
+  importedRepo: ImportedRepoState | null
+  setImportedRepo: (repo: ImportedRepoState | null) => void
+
   // UI state
   sidebarOpen: boolean
   rightPanelOpen: boolean
@@ -102,6 +108,13 @@ export interface RoutingDebug {
   at: number
 }
 
+export interface ImportedRepoState {
+  url: string
+  username: string | null
+  branch: string | null
+  hasToken: boolean
+}
+
 export const useStudioStore = create<StudioStore>((set) => ({
   // Sessions
   sessions: [],
@@ -149,6 +162,10 @@ export const useStudioStore = create<StudioStore>((set) => ({
   setAttachedFiles: (attachedFiles) => set({ attachedFiles }),
   isUploading: false,
   setIsUploading: (isUploading) => set({ isUploading }),
+
+  // Imported repo
+  importedRepo: null,
+  setImportedRepo: (importedRepo) => set({ importedRepo }),
 
   // UI state
   sidebarOpen: false,

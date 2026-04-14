@@ -16,6 +16,7 @@ import { Icon } from "@/components/icon"
 import type { AtCommand, UploadedFile } from "@/types/studio"
 import clsx from "clsx"
 import s from "./chat-input.module.scss"
+import { ImportRepoModal } from "@/components/studio/import-repo-modal"
 
 const AT_COMMAND_DEFS: { name: string; descKey: string; hint: string }[] = [
   { name: "find-assets", descKey: "studio.atFindAssets", hint: "chocolate icons 2d" },
@@ -36,11 +37,13 @@ interface ChatInputProps {
    * twice in a row (e.g. clicking the same suggestion card again).
    */
   prefill?: { text: string; nonce: number } | null
+  onEnsureSession?: () => Promise<string | null>
 }
 
-export function ChatInput({ onSend, disabled, prefill }: ChatInputProps) {
+export function ChatInput({ onSend, disabled, prefill, onEnsureSession }: ChatInputProps) {
   const { t } = useI18n()
   const [input, setInput] = useState("")
+  const [repoModalOpen, setRepoModalOpen] = useState(false)
   const {
     atMenu,
     setAtMenu,
@@ -50,6 +53,7 @@ export function ChatInput({ onSend, disabled, prefill }: ChatInputProps) {
     setIsUploading,
     activeSessionId,
     isStreaming,
+    importedRepo,
   } = useStudioStore()
 
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -248,6 +252,22 @@ export function ChatInput({ onSend, disabled, prefill }: ChatInputProps) {
         </div>
       )}
 
+      {/* Attached repo chip */}
+      {importedRepo && (
+        <div className={s.files}>
+          <button
+            type="button"
+            className={s.repoChip}
+            onClick={() => setRepoModalOpen(true)}
+            title={t("studio.importRepoManage")}
+          >
+            <Icon icon="hugeicons:github-01" />
+            <span>{repoDisplay(importedRepo.url)}</span>
+            {importedRepo.branch && <span className={s.repoBranch}>#{importedRepo.branch}</span>}
+          </button>
+        </div>
+      )}
+
       {/* Attached files */}
       {attachedFiles.length > 0 && (
         <div className={s.files}>
@@ -272,6 +292,15 @@ export function ChatInput({ onSend, disabled, prefill }: ChatInputProps) {
           title={t("studio.attachFile")}
         >
           <Icon icon={isUploading ? "hugeicons:loading-03" : "hugeicons:attachment-02"} />
+        </button>
+
+        <button
+          className={clsx(s.attachBtn, importedRepo && s.attachBtnActive)}
+          onClick={() => setRepoModalOpen(true)}
+          disabled={isDisabled}
+          title={importedRepo ? t("studio.importRepoManage") : t("studio.importRepoAttachTitle")}
+        >
+          <Icon icon="hugeicons:github-01" />
         </button>
 
         <textarea
@@ -302,6 +331,24 @@ export function ChatInput({ onSend, disabled, prefill }: ChatInputProps) {
         hidden
         onChange={(e) => handleFileUpload(e.target.files)}
       />
+
+      {repoModalOpen && (
+        <ImportRepoModal
+          sessionId={activeSessionId}
+          onClose={() => setRepoModalOpen(false)}
+          onEnsureSession={onEnsureSession}
+        />
+      )}
     </div>
   )
+}
+
+function repoDisplay(url: string): string {
+  try {
+    const u = new URL(url)
+    const path = u.pathname.replace(/^\/+/, "").replace(/\.git$/, "")
+    return path || u.host
+  } catch {
+    return url.replace(/\.git$/, "")
+  }
 }
