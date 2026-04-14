@@ -80,8 +80,18 @@ export async function POST(req: NextRequest) {
   )
   const brokerText = await brokerRes.text()
   if (!brokerRes.ok) {
+    const parsedErr = safeParseError(brokerText)
+    const preview = brokerText.length > 400 ? `${brokerText.slice(0, 400)}…` : brokerText
+    const detail = parsedErr || preview || "(empty body)"
+    console.error(
+      `[github/attach] broker refused: status=${brokerRes.status} body=${preview}`,
+    )
     return NextResponse.json(
-      { error: safeParseError(brokerText) || "Broker refused attach" },
+      {
+        error: `Broker refused attach (${brokerRes.status}): ${detail}`,
+        brokerStatus: brokerRes.status,
+        brokerBody: preview,
+      },
       { status: brokerRes.status },
     )
   }
