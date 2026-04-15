@@ -75,6 +75,9 @@
   --white: oklch(0.93 0.005 260);
   --bg-1: oklch(0.16 0.005 260);
 
+  color: var(--text);
+  background-color: var(--body);
+
   --glass-15: oklch(0.16 0.005 260 / 0.5);
   --glass-50: oklch(0.15 0.005 260 / 0.7);
   --glass-75: oklch(0.14 0.005 260 / 0.85);
