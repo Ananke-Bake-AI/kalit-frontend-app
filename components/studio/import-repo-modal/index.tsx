@@ -158,6 +158,7 @@ function GitHubTab({ sessionId, onEnsureSession, setError, setBusy, busy, onAtta
   const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null)
   const [branch, setBranch] = useState("")
   const [connecting, setConnecting] = useState(false)
+  const [unlinkingId, setUnlinkingId] = useState<string | null>(null)
   const popupRef = useRef<Window | null>(null)
 
   const loadInstallations = useCallback(async () => {
@@ -203,6 +204,38 @@ function GitHubTab({ sessionId, onEnsureSession, setError, setBusy, busy, onAtta
   useEffect(() => {
     if (selectedInstall) void loadRepos(selectedInstall)
   }, [selectedInstall, loadRepos])
+
+  const handleUnlink = useCallback(async (inst: Installation) => {
+    if (unlinkingId) return
+    const ok = typeof window !== "undefined"
+      ? window.confirm(t("studio.importRepoGhUnlinkConfirm").replace("{account}", inst.accountLogin))
+      : true
+    if (!ok) return
+    setUnlinkingId(inst.installationId)
+    setError(null)
+    try {
+      const res = await fetch(`/api/github/installations/${encodeURIComponent(inst.installationId)}`, {
+        method: "DELETE",
+      })
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string }
+        setError(data.error || t("studio.importRepoGhUnlinkFailed"))
+        return
+      }
+      // If we just removed the selected install, clear selection and repos so
+      // `loadInstallations` → selectedInstall can re-seed from the new list.
+      if (selectedInstall === inst.installationId) {
+        setSelectedInstall(null)
+        setRepos([])
+        setSelectedRepo(null)
+      }
+      await loadInstallations()
+    } catch {
+      setError(t("studio.importRepoGhUnlinkFailed"))
+    } finally {
+      setUnlinkingId(null)
+    }
+  }, [unlinkingId, selectedInstall, loadInstallations, setError, t])
 
   // Listen for the callback popup to signal completion, then refresh.
   useEffect(() => {
@@ -331,26 +364,44 @@ function GitHubTab({ sessionId, onEnsureSession, setError, setBusy, busy, onAtta
 
   return (
     <div className={s.ghBody}>
-      {installations.length > 1 && (
-        <div className={s.field}>
-          <label className={s.label}>{t("studio.importRepoGhPickInstall")}</label>
-          <div className={s.installRow}>
-            {installations.map((inst) => (
-              <button
+      <div className={s.field}>
+        <label className={s.label}>{t("studio.importRepoGhPickInstall")}</label>
+        <div className={s.installRow}>
+          {installations.map((inst) => {
+            const active = selectedInstall === inst.installationId
+            const isUnlinking = unlinkingId === inst.installationId
+            return (
+              <div
                 key={inst.installationId}
-                className={clsx(
-                  s.installChip,
-                  selectedInstall === inst.installationId && s.installChipActive,
-                )}
-                onClick={() => setSelectedInstall(inst.installationId)}
+                className={clsx(s.installChip, active && s.installChipActive)}
               >
-                <Icon icon={inst.accountType === "Organization" ? "hugeicons:building-06" : "hugeicons:user"} />
-                {inst.accountLogin}
-              </button>
-            ))}
-          </div>
+                <button
+                  type="button"
+                  className={s.installChipLabel}
+                  onClick={() => setSelectedInstall(inst.installationId)}
+                  disabled={isUnlinking}
+                >
+                  <Icon icon={inst.accountType === "Organization" ? "hugeicons:building-06" : "hugeicons:user"} />
+                  {inst.accountLogin}
+                </button>
+                <button
+                  type="button"
+                  className={s.installChipRemove}
+                  onClick={() => handleUnlink(inst)}
+                  disabled={!!unlinkingId}
+                  title={t("studio.importRepoGhUnlink")}
+                  aria-label={t("studio.importRepoGhUnlink")}
+                >
+                  <Icon
+                    icon={isUnlinking ? "hugeicons:loading-03" : "hugeicons:cancel-01"}
+                    className={isUnlinking ? s.spin : undefined}
+                  />
+                </button>
+              </div>
+            )
+          })}
         </div>
-      )}
+      </div>
 
       <div className={s.field}>
         <label className={s.label}>{t("studio.importRepoGhPickRepo")}</label>

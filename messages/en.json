@@ -817,7 +817,10 @@
     "importRepoGhLoading": "Loading repositories…",
     "importRepoGhFailed": "Could not load GitHub data.",
     "importRepoGhPopupBlocked": "Your browser blocked the popup. Please allow popups and try again.",
-    "importRepoGhConnected": "Connected — {count} repo(s) granted"
+    "importRepoGhConnected": "Connected — {count} repo(s) granted",
+    "importRepoGhUnlink": "Unlink this account",
+    "importRepoGhUnlinkConfirm": "Unlink {account} from Kalit? The GitHub App will be uninstalled from that account.",
+    "importRepoGhUnlinkFailed": "Could not unlink this account."
   },
   "seo": {
     "homeTitle": "Build, Launch, Grow, and Secure with AI",

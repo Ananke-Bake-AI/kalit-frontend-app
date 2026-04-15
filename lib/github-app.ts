@@ -145,6 +145,23 @@ export async function mintInstallationToken(
   return { token: data.token, expiresAt: data.expires_at }
 }
 
+// Uninstalls the app from GitHub's side, revoking the installation so the
+// user can reinstall cleanly later. 404 means GitHub already forgot about
+// it (user uninstalled manually), which we treat as success.
+export async function revokeInstallation(
+  cfg: GitHubAppConfig,
+  installationId: string | number,
+): Promise<void> {
+  const jwt = await generateAppJWT(cfg)
+  const res = await ghFetch(
+    `/app/installations/${installationId}`,
+    jwt,
+    { method: "DELETE" },
+  )
+  if (res.status === 204 || res.status === 404) return
+  throw new Error(`GitHub revokeInstallation failed: ${res.status}`)
+}
+
 export async function listInstallationRepos(
   installationToken: string,
 ): Promise<GitHubRepo[]> {

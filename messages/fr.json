@@ -817,7 +817,10 @@
     "importRepoGhLoading": "Chargement des dépôts…",
     "importRepoGhFailed": "Impossible de charger les données GitHub.",
     "importRepoGhPopupBlocked": "Ton navigateur a bloqué la popup. Autorise-la et réessaie.",
-    "importRepoGhConnected": "Connecté — {count} dépôt(s) autorisé(s)"
+    "importRepoGhConnected": "Connecté — {count} dépôt(s) autorisé(s)",
+    "importRepoGhUnlink": "Dissocier ce compte",
+    "importRepoGhUnlinkConfirm": "Dissocier {account} de Kalit ? L'application GitHub sera désinstallée de ce compte.",
+    "importRepoGhUnlinkFailed": "Impossible de dissocier ce compte."
   },
   "seo": {
     "homeTitle": "Créez, lancez, développez et sécurisez avec l'IA",
