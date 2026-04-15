@@ -51,12 +51,13 @@ export function ImportRepoModal({ sessionId, onClose, onEnsureSession }: ImportR
   const [busy, setBusy] = useState(false)
 
   // Pushes a local "repo linked" notice into the chat so the user knows what
-  // to do next. `temp-` prefix makes the store's merge dedup carry it across
-  // server-side refreshes (it has no server counterpart, so it's kept).
+  // to do next. `local-` prefix (NOT `temp-`) so the store's merge dedup
+  // drops it on the next fetchMessages — the notice is one-shot and would
+  // otherwise get re-appended at the bottom after every server refresh.
   const pushRepoLinkedNotice = useCallback((repoName: string) => {
     const content = t("studio.repoLinkedChat").replace("{repo}", repoName)
     addMessage({
-      id: `temp-repolinked-${Date.now()}`,
+      id: `local-notice-repolinked-${Date.now()}`,
       role: "assistant",
       content,
       createdAt: new Date().toISOString(),
