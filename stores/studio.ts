@@ -27,6 +27,7 @@ interface StudioStore {
   setMessages: (messages: ChatMessage[]) => void
   setMessagesLoading: (loading: boolean) => void
   addMessage: (message: ChatMessage) => void
+  removeMessage: (id: string) => void
 
   // Streaming
   isStreaming: boolean
@@ -163,6 +164,8 @@ export const useStudioStore = create<StudioStore>((set) => ({
   setMessagesLoading: (messagesLoading) => set({ messagesLoading }),
   addMessage: (message) =>
     set((s) => (shouldSkipAdd(s.messages, message) ? s : { messages: [...s.messages, message] })),
+  removeMessage: (id) =>
+    set((s) => ({ messages: s.messages.filter((m) => m.id !== id) })),
 
   // Streaming
   isStreaming: false,

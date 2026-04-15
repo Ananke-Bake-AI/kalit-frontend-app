@@ -52,6 +52,7 @@ export function StudioClient() {
     setLastRouting,
     resetStream,
     addMessage,
+    removeMessage,
     setActiveWidgets,
     addActiveWidget,
     setError,
@@ -369,6 +370,11 @@ export function StudioClient() {
         const data = await res.json().catch(() => ({}))
         setError((data as { error?: string }).error || `Error ${res.status}`)
         setIsStreaming(false)
+        // The broker rejected the request (e.g. "Session is busy") so this
+        // user message was never persisted server-side. Drop the optimistic
+        // temp — otherwise mergeMessages in the finally-block fetchMessages
+        // carries the stale bubble forward and every retry stacks another.
+        removeMessage(tempId)
         return
       }
 
@@ -594,7 +600,7 @@ export function StudioClient() {
       notify()
     }
   }, [
-    activeSessionId, isStreaming, locale, progressMode, addMessage,
+    activeSessionId, isStreaming, locale, progressMode, addMessage, removeMessage,
     addSession, setActiveSessionId, setMessages, t,
     setError, setIsStreaming, setStreamSegments, setStreamThinking,
     resetStream, setActiveWidgets, addActiveWidget,
