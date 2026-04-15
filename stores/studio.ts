@@ -115,6 +115,34 @@ export interface ImportedRepoState {
   hasToken: boolean
 }
 
+// Optimistic adds use `temp-…` ids; the broker assigns its own id when the
+// message is persisted. Without dedup, both can end up in the list — once as
+// the temp and again from the next refresh — producing the visible duplicate.
+const isTempId = (id: string): boolean => id.startsWith("temp-")
+
+const sameContent = (a: ChatMessage, b: ChatMessage): boolean =>
+  a.role === b.role && a.content === b.content
+
+// Drop a temp message when the incoming server list already covers it
+// (same role+content). Server messages are the source of truth; only temps
+// that have NO server counterpart yet are kept (e.g. POST in-flight).
+function mergeMessages(prev: ChatMessage[], next: ChatMessage[]): ChatMessage[] {
+  const carriedTemps = prev.filter(
+    (m) => isTempId(m.id) && !next.some((n) => sameContent(n, m)),
+  )
+  return [...next, ...carriedTemps]
+}
+
+// Skip an optimistic add when the same id is already present, or when the
+// most recent message has the same role+content (rapid double-Enter, or the
+// server copy already landed). Non-adjacent matches are allowed so a user
+// can legitimately send the same prompt twice later in the conversation.
+function shouldSkipAdd(prev: ChatMessage[], msg: ChatMessage): boolean {
+  if (prev.some((m) => m.id === msg.id)) return true
+  const last = prev[prev.length - 1]
+  return !!last && sameContent(last, msg)
+}
+
 export const useStudioStore = create<StudioStore>((set) => ({
   // Sessions
   sessions: [],
@@ -131,9 +159,10 @@ export const useStudioStore = create<StudioStore>((set) => ({
   // Messages
   messages: [],
   messagesLoading: false,
-  setMessages: (messages) => set({ messages }),
+  setMessages: (messages) => set((s) => ({ messages: mergeMessages(s.messages, messages) })),
   setMessagesLoading: (messagesLoading) => set({ messagesLoading }),
-  addMessage: (message) => set((s) => ({ messages: [...s.messages, message] })),
+  addMessage: (message) =>
+    set((s) => (shouldSkipAdd(s.messages, message) ? s : { messages: [...s.messages, message] })),
 
   // Streaming
   isStreaming: false,
