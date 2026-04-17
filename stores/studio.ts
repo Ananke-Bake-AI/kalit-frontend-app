@@ -102,6 +102,15 @@ interface StudioStore {
   // Populated by studio-client's SSE handler on every outgoing message.
   lastRouting: RoutingDebug | null
   setLastRouting: (routing: RoutingDebug | null) => void
+
+  // Debug console (admin-only)
+  consoleOpen: boolean
+  setConsoleOpen: (open: boolean) => void
+  consoleLogs: ConsoleLogEntry[]
+  addConsoleLog: (entry: ConsoleLogEntry) => void
+  clearConsoleLogs: () => void
+  consoleSummary: ConsoleSummary | null
+  setConsoleSummary: (summary: ConsoleSummary | null) => void
 }
 
 export interface RoutingDebug {
@@ -111,6 +120,25 @@ export interface RoutingDebug {
   reasoning?: string
   latencyMs?: number
   at: number
+}
+
+export interface ConsoleLogEntry {
+  id: string
+  ts: number
+  type: string     // route | tool | text | think | done | error | progress | widget | file | system | cmd | cost
+  tag: string      // short label (e.g. "ROUTE", "TOOL", ">")
+  message: string
+}
+
+export interface ConsoleSummary {
+  model: string
+  inputTokens: number
+  outputTokens: number
+  cacheCreationTokens: number
+  cacheReadTokens: number
+  costCredits: number
+  turnDurationMs: number
+  segmentsCount: number
 }
 
 export interface ImportedRepoState {
@@ -248,4 +276,14 @@ export const useStudioStore = create<StudioStore>((set) => ({
   // Routing debug
   lastRouting: null,
   setLastRouting: (lastRouting) => set({ lastRouting }),
+
+  // Debug console
+  consoleOpen: false,
+  setConsoleOpen: (consoleOpen) => set({ consoleOpen }),
+  consoleLogs: [],
+  addConsoleLog: (entry) =>
+    set((s) => ({ consoleLogs: [...s.consoleLogs.slice(-500), entry] })),
+  clearConsoleLogs: () => set({ consoleLogs: [] }),
+  consoleSummary: null,
+  setConsoleSummary: (consoleSummary) => set({ consoleSummary }),
 }))

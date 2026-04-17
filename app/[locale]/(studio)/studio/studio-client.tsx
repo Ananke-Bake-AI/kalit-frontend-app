@@ -21,6 +21,7 @@ import { MessageList } from "@/components/studio/message-list"
 import { FileExplorer } from "@/components/studio/file-explorer"
 import { FilePreviewModal } from "@/components/studio/file-preview-modal"
 import { RoutingDebugPanel } from "@/components/studio/routing-debug"
+import { DebugConsole } from "@/components/studio/debug-console"
 import { ModelSelector } from "@/components/studio/model-selector"
 import { useStudioFocus } from "@/app/[locale]/(studio)/studio-focus-context"
 import { useTheme } from "@/components/app/theme-context"
@@ -72,6 +73,9 @@ export function StudioClient() {
     setNotifyTitle,
     setNotifySound,
     setImportedRepo,
+    addConsoleLog,
+    setConsoleSummary,
+    setConsoleOpen,
   } = useStudioStore()
 
   const [ready, setReady] = useState(false)
@@ -445,6 +449,12 @@ export function StudioClient() {
   const handleSend = useCallback(async (message: string, files?: UploadedFile[]) => {
     if (isStreaming) return
 
+    // Admin command: /console toggles the debug console
+    if (message.trim() === "/console") {
+      setConsoleOpen(!useStudioStore.getState().consoleOpen)
+      return
+    }
+
     // Lazy session creation: when the user composes from the welcome screen
     // we don't have an activeSessionId yet. Create one here so empty drafts
     // don't pile up in the sidebar.
@@ -531,6 +541,19 @@ export function StudioClient() {
         }
       }, 5_000)
 
+      // Console log helper — only fires if admin console might be listening
+      let textCharCount = 0
+      let toolCount = 0
+      const clog = (type: string, tag: string, message: string) => {
+        addConsoleLog({
+          id: `ev-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          ts: Date.now(),
+          type,
+          tag,
+          message,
+        })
+      }
+
       const pushText = (chunk: string) => {
         const last = segments[segments.length - 1]
         if (last?.type === "text") {
@@ -572,16 +595,31 @@ export function StudioClient() {
               const event = JSON.parse(line.slice(6))
               switch (event.type) {
                 case "text":
-                  if (event.content) pushText(event.content)
+                  if (event.content) {
+                    pushText(event.content)
+                    textCharCount += event.content.length
+                    // Batch text logs — emit a summary every 200 chars
+                    if (textCharCount % 200 < event.content.length) {
+                      clog("text", "TEXT", `Streaming... ${textCharCount} chars received`)
+                    }
+                  }
                   break
 
                 case "thinking":
                   thinking += event.content || ""
                   setStreamThinking(thinking)
+                  if (thinking.length <= (event.content?.length || 0)) {
+                    clog("think", "THINK", "Thinking block started...")
+                  }
                   break
 
                 case "tool_use":
-                  if (event.name) pushTool(event.name, event.input)
+                  if (event.name) {
+                    pushTool(event.name, event.input)
+                    toolCount++
+                    const inputPreview = event.input ? JSON.stringify(event.input).slice(0, 120) : ""
+                    clog("tool", "TOOL", `#${toolCount} ${event.name}(${inputPreview}${inputPreview.length >= 120 ? "..." : ""})`)
+                  }
                   break
 
                 case "tool_result":
@@ -589,6 +627,7 @@ export function StudioClient() {
                   for (let i = segments.length - 1; i >= 0; i--) {
                     if (segments[i].type === "tool" && !(segments[i] as { done: boolean }).done) {
                       ;(segments[i] as { type: "tool"; done: boolean }).done = true
+                      clog("tool", "TOOL", `#${toolCount} completed`)
                       break
                     }
                   }
@@ -599,6 +638,7 @@ export function StudioClient() {
                   const wt = event.widget?.widgetType || event.widgetType
                   const wi = event.widget?.widgetId || event.widgetId
                   if (wt && wi) {
+                    clog("widget", "WIDGET", `${wt} ${wi.slice(0, 8)} status=${event.status || "active"}`)
                     // If the same widgetId was already emitted in this stream,
                     // update it in place instead of appending a duplicate card.
                     const existingIdx = segments.findIndex(
@@ -636,6 +676,7 @@ export function StudioClient() {
                 }
 
                 case "progress": {
+                  clog("progress", "PROG", event.content || "...")
                   const lastSeg = segments[segments.length - 1]
                   if (lastSeg?.type === "progress") {
                     lastSeg.messages.push(event.content)
@@ -647,6 +688,7 @@ export function StudioClient() {
                 }
 
                 case "file":
+                  clog("file", "FILE", `${event.name} (${event.mimeType})`)
                   segments.push({
                     type: "file",
                     name: event.name,
@@ -657,6 +699,7 @@ export function StudioClient() {
                   break
 
                 case "error":
+                  clog("error", "ERROR", event.content || "Unknown error")
                   setError(event.content || t("studio.streamError"))
                   break
 
@@ -685,12 +728,47 @@ export function StudioClient() {
                       latencyMs: payload.latency_ms,
                       at: Date.now(),
                     })
+                    const latStr = payload.latency_ms !== undefined ? ` latency=${payload.latency_ms}ms` : ""
+                    clog("route", "ROUTE", `suite=${payload.suite} confidence=${payload.confidence} source=${payload.source}${latStr}`)
+                    if (payload.reasoning) {
+                      clog("route", "ROUTE", `reason: ${payload.reasoning}`)
+                    }
                   }
                   break
                 }
 
+                case "debug_summary": {
+                  // Admin-only: broker sends token usage + cost after done
+                  const ds = event as {
+                    model?: string
+                    input_tokens?: number
+                    output_tokens?: number
+                    cache_creation_tokens?: number
+                    cache_read_tokens?: number
+                    cost_credits?: number
+                    turn_duration_ms?: number
+                    segments_count?: number
+                  }
+                  setConsoleSummary({
+                    model: ds.model || "",
+                    inputTokens: ds.input_tokens || 0,
+                    outputTokens: ds.output_tokens || 0,
+                    cacheCreationTokens: ds.cache_creation_tokens || 0,
+                    cacheReadTokens: ds.cache_read_tokens || 0,
+                    costCredits: ds.cost_credits || 0,
+                    turnDurationMs: ds.turn_duration_ms || 0,
+                    segmentsCount: ds.segments_count || 0,
+                  })
+                  const inTok = ds.input_tokens || 0
+                  const outTok = ds.output_tokens || 0
+                  const cost = ds.cost_credits || 0
+                  const dur = ((ds.turn_duration_ms || 0) / 1000).toFixed(1)
+                  clog("cost", "COST", `in=${inTok} out=${outTok} cost=${cost.toFixed(4)} credits turn=${dur}s model=${ds.model || "?"}`)
+                  break
+                }
+
                 case "done":
-                  // Handled after loop
+                  clog("done", "DONE", `Stream completed — ${textCharCount} chars, ${toolCount} tools`)
                   break
               }
             } catch {
@@ -739,6 +817,7 @@ export function StudioClient() {
     setError, setIsStreaming, setStreamSegments, setStreamThinking,
     resetStream, setActiveWidgets, addActiveWidget,
     fetchMessages, fetchSessions, fetchQuota, notify,
+    addConsoleLog, setConsoleSummary, setConsoleOpen,
   ])
 
   // ── Stop streaming ──────────────────────────────────────
@@ -799,6 +878,7 @@ export function StudioClient() {
   // ── Global keyboard shortcuts ───────────────────────────
   //   ⌘K / Ctrl+K        → focus sidebar search
   //   ⌘⇧O / Ctrl+Shift+O → start a new chat
+  //   ⌘⇧D / Ctrl+Shift+D → toggle debug console (admin)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const meta = e.metaKey || e.ctrlKey
@@ -809,11 +889,14 @@ export function StudioClient() {
       } else if (e.shiftKey && (e.key === "o" || e.key === "O")) {
         e.preventDefault()
         void handleNewChat()
+      } else if (e.shiftKey && (e.key === "d" || e.key === "D")) {
+        e.preventDefault()
+        setConsoleOpen(!useStudioStore.getState().consoleOpen)
       }
     }
     window.addEventListener("keydown", onKey)
     return () => window.removeEventListener("keydown", onKey)
-  }, [handleNewChat])
+  }, [handleNewChat, setConsoleOpen])
 
   // ── Toggle right panel (file explorer) ──────────────────
 
@@ -994,6 +1077,7 @@ export function StudioClient() {
       )}
 
       <RoutingDebugPanel />
+      <DebugConsole />
     </ChatLayout>
   )
 }

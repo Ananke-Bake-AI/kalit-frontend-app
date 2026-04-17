@@ -1,0 +1,394 @@
+// ── Admin Debug Console ─────────────────────────────────
+// Floating, draggable, resizable terminal-style console for
+// real-time SSE event logs, token/cost tracking, and admin commands.
+
+$bg: rgba(12, 12, 18, 0.94);
+$border: rgba(255, 255, 255, 0.08);
+$text: #e8e8e8;
+$text-dim: #888;
+$text-muted: #555;
+$accent: #7eb8ff;
+$green: #8bda7e;
+$yellow: #e8c86a;
+$red: #e86a6a;
+$orange: #e8a86a;
+$purple: #b38bda;
+$mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+.container {
+  position: fixed;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  background: $bg;
+  color: $text;
+  border: 1px solid $border;
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.03);
+  font-family: $mono;
+  font-size: 11px;
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+  min-width: 380px;
+  min-height: 200px;
+
+  &[data-minimized="true"] {
+    min-height: unset;
+    height: auto !important;
+    resize: none;
+  }
+}
+
+// ── Title bar (draggable) ───────────────────────────────
+
+.titleBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid $border;
+  cursor: grab;
+  user-select: none;
+  flex-shrink: 0;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.titleDots {
+  display: flex;
+  gap: 5px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: filter 0.15s;
+
+  &:hover {
+    filter: brightness(1.3);
+  }
+
+  &Close {
+    background: #ff5f57;
+  }
+
+  &Minimize {
+    background: #febc2e;
+  }
+
+  &Maximize {
+    background: #28c840;
+  }
+}
+
+.titleText {
+  flex: 1;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 500;
+  color: $text-dim;
+  letter-spacing: 0.03em;
+}
+
+.titleSession {
+  font-size: 10px;
+  color: $text-muted;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ── Stats bar ───────────────────────────────────────────
+
+.statsBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px 10px;
+  border-bottom: 1px solid $border;
+  background: rgba(255, 255, 255, 0.015);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: $text-dim;
+
+  span {
+    color: $text;
+    font-weight: 500;
+  }
+}
+
+.statLabel {
+  color: $text-muted;
+}
+
+.statDivider {
+  width: 1px;
+  height: 12px;
+  background: $border;
+}
+
+// ── Filter tabs ─────────────────────────────────────────
+
+.filterBar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 8px;
+  border-bottom: 1px solid $border;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.filterBtn {
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-family: $mono;
+  color: $text-dim;
+  background: transparent;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: $text;
+  }
+
+  &[data-active="true"] {
+    background: rgba(255, 255, 255, 0.1);
+    color: $text;
+  }
+}
+
+.filterCount {
+  font-size: 9px;
+  color: $text-muted;
+  margin-left: 2px;
+}
+
+// ── Log area ────────────────────────────────────────────
+
+.logs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+  min-height: 0;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+  }
+}
+
+.logEntry {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 2px 10px;
+  line-height: 1.5;
+  transition: background 0.1s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.025);
+  }
+}
+
+.logTime {
+  flex-shrink: 0;
+  color: $text-muted;
+  font-size: 10px;
+  min-width: 55px;
+}
+
+.logTag {
+  flex-shrink: 0;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  min-width: 48px;
+  text-align: center;
+
+  &[data-type="route"] {
+    background: rgba(120, 180, 255, 0.15);
+    color: $accent;
+  }
+
+  &[data-type="text"] {
+    background: rgba(139, 218, 126, 0.12);
+    color: $green;
+  }
+
+  &[data-type="tool"] {
+    background: rgba(179, 139, 218, 0.15);
+    color: $purple;
+  }
+
+  &[data-type="widget"] {
+    background: rgba(232, 168, 106, 0.15);
+    color: $orange;
+  }
+
+  &[data-type="done"] {
+    background: rgba(139, 218, 126, 0.18);
+    color: $green;
+  }
+
+  &[data-type="error"] {
+    background: rgba(232, 106, 106, 0.18);
+    color: $red;
+  }
+
+  &[data-type="progress"] {
+    background: rgba(232, 200, 106, 0.12);
+    color: $yellow;
+  }
+
+  &[data-type="system"] {
+    background: rgba(255, 255, 255, 0.06);
+    color: $text-dim;
+  }
+
+  &[data-type="cmd"] {
+    background: rgba(120, 180, 255, 0.12);
+    color: $accent;
+  }
+
+  &[data-type="file"] {
+    background: rgba(232, 168, 106, 0.12);
+    color: $orange;
+  }
+
+  &[data-type="think"] {
+    background: rgba(232, 200, 106, 0.1);
+    color: $yellow;
+  }
+
+  &[data-type="cost"] {
+    background: rgba(139, 218, 126, 0.12);
+    color: $green;
+  }
+}
+
+.logMsg {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+  white-space: pre-wrap;
+  color: $text;
+
+  &Dim {
+    color: $text-dim;
+  }
+}
+
+.logValue {
+  color: $accent;
+}
+
+.logHighlight {
+  color: $green;
+  font-weight: 500;
+}
+
+.logWarn {
+  color: $yellow;
+}
+
+.logError {
+  color: $red;
+}
+
+// ── Command input ───────────────────────────────────────
+
+.cmdBar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-top: 1px solid $border;
+  background: rgba(255, 255, 255, 0.02);
+  flex-shrink: 0;
+}
+
+.cmdPrompt {
+  color: $accent;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.cmdInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: $mono;
+  font-size: 11px;
+  color: $text;
+  min-width: 0;
+
+  &::placeholder {
+    color: $text-muted;
+  }
+}
+
+// ── Empty state ─────────────────────────────────────────
+
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  color: $text-muted;
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.6;
+  flex: 1;
+}
+
+// ── Resize handle ───────────────────────────────────────
+
+.resizeHandle {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 14px;
+  height: 14px;
+  cursor: nwse-resize;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+  }
+}
