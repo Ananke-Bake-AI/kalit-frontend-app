@@ -31,6 +31,9 @@ importers:
       '@kalit/broker-client':
         specifier: workspace:*
         version: link:../../packages/broker-client
+      '@kalit/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
       '@prisma/client':
         specifier: ^6.19.2
         version: 6.19.2(prisma@6.19.2(typescript@5.9.3))(typescript@5.9.3)
@@ -143,6 +146,18 @@ importers:
 
   packages/broker-client:
     devDependencies:
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
+  packages/i18n:
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.14
+        version: 19.2.14
+      react:
+        specifier: 19.2.0
+        version: 19.2.0
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
