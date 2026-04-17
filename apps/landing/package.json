@@ -11,6 +11,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@kalit/broker-client": "workspace:*",
     "@auth/prisma-adapter": "^2.11.1",
     "@color4bg/react": "^0.1.2",
     "@dicebear/collection": "^9.4.2",

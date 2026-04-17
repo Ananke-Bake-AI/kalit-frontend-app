@@ -2,6 +2,7 @@ import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["bcryptjs"],
+  transpilePackages: ["@kalit/broker-client"],
   images: {
     qualities: [25, 50, 75, 80, 100]
   },

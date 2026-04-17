@@ -1,29 +1,15 @@
 /**
- * Browser → broker API communication helper.
+ * Browser → broker API wiring for kalit-landing.
  *
- * Uses Next.js rewrites: browser calls /api/broker/* which Vercel rewrites
- * to the Go broker's /api/flow/*. Same-origin, no CORS needed.
+ * Thin adapter around `@kalit/broker-client`. The package is environment-agnostic
+ * (shared with the future desktop app); this file injects the web-specific
+ * token source and URL rewrites.
+ *
+ * Server-side callers (API routes) should use `lib/broker-server.ts` instead —
+ * it has access to the NextAuth session and mints the JWT directly.
  */
 
-/**
- * Broker URL prefix. Empty string because rewrites are same-origin.
- * Server-side falls back to BROKER_URL env var for direct calls.
- */
-export function getBrokerUrl(): string {
-  if (typeof window !== "undefined") {
-    // Browser — same origin via Next.js rewrites
-    return ""
-  }
-  // Server-side (SSR / API routes)
-  return (process.env.BROKER_URL || "http://localhost:9000").replace(/\/+$/, "")
-}
-
-/**
- * Cached broker token. Fetched once from the server-side endpoint
- * (because the NextAuth session cookie is httpOnly).
- */
-let cachedToken: string | null = null
-let tokenFetchPromise: Promise<string | null> | null = null
+import { createBrokerClient } from "@kalit/broker-client"
 
 async function fetchBrokerToken(): Promise<string | null> {
   try {
@@ -36,34 +22,20 @@ async function fetchBrokerToken(): Promise<string | null> {
   }
 }
 
-export async function getBrokerToken(): Promise<string | null> {
-  if (cachedToken) return cachedToken
-  if (!tokenFetchPromise) {
-    tokenFetchPromise = fetchBrokerToken().then((token) => {
-      cachedToken = token
-      tokenFetchPromise = null
-      return token
-    })
-  }
-  return tokenFetchPromise
-}
+const client = createBrokerClient({
+  baseUrl: "",
+  getToken: fetchBrokerToken,
+  fileUrlPrefix: { from: "/api/flow/", to: "/api/broker/" },
+})
 
-/** Clear cached token (call on logout). */
+/** Invalidate the cached broker token (call on logout). */
 export function clearBrokerToken(): void {
-  cachedToken = null
-  tokenFetchPromise = null
+  client.clearToken()
 }
 
-/**
- * The broker returns canonical URLs with the `/api/flow/` prefix. The Next.js
- * rewrite only exposes `/api/broker/*` to the browser, so any broker-served
- * URL we render (<img src>, download links, …) must be rewritten to the
- * client-visible prefix.
- */
+/** Rewrite `/api/flow/*` file URLs returned by the broker for browser rendering. */
 export function toClientFileUrl(url: string | undefined | null): string {
-  if (!url) return ""
-  if (url.startsWith("/api/flow/")) return `/api/broker/${url.slice("/api/flow/".length)}`
-  return url
+  return client.mapFileUrl(url)
 }
 
 /**
@@ -71,15 +43,5 @@ export function toClientFileUrl(url: string | undefined | null): string {
  * Paths are relative to the rewrite prefix: /api/broker/sessions → broker's /api/flow/sessions
  */
 export async function brokerFetch(path: string, options?: RequestInit): Promise<Response> {
-  const token = await getBrokerToken()
-  const headers = new Headers(options?.headers)
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`)
-  }
-  // Path should already start with /api/broker/ for rewrites
-  const url = `${getBrokerUrl()}${path}`
-  return fetch(url, {
-    ...options,
-    headers,
-  })
+  return client.fetch(path, options)
 }
