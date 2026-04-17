@@ -10,6 +10,7 @@
  */
 
 import { createBrokerClient } from "@kalit/broker-client"
+import { setStudioBrokerClient } from "@kalit/studio-ui"
 
 async function fetchBrokerToken(): Promise<string | null> {
   try {
@@ -27,6 +28,8 @@ const client = createBrokerClient({
   getToken: fetchBrokerToken,
   fileUrlPrefix: { from: "/api/flow/", to: "/api/broker/" },
 })
+
+setStudioBrokerClient(client)
 
 /** Invalidate the cached broker token (call on logout). */
 export function clearBrokerToken(): void {

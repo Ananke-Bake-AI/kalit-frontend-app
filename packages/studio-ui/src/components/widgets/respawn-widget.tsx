@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { useI18n } from "@/stores/i18n"
-import { Icon } from "@/components/icon"
+import { useI18n } from "@kalit/i18n/react"
+import { Icon } from "../../primitives/icon"
 import s from "./widgets.module.scss"
 
 interface RespawnWidgetProps {

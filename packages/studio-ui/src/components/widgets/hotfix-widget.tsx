@@ -1,9 +1,9 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
-import { brokerFetch } from "@/lib/broker-direct"
-import { useI18n } from "@/stores/i18n"
-import { Icon } from "@/components/icon"
+import { brokerFetch } from "../../host"
+import { useI18n } from "@kalit/i18n/react"
+import { Icon } from "../../primitives/icon"
 import s from "./widgets.module.scss"
 
 type HotfixStatus = "running" | "done" | "error" | "idle"

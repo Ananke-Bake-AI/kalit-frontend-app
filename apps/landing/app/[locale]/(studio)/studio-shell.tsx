@@ -2,15 +2,17 @@
 
 import type { Session } from "next-auth"
 import type { ReactNode } from "react"
-import { useEffect, useState } from "react"
-import { usePathname } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 import NextTopLoader from "nextjs-toploader"
+import { StudioHostProvider } from "@kalit/studio-ui"
 import { Header } from "@/components/layout/header"
 import { RealViewport } from "@/components/layout/real-viewport"
 import { SyncAppPageFromRoute } from "@/components/layout/sync-app-page-from-route"
 import { Toast } from "@/components/layout/toast"
 import { EmailBanner } from "@/components/layout/email-banner"
+import "@/lib/broker-direct"
 import { StudioFocusProvider, useStudioFocus } from "./studio-focus-context"
 import s from "./studio-shell.module.scss"
 
@@ -52,15 +54,36 @@ function StudioShellInner({ children, session }: { children: ReactNode; session:
 
 export const StudioShell = ({ children, session = null }: StudioShellProps) => {
   const [initialFocus, setInitialFocus] = useState<boolean>(false)
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     if (typeof window === "undefined") return
     setInitialFocus(window.localStorage.getItem(FOCUS_STORAGE_KEY) === "1")
   }, [])
 
+  const hostValue = useMemo(
+    () => ({
+      user: session?.user
+        ? {
+            id: (session.user as { id?: string }).id,
+            email: session.user.email ?? undefined,
+            name: session.user.name ?? undefined,
+            image: session.user.image ?? undefined,
+            isAdmin: (session.user as { isAdmin?: boolean }).isAdmin === true,
+          }
+        : null,
+      navigate: (path: string) => router.push(path),
+      getSearchParam: (key: string) => searchParams?.get(key) ?? null,
+    }),
+    [session, router, searchParams]
+  )
+
   return (
-    <StudioFocusProvider initial={initialFocus} storageKey={FOCUS_STORAGE_KEY}>
-      <StudioShellInner session={session}>{children}</StudioShellInner>
-    </StudioFocusProvider>
+    <StudioHostProvider value={hostValue}>
+      <StudioFocusProvider initial={initialFocus} storageKey={FOCUS_STORAGE_KEY}>
+        <StudioShellInner session={session}>{children}</StudioShellInner>
+      </StudioFocusProvider>
+    </StudioHostProvider>
   )
 }
