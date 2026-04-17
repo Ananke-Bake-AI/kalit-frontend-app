@@ -6,7 +6,7 @@
   justify-content: space-between;
   gap: var(--size-4);
   padding: 0.95rem 0;
-  border-bottom: 1px solid oklch(0 0 0 / 0.05);
+  border-bottom: 1px solid oklch(from var(--text) l c h / 0.05);
 
   &:last-child {
     border-bottom: none;

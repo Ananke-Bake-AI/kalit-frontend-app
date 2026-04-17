@@ -149,3 +149,28 @@
     }
   }
 }
+
+// ── Dark-mode refinements ───────────────────────────────
+:global(html.dark) {
+  .plan {
+    background-color: oklch(0.2 0.01 260 / 0.85);
+    box-shadow: 0 24px 48px -8px oklch(0 0 0 / 0.5);
+
+    &:not(.recommended) {
+      .top::before {
+        mask: linear-gradient(to top, oklch(0 0 0 / 0) 0%, oklch(0 0 0 / 0.8) 100%);
+        -webkit-mask: linear-gradient(to top, oklch(0 0 0 / 0) 0%, oklch(0 0 0 / 0.8) 100%);
+      }
+
+      .button,
+      .cta > * {
+        background-color: oklch(0.26 0.012 260);
+
+        &:hover {
+          background-color: var(--btn-bg);
+          color: var(--btn-color);
+        }
+      }
+    }
+  }
+}
