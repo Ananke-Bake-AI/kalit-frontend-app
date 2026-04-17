@@ -18,7 +18,7 @@ export async function createStudioSession(
     const res = await brokerFetch("/api/broker/sessions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ model: "minimax-m2.7:cloud" }),
+      body: JSON.stringify({ model: "mistral:mistral-small-latest" }),
     })
     if (res.ok) {
       const data = await res.json()

@@ -236,12 +236,34 @@
   transform: rotate(45deg);
 }
 
+.sessionMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
 .sessionTime {
   @include ellipsis;
   font-size: 0.68rem;
   color: var(--text-secondary);
   opacity: 0.7;
   font-weight: 300;
+  flex-shrink: 0;
+}
+
+.modelBadge {
+  font-size: 0.58rem;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-secondary);
+  opacity: 0.55;
+  background: oklch(from var(--text) l c h / 0.06);
+  padding: 0.05rem 0.3rem;
+  border-radius: var(--radius-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 7rem;
 }
 
 .renameInput {

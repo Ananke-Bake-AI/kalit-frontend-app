@@ -58,7 +58,7 @@ const MODEL_GROUPS: { label: string; models: ModelOption[] }[] = [
 ]
 
 const STORAGE_KEY = "kalit_admin_model"
-const DEFAULT_MODEL = "minimax-m2.7:cloud"
+const DEFAULT_MODEL = "mistral:mistral-small-latest"
 
 export function ModelSelector() {
   const { data: session } = useSession()

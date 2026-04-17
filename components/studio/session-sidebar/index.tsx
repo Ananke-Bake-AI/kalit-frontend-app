@@ -1,6 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useSession } from "next-auth/react"
 import { useStudioStore } from "@/stores/studio"
 import { useI18n } from "@/stores/i18n"
 import { brokerFetch } from "@/lib/broker-direct"
@@ -48,7 +49,14 @@ const BUCKET_I18N: Record<DateBucket, string> = {
   older: "studio.groupOlder",
 }
 
+function shortModelName(model: string): string {
+  const id = model.includes(":") ? model.split(":").pop()! : model
+  return id.replace(/-latest$/, "").replace(/:cloud$/, "")
+}
+
 export function SessionSidebar({ onSessionSelect, onNewChat }: SessionSidebarProps) {
+  const { data: authSession } = useSession()
+  const isAdmin = authSession?.user?.isAdmin === true
   const { t, locale } = useI18n()
   const {
     sessions,
@@ -297,11 +305,18 @@ export function SessionSidebar({ onSessionSelect, onNewChat }: SessionSidebarPro
                     {displayTitle}
                   </span>
                 )}
-                <span
-                  className={s.sessionTime}
-                  title={new Date(session.updatedAt).toLocaleString(locale)}
-                >
-                  {formatRelative(session.updatedAt, locale)}
+                <span className={s.sessionMeta}>
+                  <span
+                    className={s.sessionTime}
+                    title={new Date(session.updatedAt).toLocaleString(locale)}
+                  >
+                    {formatRelative(session.updatedAt, locale)}
+                  </span>
+                  {isAdmin && session.model && (
+                    <span className={s.modelBadge} title={session.model}>
+                      {shortModelName(session.model)}
+                    </span>
+                  )}
                 </span>
               </span>
               {session.isProcessing && <span className={s.processingDot} />}
