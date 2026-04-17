@@ -67,7 +67,8 @@
   --glass-inset-shadow: 0 -4px 8px 4px oklch(1 0 0 / 0.75) inset;
 }
 
-// ── Studio dark theme ─────────────────────────────────────
+// ── Dark theme ────────────────────────────────────────────
+html.dark,
 .studio-dark {
   --body: oklch(0.13 0.005 260);
   --text: oklch(0.93 0.005 260);

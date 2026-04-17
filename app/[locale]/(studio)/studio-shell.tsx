@@ -12,7 +12,6 @@ import { SyncAppPageFromRoute } from "@/components/layout/sync-app-page-from-rou
 import { Toast } from "@/components/layout/toast"
 import { EmailBanner } from "@/components/layout/email-banner"
 import { StudioFocusProvider, useStudioFocus } from "./studio-focus-context"
-import { StudioThemeProvider, useStudioTheme } from "./studio-theme-context"
 import s from "./studio-shell.module.scss"
 
 interface StudioShellProps {
@@ -21,18 +20,16 @@ interface StudioShellProps {
 }
 
 const FOCUS_STORAGE_KEY = "studio-focus-mode"
-const THEME_STORAGE_KEY = "studio-dark-mode"
 
 function StudioShellInner({ children, session }: { children: ReactNode; session: Session | null }) {
   const { focusMode } = useStudioFocus()
-  const { darkMode } = useStudioTheme()
   const pathname = usePathname() || ""
 
   const isProjectRoute = /\/studio\/project\//.test(pathname)
   const hideSiteChrome = focusMode || isProjectRoute
 
   return (
-    <div className={`${s.root}${darkMode ? " studio-dark" : ""}`} data-focus={hideSiteChrome || undefined}>
+    <div className={s.root} data-focus={hideSiteChrome || undefined}>
       <SyncAppPageFromRoute />
       {/* Studio is a single locked viewport with no footer — long chats
           scroll inside the message list, not the page. A focus-mode toggle
@@ -55,19 +52,15 @@ function StudioShellInner({ children, session }: { children: ReactNode; session:
 
 export const StudioShell = ({ children, session = null }: StudioShellProps) => {
   const [initialFocus, setInitialFocus] = useState<boolean>(false)
-  const [initialDark, setInitialDark] = useState<boolean>(false)
 
   useEffect(() => {
     if (typeof window === "undefined") return
     setInitialFocus(window.localStorage.getItem(FOCUS_STORAGE_KEY) === "1")
-    setInitialDark(window.localStorage.getItem(THEME_STORAGE_KEY) === "1")
   }, [])
 
   return (
     <StudioFocusProvider initial={initialFocus} storageKey={FOCUS_STORAGE_KEY}>
-      <StudioThemeProvider initial={initialDark} storageKey={THEME_STORAGE_KEY}>
-        <StudioShellInner session={session}>{children}</StudioShellInner>
-      </StudioThemeProvider>
+      <StudioShellInner session={session}>{children}</StudioShellInner>
     </StudioFocusProvider>
   )
 }

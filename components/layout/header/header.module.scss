@@ -69,6 +69,36 @@
       display: none;
     }
   }
+
+  .themeToggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2em;
+    height: 2em;
+    border: none;
+    background: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-radius: var(--radius-rounded);
+    transition:
+      color 0.2s ease,
+      background 0.2s ease;
+
+    &:hover {
+      color: var(--text);
+      background: oklch(from var(--text) l c h / 0.06);
+    }
+
+    :global(svg) {
+      width: 1.15em;
+      height: 1.15em;
+    }
+
+    @include max($responsiveNav) {
+      display: none;
+    }
+  }
 }
 
 .bnav {

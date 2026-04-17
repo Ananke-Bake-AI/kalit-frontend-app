@@ -1,5 +1,6 @@
 "use client"
 
+import { useTheme } from "@/components/app/theme-context"
 import { Avatar } from "@/components/avatar"
 import { Button } from "@/components/button"
 import { Icon } from "@/components/icon"
@@ -26,6 +27,7 @@ interface HeaderProps {
 export const Header = ({ initialSession = null }: HeaderProps) => {
   const { nav, setNav, page } = useAppStore()
   const { data: session, status } = useSession()
+  const { darkMode, toggleTheme } = useTheme()
   const t = useTranslation()
   const [menuOpen, setMenuOpen] = useState(false)
   const headerRef = useRef<HTMLElement>(null)
@@ -76,6 +78,14 @@ export const Header = ({ initialSession = null }: HeaderProps) => {
         </Link>
         <Nav />
         <LanguageSwitcher className={s.langSwitcher} />
+        <button
+          className={s.themeToggle}
+          onClick={toggleTheme}
+          title={darkMode ? t("studio.lightMode") : t("studio.darkMode")}
+          aria-label={darkMode ? t("studio.lightMode") : t("studio.darkMode")}
+        >
+          <Icon icon={darkMode ? "hugeicons:sun-03" : "hugeicons:moon-02"} />
+        </button>
 
         {resolvedSession?.user ? (
           <>
