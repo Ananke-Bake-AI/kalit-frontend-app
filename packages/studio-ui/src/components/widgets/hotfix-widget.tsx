@@ -6,33 +6,54 @@ import { useI18n } from "@kalit/i18n/react"
 import { Icon } from "../../primitives/icon"
 import s from "./widgets.module.scss"
 
-type HotfixStatus = "running" | "done" | "error" | "idle"
-type HotfixPhase = "init" | "planning" | "working" | "testing" | "done" | null
+type TaskStatus = "running" | "done" | "error" | "idle"
+type TaskPhase = "init" | "planning" | "working" | "testing" | "done" | null
 
-interface HotfixData {
-  status: HotfixStatus
-  phase: HotfixPhase
+interface TaskData {
+  status: TaskStatus
+  phase: TaskPhase
   stats: { total: number; done: number; inProgress: number } | null
 }
 
-interface HotfixWidgetProps {
+type TaskKind = "hotfix" | "sprint" | "patch"
+
+// i18n keys vary per kind so the running/done/failed labels make sense.
+// Missing keys fall back to the legacy hotfix keys so older translations
+// keep working while new locales get populated.
+const kindLabels: Record<TaskKind, { running: string; done: string; failed: string; phasePrefix: string }> = {
+  hotfix: {
+    running: "studio.applyingHotfix",
+    done: "studio.hotfixApplied",
+    failed: "studio.hotfixFailed",
+    phasePrefix: "hotfix",
+  },
+  sprint: {
+    running: "studio.applyingSprint",
+    done: "studio.sprintApplied",
+    failed: "studio.sprintFailed",
+    phasePrefix: "sprint",
+  },
+  patch: {
+    running: "studio.applyingPatch",
+    done: "studio.patchApplied",
+    failed: "studio.patchFailed",
+    phasePrefix: "patch",
+  },
+}
+
+interface ProjectTaskWidgetProps {
   projectId: string
+  kind?: TaskKind
   onCompleted?: () => void
 }
 
-const phaseI18nKeys: Record<string, string> = {
-  init: "studio.hotfixInit",
-  planning: "studio.hotfixPlanning",
-  working: "studio.hotfixWorking",
-  testing: "studio.hotfixTesting",
-  done: "studio.hotfixDone",
-}
-
-export function HotfixWidget({ projectId, onCompleted }: HotfixWidgetProps) {
+export function ProjectTaskWidget({ projectId, kind = "hotfix", onCompleted }: ProjectTaskWidgetProps) {
   const { t } = useI18n()
-  const [data, setData] = useState<HotfixData | null>(null)
+  const [data, setData] = useState<TaskData | null>(null)
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const finishedRef = useRef(false)
+
+  const labels = kindLabels[kind]
 
   const stopPolling = useCallback(() => {
     if (pollingRef.current) { clearInterval(pollingRef.current); pollingRef.current = null }
@@ -47,7 +68,7 @@ export function HotfixWidget({ projectId, onCompleted }: HotfixWidgetProps) {
       if (!json.success) return
 
       const tf = json.data
-      const status: HotfixStatus =
+      const status: TaskStatus =
         tf.status === "completed" || tf.phase === "done" ? "done" :
         tf.status === "failed" || tf.phase === "error" ? "error" :
         tf.status === "cancelled" ? "idle" : "running"
@@ -82,7 +103,7 @@ export function HotfixWidget({ projectId, onCompleted }: HotfixWidgetProps) {
     return (
       <div className={s.inlineSuccess}>
         <Icon icon="hugeicons:tick-02" />
-        {t("studio.hotfixApplied")}
+        {t(labels.done)}
       </div>
     )
   }
@@ -91,14 +112,13 @@ export function HotfixWidget({ projectId, onCompleted }: HotfixWidgetProps) {
     return (
       <div className={s.inlineDanger}>
         <Icon icon="hugeicons:cancel-01" />
-        {t("studio.hotfixFailed")}
+        {t(labels.failed)}
       </div>
     )
   }
 
-  // Running
-  const phaseKey = data?.phase ? phaseI18nKeys[data.phase] : null
-  const phaseLabel = phaseKey ? t(phaseKey) : t("studio.applyingHotfix")
+  const phaseKey = data?.phase ? `studio.${labels.phasePrefix}${capitalize(data.phase)}` : null
+  const phaseLabel = phaseKey ? t(phaseKey) : t(labels.running)
   const hasStats = data?.stats && data.stats.total > 0
 
   return (
@@ -117,4 +137,22 @@ export function HotfixWidget({ projectId, onCompleted }: HotfixWidgetProps) {
       )}
     </div>
   )
+}
+
+function capitalize(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1)
+}
+
+// Thin wrappers so the widget-renderer can keep a clean switch and each kind
+// gets its own display name in React DevTools.
+export function HotfixWidget(props: Omit<ProjectTaskWidgetProps, "kind">) {
+  return <ProjectTaskWidget {...props} kind="hotfix" />
+}
+
+export function SprintWidget(props: Omit<ProjectTaskWidgetProps, "kind">) {
+  return <ProjectTaskWidget {...props} kind="sprint" />
+}
+
+export function PatchWidget(props: Omit<ProjectTaskWidgetProps, "kind">) {
+  return <ProjectTaskWidget {...props} kind="patch" />
 }

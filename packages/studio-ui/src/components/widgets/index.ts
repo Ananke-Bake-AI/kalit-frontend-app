@@ -1,6 +1,6 @@
 export { ProjectWidget } from "./project-widget"
 export { ResearchWidget } from "./research-widget"
 export { TaskWidget } from "./task-widget"
-export { HotfixWidget } from "./hotfix-widget"
+export { HotfixWidget, SprintWidget, PatchWidget } from "./hotfix-widget"
 export { RespawnWidget } from "./respawn-widget"
 export { MarketingWidget } from "./marketing-widget"

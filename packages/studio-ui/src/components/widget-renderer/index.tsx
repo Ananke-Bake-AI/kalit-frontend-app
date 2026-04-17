@@ -1,6 +1,6 @@
 "use client"
 
-import { ProjectWidget, ResearchWidget, TaskWidget, HotfixWidget, RespawnWidget, MarketingWidget } from "../widgets"
+import { ProjectWidget, ResearchWidget, TaskWidget, HotfixWidget, SprintWidget, PatchWidget, RespawnWidget, MarketingWidget } from "../widgets"
 
 interface WidgetRendererProps {
   widgetType: string
@@ -28,6 +28,10 @@ export function WidgetRenderer({
       return <TaskWidget taskId={widgetId} onCompleted={onCompleted} />
     case "hotfix":
       return <HotfixWidget projectId={widgetId} onCompleted={onCompleted} />
+    case "sprint":
+      return <SprintWidget projectId={widgetId} onCompleted={onCompleted} />
+    case "patch":
+      return <PatchWidget projectId={widgetId} onCompleted={onCompleted} />
     case "respawn":
       return <RespawnWidget widgetId={widgetId} messageCreatedAt={messageCreatedAt} onCompleted={onCompleted} />
     case "marketing-workspace":
