@@ -30,5 +30,81 @@
 
 .history {
   display: grid;
+  gap: 0.5rem;
+}
+
+.eventRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
   gap: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.75rem;
+  background: oklch(0 0 0 / 0.025);
+  border: 1px solid oklch(0 0 0 / 0.04);
+
+  @include max($responsive) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.eventMain {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.eventTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text);
+
+  .service {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    background: oklch(from var(--text) l c h / 0.08);
+    color: var(--text-secondary);
+    text-transform: lowercase;
+  }
+}
+
+.eventSubtitle {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eventMeta {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+
+  @include max($responsive) {
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+}
+
+.tokensIn,
+.tokensOut {
+  font-variant-numeric: tabular-nums;
+}
+
+.tokensIn::before { content: "↓ "; opacity: 0.5; }
+.tokensOut::before { content: "↑ "; opacity: 0.5; }
+
+.timestamp {
+  font-variant-numeric: tabular-nums;
 }

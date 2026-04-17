@@ -57,6 +57,30 @@ export async function authAndToken() {
 }
 
 /**
+ * Fetch a broker endpoint on behalf of the current user. Returns null if the
+ * user isn't signed in (server components should then render a placeholder
+ * rather than redirect). `path` is the full broker path starting with "/",
+ * e.g. "/api/usage/events".
+ */
+export async function brokerFetchAs<T>(path: string): Promise<T | null> {
+  const session = await auth()
+  if (!session?.user?.id || !session.user.email) return null
+  const token = await signBrokerJwt(
+    session.user.id,
+    session.user.email,
+    session.user.orgId,
+    session.user.name,
+    session.user.isAdmin === true,
+  )
+  const res = await fetch(`${BROKER_URL()}${path}`, {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  })
+  if (!res.ok) return null
+  return (await res.json()) as T
+}
+
+/**
  * Proxy a request to the broker.
  * `brokerPath` should NOT start with a leading slash — it's relative to /api/flow/.
  */

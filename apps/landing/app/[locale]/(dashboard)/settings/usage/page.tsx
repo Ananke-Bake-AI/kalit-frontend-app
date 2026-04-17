@@ -1,14 +1,36 @@
 import { Badge } from "@/components/badge"
 import { EmptyPlaceholder } from "@/components/empty-placeholder"
 import { auth } from "@/lib/auth"
+import { brokerFetchAs } from "@/lib/broker-server"
 import { getRemainingCredits, resolveEntitlements } from "@/lib/entitlements"
 import { getServerTranslation, localeHref } from "@/lib/i18n-server"
 import { redirect } from "next/navigation"
-import { prisma } from "@/lib/prisma"
 import type { CSSProperties } from "react"
-import rows from "@/components/stacked-rows/stacked-rows.module.scss"
 import { SurfacePanel } from "@/components/surface-panel"
 import s from "./usage.module.scss"
+
+type UsageEvent = {
+  eventId: string
+  sessionId: string
+  service: string
+  model: string
+  tokensIn: number
+  tokensOut: number
+  cacheRead: number
+  cacheWrite: number
+  originTs: string
+  receivedAt: string
+}
+
+type UsageListResponse = { events: UsageEvent[] }
+
+const fmtNumber = new Intl.NumberFormat("en-US")
+const fmtDate = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+})
 
 export default async function UsagePage() {
   const session = await auth()
@@ -23,13 +45,8 @@ export default async function UsagePage() {
     ? Math.round((used / entitlements.creditsPerMonth) * 100)
     : 0
 
-  const now = new Date()
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-  const recentUsage = await prisma.usageRecord.findMany({
-    where: { orgId, createdAt: { gte: startOfMonth } },
-    orderBy: { createdAt: "desc" },
-    take: 50,
-  })
+  const usage = await brokerFetchAs<UsageListResponse>("/api/usage/events?limit=100")
+  const events = usage?.events ?? []
 
   return (
     <>
@@ -53,20 +70,28 @@ export default async function UsagePage() {
       </SurfacePanel>
 
       <SurfacePanel title={t("settingsPages.recentUsage")} subtitle={t("settingsPages.recentUsageDesc")}>
-        {recentUsage.length === 0 ? (
+        {events.length === 0 ? (
           <EmptyPlaceholder
             title={t("settingsPages.noUsage")}
             description={t("settingsPages.noUsageDesc")}
           />
         ) : (
           <div className={s.history}>
-            {recentUsage.map((record) => (
-              <div key={record.id} className={rows.row}>
-                <div className={rows.main}>
-                  <div className={rows.title}>{record.suiteId}</div>
-                  <div className={rows.subtitle}>{record.action}</div>
+            {events.map((e) => (
+              <div key={e.eventId} className={s.eventRow}>
+                <div className={s.eventMain}>
+                  <div className={s.eventTitle}>
+                    <span>{e.model || "unknown model"}</span>
+                    <span className={s.service}>{e.service}</span>
+                  </div>
+                  <div className={s.eventSubtitle}>
+                    {fmtDate.format(new Date(e.receivedAt))} · session {e.sessionId.slice(0, 8)}
+                  </div>
                 </div>
-                <span className={rows.meta}>{record.credits} credits</span>
+                <div className={s.eventMeta}>
+                  <span className={s.tokensIn}>{fmtNumber.format(e.tokensIn)} in</span>
+                  <span className={s.tokensOut}>{fmtNumber.format(e.tokensOut)} out</span>
+                </div>
               </div>
             ))}
           </div>
