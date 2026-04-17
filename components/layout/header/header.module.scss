@@ -62,6 +62,11 @@
   .btn {
     font-size: 0.8em;
     margin-left: auto;
+
+    :global(html.dark) & {
+      background: var(--gradient-radial-1);
+      color: var(--white);
+    }
   }
 
   .langSwitcher {
