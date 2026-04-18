@@ -12,6 +12,7 @@ import s from "./usage.module.scss"
 type UsageEvent = {
   eventId: string
   sessionId: string
+  sessionTitle?: string
   service: string
   model: string
   tokensIn: number
@@ -23,6 +24,44 @@ type UsageEvent = {
 }
 
 type UsageListResponse = { events: UsageEvent[] }
+
+type SessionBucket = {
+  sessionId: string
+  title: string
+  services: string[]
+  events: number
+  tokensIn: number
+  tokensOut: number
+  lastActivity: Date
+}
+
+function aggregateBySession(events: UsageEvent[]): SessionBucket[] {
+  const map = new Map<string, SessionBucket>()
+  for (const e of events) {
+    const at = new Date(e.receivedAt)
+    const cur = map.get(e.sessionId)
+    if (!cur) {
+      map.set(e.sessionId, {
+        sessionId: e.sessionId,
+        title: e.sessionTitle?.trim() || `Session ${e.sessionId.slice(0, 8)}`,
+        services: e.service ? [e.service] : [],
+        events: 1,
+        tokensIn: e.tokensIn,
+        tokensOut: e.tokensOut,
+        lastActivity: at,
+      })
+      continue
+    }
+    cur.events += 1
+    cur.tokensIn += e.tokensIn
+    cur.tokensOut += e.tokensOut
+    if (at > cur.lastActivity) cur.lastActivity = at
+    if (e.service && !cur.services.includes(e.service)) cur.services.push(e.service)
+    if (!cur.title.startsWith("Session ") && !e.sessionTitle) continue
+    if (e.sessionTitle && cur.title.startsWith("Session ")) cur.title = e.sessionTitle.trim()
+  }
+  return [...map.values()].sort((a, b) => b.lastActivity.getTime() - a.lastActivity.getTime())
+}
 
 const fmtNumber = new Intl.NumberFormat("en-US")
 const fmtDate = new Intl.DateTimeFormat("en-US", {
@@ -45,8 +84,9 @@ export default async function UsagePage() {
     ? Math.round((used / entitlements.creditsPerMonth) * 100)
     : 0
 
-  const usage = await brokerFetchAs<UsageListResponse>("/api/usage/events?limit=100")
+  const usage = await brokerFetchAs<UsageListResponse>("/api/usage/events?limit=200")
   const events = usage?.events ?? []
+  const sessions = aggregateBySession(events)
 
   return (
     <>
@@ -70,27 +110,29 @@ export default async function UsagePage() {
       </SurfacePanel>
 
       <SurfacePanel title={t("settingsPages.recentUsage")} subtitle={t("settingsPages.recentUsageDesc")}>
-        {events.length === 0 ? (
+        {sessions.length === 0 ? (
           <EmptyPlaceholder
             title={t("settingsPages.noUsage")}
             description={t("settingsPages.noUsageDesc")}
           />
         ) : (
           <div className={s.history}>
-            {events.map((e) => (
-              <div key={e.eventId} className={s.eventRow}>
+            {sessions.map((row) => (
+              <div key={row.sessionId} className={s.eventRow}>
                 <div className={s.eventMain}>
                   <div className={s.eventTitle}>
-                    <span>{e.model || "unknown model"}</span>
-                    <span className={s.service}>{e.service}</span>
+                    <span>{row.title}</span>
+                    {row.services.map((svc) => (
+                      <span key={svc} className={s.service}>{svc}</span>
+                    ))}
                   </div>
                   <div className={s.eventSubtitle}>
-                    {fmtDate.format(new Date(e.receivedAt))} · session {e.sessionId.slice(0, 8)}
+                    {fmtDate.format(row.lastActivity)} · {row.events} event{row.events > 1 ? "s" : ""}
                   </div>
                 </div>
                 <div className={s.eventMeta}>
-                  <span className={s.tokensIn}>{fmtNumber.format(e.tokensIn)} in</span>
-                  <span className={s.tokensOut}>{fmtNumber.format(e.tokensOut)} out</span>
+                  <span className={s.tokensIn}>{fmtNumber.format(row.tokensIn)} in</span>
+                  <span className={s.tokensOut}>{fmtNumber.format(row.tokensOut)} out</span>
                 </div>
               </div>
             ))}
