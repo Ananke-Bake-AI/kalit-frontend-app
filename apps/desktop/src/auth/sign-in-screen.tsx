@@ -7,8 +7,9 @@ export function SignInScreen() {
   return (
     <main className={styles.root}>
       <div className={styles.card}>
+        <span className={styles.kicker}>Kalit Studio</span>
         <div className={styles.logo}>K</div>
-        <h1 className={styles.title}>Welcome to Kalit Studio</h1>
+        <h1 className={styles.title}>Welcome back</h1>
         <p className={styles.subtitle}>
           Sign in with your Kalit account to start building.
         </p>

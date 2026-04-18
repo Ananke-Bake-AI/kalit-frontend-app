@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
-import { brokerFetch } from "../../host"
+import { brokerFetch, toFindAssetsUrl } from "../../host"
 import { useI18n } from "@kalit/i18n/react"
 import { Icon } from "../../primitives/icon"
 import s from "./widgets.module.scss"
@@ -18,10 +18,7 @@ function getExt(path: string): string {
 }
 
 function proxyAssetUrl(url: string): string {
-  if (!url) return url
-  const match = url.match(/https?:\/\/[^/]+\/(.+)/)
-  if (match) return `/api/broker/find-assets/${match[1]}`
-  return url
+  return toFindAssetsUrl(url) || url
 }
 
 function isImage(path: string) { return IMAGE_EXTS.includes(getExt(path)) }

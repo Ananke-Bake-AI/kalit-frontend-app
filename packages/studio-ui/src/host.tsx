@@ -47,6 +47,15 @@ export function toClientFileUrl(url: string | undefined | null): string {
   return client ? client.mapFileUrl(url) : (url ?? "")
 }
 
+/** Rewrite a find-assets preview URL through the landing's asset proxy. */
+export function toFindAssetsUrl(url: string | undefined | null): string {
+  if (client?.mapFindAssetsUrl) return client.mapFindAssetsUrl(url)
+  if (!url) return ""
+  const match = url.match(/https?:\/\/[^/]+\/(.+)/)
+  if (match) return `/api/broker/find-assets/${match[1]}`
+  return url
+}
+
 /** Clear cached auth (call on logout). Safe to call even if no client set. */
 export function clearBrokerToken(): void {
   client?.clearToken()

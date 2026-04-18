@@ -29,6 +29,13 @@ export interface BrokerClientConfig {
     from: string
     to: string
   }
+  /**
+   * Prefix applied to find-assets preview URLs. Third-party asset hosts are
+   * proxied through a landing route (`/api/broker/find-assets/<rest>`) that
+   * adds the API key. Defaults to the relative landing path; desktop should
+   * pass an absolute landing URL so packaged renderers (file://) resolve it.
+   */
+  findAssetsPrefix?: string
 }
 
 export interface BrokerClient {
@@ -36,6 +43,8 @@ export interface BrokerClient {
   fetch: (path: string, options?: RequestInit) => Promise<Response>
   /** Rewrite a broker-canonical file URL for client rendering. */
   mapFileUrl: (url: string | undefined | null) => string
+  /** Proxy a find-assets preview URL through the landing asset proxy. */
+  mapFindAssetsUrl: (url: string | undefined | null) => string
   /** Invalidate any cached token. Call on logout. */
   clearToken: () => void
 }
@@ -79,10 +88,22 @@ export function createBrokerClient(config: BrokerClientConfig): BrokerClient {
     return url
   }
 
+  const findAssetsPrefix = (config.findAssetsPrefix ?? "/api/broker/find-assets/").replace(
+    /\/+$/,
+    "/",
+  )
+
+  function mapFindAssetsUrl(url: string | undefined | null): string {
+    if (!url) return ""
+    const match = url.match(/https?:\/\/[^/]+\/(.+)/)
+    if (match) return `${findAssetsPrefix}${match[1]}`
+    return url
+  }
+
   function clearToken(): void {
     cachedToken = null
     tokenFetchPromise = null
   }
 
-  return { fetch: brokerFetch, mapFileUrl, clearToken }
+  return { fetch: brokerFetch, mapFileUrl, mapFindAssetsUrl, clearToken }
 }

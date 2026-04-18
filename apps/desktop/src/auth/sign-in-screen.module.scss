@@ -1,77 +1,142 @@
+@use "../styles/mixins" as *;
+
 .root {
+  position: relative;
   display: grid;
   place-items: center;
   min-height: 100dvh;
-  padding: 2rem;
-  background: radial-gradient(at 30% 20%, rgba(124, 92, 255, 0.12), transparent 60%),
-    radial-gradient(at 70% 80%, rgba(58, 160, 255, 0.1), transparent 55%),
-    var(--body, #0b0d10);
-  color: var(--text, #e7e7e9);
+  padding: clamp(1.5rem, 4vw, 3rem);
+  color: var(--text);
+  overflow: hidden;
+  isolation: isolate;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(80px);
+    opacity: 0.55;
+  }
+
+  &::before {
+    top: -20%;
+    left: -10%;
+    width: 60vmin;
+    height: 60vmin;
+    background: var(--gradient-color-3-radial);
+  }
+
+  &::after {
+    bottom: -25%;
+    right: -15%;
+    width: 70vmin;
+    height: 70vmin;
+    background: var(--gradient-color-2-radial);
+    opacity: 0.4;
+  }
 }
 
 .card {
-  width: min(420px, 100%);
-  padding: 2.5rem 2rem;
-  background: var(--surface, #15181d);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 18px;
+  position: relative;
+  overflow: hidden;
+  width: min(440px, 100%);
+  padding: clamp(1.75rem, 4vw, 2.5rem);
   display: grid;
   justify-items: center;
   gap: 1rem;
-  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.4);
+  @include cornerShape(1.7rem);
+  @include glass(false, var(--glass-50), true);
+  @include border-glass();
+  box-shadow:
+    0 24px 60px oklch(0 0 0 / 0.12),
+    var(--glass-inset-shadow);
+}
+
+.kicker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-rounded);
+  @include glass(false, var(--glass-75));
+  @include border-glass(var(--gradient-border-glass-2));
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .logo {
-  width: 64px;
-  height: 64px;
-  border-radius: 16px;
+  position: relative;
+  width: 72px;
+  height: 72px;
   display: grid;
   place-items: center;
-  font-size: 32px;
+  font-family: var(--font-heading);
+  font-size: 2.4rem;
   font-weight: 700;
-  color: white;
-  background: linear-gradient(135deg, #7c5cff, #3aa0ff);
+  color: var(--white);
+  background: var(--gradient-radial-1);
+  @include cornerShape(1.2rem);
+  box-shadow:
+    0 16px 40px -12px oklch(from var(--color-3) l c h / 0.5),
+    var(--glass-inset-shadow);
 }
 
 .title {
-  margin: 0.25rem 0 0;
-  font-size: 1.5rem;
-  font-weight: 600;
+  margin: 0.4rem 0 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.6rem, 3vw, 2rem);
+  line-height: 1.05;
+  color: var(--text);
+  text-align: center;
 }
 
 .subtitle {
   margin: 0;
-  color: rgba(231, 231, 233, 0.65);
+  max-width: 32ch;
+  color: var(--text-secondary);
   text-align: center;
   font-size: 0.95rem;
+  line-height: 1.55;
 }
 
 .primary {
-  margin-top: 1rem;
-  padding: 0.85rem 1.5rem;
+  position: relative;
+  margin-top: 0.75rem;
+  padding: 0 1.5rem;
   width: 100%;
+  height: var(--btn-height);
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-rounded);
   cursor: pointer;
-  color: white;
+  color: var(--btn-color);
   font-weight: 600;
   font-size: 0.95rem;
-  background: linear-gradient(135deg, #7c5cff, #3aa0ff);
-  transition: transform 0.15s ease, filter 0.15s ease;
+  background: var(--btn-bg);
+  transition: var(--btn-transition);
+  overflow: hidden;
 
   &:hover {
+    filter: brightness(1.08);
     transform: translateY(-1px);
-    filter: brightness(1.05);
   }
 
   &:active {
     transform: translateY(0);
+    filter: brightness(0.98);
   }
 }
 
 .hint {
-  margin: 0.5rem 0 0;
+  margin: 0.35rem 0 0;
+  max-width: 34ch;
   font-size: 0.8rem;
-  color: rgba(231, 231, 233, 0.45);
+  line-height: 1.55;
+  color: var(--text-secondary);
   text-align: center;
+  opacity: 0.85;
 }

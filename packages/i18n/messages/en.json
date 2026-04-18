@@ -774,6 +774,8 @@
     "notifyTitleSound": "Tab title + sound when ready",
     "notifyToggle": "Toggle notifications",
     "dropToUpload": "Drop to upload",
+    "copy": "Copy",
+    "copied": "Copied",
     "downloadFailed": "Download failed",
     "rename": "Rename",
     "searchPlaceholder": "Search conversations",

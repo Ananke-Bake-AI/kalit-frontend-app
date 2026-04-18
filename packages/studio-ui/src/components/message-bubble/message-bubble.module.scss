@@ -63,6 +63,60 @@
   }
 }
 
+// ── Meta row (copy button + timestamp) ──────────────────
+
+.metaRow {
+  display: flex;
+  align-items: center;
+  gap: var(--size-1);
+  align-self: flex-end;
+  margin-top: calc(-1 * var(--size-1));
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+
+  :global(svg) {
+    font-size: 0.85rem;
+    width: 0.85rem;
+    height: 0.85rem;
+  }
+
+  .bubbleUser & {
+    color: oklch(from var(--white) l c h / 0.75);
+
+    &:hover {
+      color: var(--white);
+      background: oklch(from var(--white) l c h / 0.15);
+    }
+  }
+
+  .bubbleAssistant & {
+    color: var(--text-secondary);
+
+    &:hover {
+      color: var(--text);
+      background: oklch(from var(--text) l c h / 0.08);
+    }
+  }
+}
+
+.row:hover .copyBtn,
+.copyBtn:focus-visible {
+  opacity: 0.75;
+}
+
 // ── Timestamp ───────────────────────────────────────────
 
 .timestamp {

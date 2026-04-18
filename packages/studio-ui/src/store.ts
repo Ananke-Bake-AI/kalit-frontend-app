@@ -153,8 +153,13 @@ export interface ImportedRepoState {
 // the temp and again from the next refresh — producing the visible duplicate.
 const isTempId = (id: string): boolean => id.startsWith("temp-")
 
+// Broker may normalize whitespace (trim, \r\n → \n) before persisting, so the
+// temp's raw content can differ from the server copy by a few chars. Compare
+// trimmed + normalized to keep dedup robust.
+const normalize = (s: string): string => s.replace(/\r\n/g, "\n").trim()
+
 const sameContent = (a: ChatMessage, b: ChatMessage): boolean =>
-  a.role === b.role && a.content === b.content
+  a.role === b.role && normalize(a.content) === normalize(b.content)
 
 // Drop a temp message when the incoming server list already covers it
 // (same role+content). Server messages are the source of truth; only temps
@@ -233,7 +238,7 @@ export const useStudioStore = create<StudioStore>((set) => ({
 
   // UI state
   sidebarOpen: false,
-  rightPanelOpen: false,
+  rightPanelOpen: true,
   setSidebarOpen: (sidebarOpen) => set({ sidebarOpen }),
   setRightPanelOpen: (rightPanelOpen) => set({ rightPanelOpen }),
 

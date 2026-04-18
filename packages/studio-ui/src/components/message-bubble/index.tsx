@@ -1,6 +1,6 @@
 "use client"
 
-import { memo, useMemo, useState } from "react"
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { Icon } from "../../primitives/icon"
@@ -88,6 +88,34 @@ export const MessageBubble = memo(function MessageBubble({ message, showToolBadg
     [segments, message.content],
   )
 
+  const [copied, setCopied] = useState(false)
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current) }, [])
+  const copyText = message.role === "user" ? message.content : displayText
+  const handleCopy = useCallback(async () => {
+    if (!copyText) return
+    try {
+      await navigator.clipboard.writeText(copyText)
+      setCopied(true)
+      if (copyTimeoutRef.current) clearTimeout(copyTimeoutRef.current)
+      copyTimeoutRef.current = setTimeout(() => setCopied(false), 1500)
+    } catch {
+      // clipboard may be blocked in non-secure contexts — silent
+    }
+  }, [copyText])
+
+  const copyBtn = copyText ? (
+    <button
+      type="button"
+      className={s.copyBtn}
+      onClick={handleCopy}
+      title={copied ? t("studio.copied") : t("studio.copy")}
+      aria-label={copied ? t("studio.copied") : t("studio.copy")}
+    >
+      <Icon icon={copied ? "hugeicons:tick-02" : "hugeicons:copy-01"} />
+    </button>
+  ) : null
+
   if (message.role === "user") {
     return (
       <div className={s.row} data-role="user">
@@ -120,7 +148,10 @@ export const MessageBubble = memo(function MessageBubble({ message, showToolBadg
             </div>
           )}
           <span>{message.content}</span>
-          <span className={s.timestamp} title={fullTimestamp}>{timeLabel}</span>
+          <div className={s.metaRow}>
+            {copyBtn}
+            <span className={s.timestamp} title={fullTimestamp}>{timeLabel}</span>
+          </div>
         </div>
       </div>
     )
@@ -270,7 +301,10 @@ export const MessageBubble = memo(function MessageBubble({ message, showToolBadg
             </div>
           )
         )}
-        <span className={s.timestamp} title={fullTimestamp}>{timeLabel}</span>
+        <div className={s.metaRow}>
+          {copyBtn}
+          <span className={s.timestamp} title={fullTimestamp}>{timeLabel}</span>
+        </div>
       </div>
     </div>
   )

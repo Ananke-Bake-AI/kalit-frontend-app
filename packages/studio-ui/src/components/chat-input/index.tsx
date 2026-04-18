@@ -191,16 +191,94 @@ export function ChatInput({ onSend, disabled, prefill, onEnsureSession }: ChatIn
 
   const [isDragging, setIsDragging] = useState(false)
 
-  const handleDragOver = useCallback((e: DragEvent<HTMLDivElement>) => {
-    if (!e.dataTransfer?.types?.includes("Files")) return
-    e.preventDefault()
-    e.dataTransfer.dropEffect = "copy"
-    setIsDragging(true)
+  // Track window-level drag enter/leave counts so we can reliably hide the
+  // overlay when the drag leaves the viewport (including: user cancels, drops
+  // on another window, or just moves over a different tab). Chrome fires
+  // dragover on every visible tab when a file is being dragged anywhere in
+  // the OS, so we key the overlay off window-level events rather than the
+  // local container — the container-level dragleave misses many exits.
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    let counter = 0
+    let lastDragAt = 0
+    let watchdog: ReturnType<typeof setInterval> | null = null
+
+    const hasFiles = (e: globalThis.DragEvent): boolean => {
+      const types = e.dataTransfer?.types
+      if (!types) return false
+      for (let i = 0; i < types.length; i++) {
+        if (types[i] === "Files") return true
+      }
+      return false
+    }
+
+    const reset = () => {
+      counter = 0
+      lastDragAt = 0
+      setIsDragging(false)
+      if (watchdog) { clearInterval(watchdog); watchdog = null }
+    }
+
+    const startWatchdog = () => {
+      if (watchdog) return
+      // A drag that passes through a background window (e.g. macOS screenshot
+      // dragged across Chrome into the terminal) can leave `isDragging` stuck
+      // because Chrome never fires `drop`/`dragend` and `dragleave` is flaky.
+      // Fallback: while an overlay is showing, if no drag event has fired for
+      // ~400ms, assume the drag is gone and clear the overlay.
+      watchdog = setInterval(() => {
+        if (Date.now() - lastDragAt > 400) reset()
+      }, 150)
+    }
+
+    const onDragEnter = (e: globalThis.DragEvent) => {
+      if (!hasFiles(e)) return
+      counter++
+      lastDragAt = Date.now()
+      setIsDragging(true)
+      startWatchdog()
+    }
+
+    const onDragOver = (e: globalThis.DragEvent) => {
+      if (!hasFiles(e)) return
+      lastDragAt = Date.now()
+    }
+
+    const onDragLeave = (e: globalThis.DragEvent) => {
+      if (!hasFiles(e)) return
+      counter = Math.max(0, counter - 1)
+      const relatedOutside =
+        !e.relatedTarget ||
+        (e.relatedTarget as Node).nodeType === Node.DOCUMENT_NODE
+      if (counter === 0 || relatedOutside) reset()
+    }
+
+    window.addEventListener("dragenter", onDragEnter)
+    window.addEventListener("dragover", onDragOver)
+    window.addEventListener("dragleave", onDragLeave)
+    window.addEventListener("drop", reset)
+    window.addEventListener("dragend", reset)
+    window.addEventListener("blur", reset)
+    document.addEventListener("visibilitychange", reset)
+
+    return () => {
+      window.removeEventListener("dragenter", onDragEnter)
+      window.removeEventListener("dragover", onDragOver)
+      window.removeEventListener("dragleave", onDragLeave)
+      window.removeEventListener("drop", reset)
+      window.removeEventListener("dragend", reset)
+      window.removeEventListener("blur", reset)
+      document.removeEventListener("visibilitychange", reset)
+      if (watchdog) clearInterval(watchdog)
+    }
   }, [])
 
-  const handleDragLeave = useCallback((e: DragEvent<HTMLDivElement>) => {
-    // Only clear when leaving the container itself, not a child element
-    if (e.currentTarget === e.target) setIsDragging(false)
+  const handleDragOver = useCallback((e: DragEvent<HTMLDivElement>) => {
+    if (!e.dataTransfer?.types?.includes("Files")) return
+    // Required so the browser treats the container as a valid drop target —
+    // without preventDefault the drop event never fires.
+    e.preventDefault()
+    e.dataTransfer.dropEffect = "copy"
   }, [])
 
   const handleDrop = useCallback((e: DragEvent<HTMLDivElement>) => {
@@ -221,7 +299,6 @@ export function ChatInput({ onSend, disabled, prefill, onEnsureSession }: ChatIn
     <div
       className={clsx(s.container, isDragging && s.containerDragging)}
       onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
       {isDragging && (

@@ -8,6 +8,7 @@ export {
   setStudioBrokerClient,
   brokerFetch,
   toClientFileUrl,
+  toFindAssetsUrl,
   clearBrokerToken,
   StudioHostProvider,
   useStudioHost,
@@ -69,3 +70,10 @@ export {
   useNotificationSystem,
 } from "./hooks/use-notification-system"
 export type { NotificationPrefs } from "./hooks/use-notification-system"
+export { useStudioChat } from "./hooks/use-studio-chat"
+export type {
+  UseStudioChatApi,
+  UseStudioChatOptions,
+  StudioChatParamReader,
+  SuiteRouteTarget,
+} from "./hooks/use-studio-chat"
