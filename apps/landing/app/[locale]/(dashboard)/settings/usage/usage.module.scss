@@ -105,6 +105,71 @@
 .tokensIn::before { content: "↓ "; opacity: 0.5; }
 .tokensOut::before { content: "↑ "; opacity: 0.5; }
 
+.credits {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--text);
+}
+
 .timestamp {
   font-variant-numeric: tabular-nums;
+}
+
+.serviceList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.serviceRow {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.serviceHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.9rem;
+}
+
+.serviceLabel {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.servicePct {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.serviceBar {
+  height: 0.5rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: oklch(0 0 0 / 0.06);
+}
+
+.serviceFill {
+  height: 100%;
+  width: var(--usage-fill-pct, 0%);
+  max-width: 100%;
+  border-radius: 999px;
+  background: oklch(from var(--text) l c h / 0.35);
+}
+
+.serviceMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.footnote {
+  margin-top: 0.9rem;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }

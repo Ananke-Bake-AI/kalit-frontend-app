@@ -25,13 +25,40 @@ type UsageEvent = {
 
 type UsageListResponse = { events: UsageEvent[] }
 
+// Mirrors broker defaultPricing × profitRatio (billing.go). Kept in sync by
+// hand — if broker pricing changes, this changes too. The broker is still
+// authoritative for the quota meter (UsageRecord); this estimate exists so
+// users can see which *service* is eating their credits, which UsageRecord
+// (single lump-sum row per session) can't show.
+const PRICING = {
+  inputPer1M: 0.5 * 2, // USD × profitRatio
+  outputPer1M: 1.5 * 2,
+}
+
+function estimateCredits(tokensIn: number, tokensOut: number): number {
+  return (
+    (tokensIn / 1_000_000) * PRICING.inputPer1M +
+    (tokensOut / 1_000_000) * PRICING.outputPer1M
+  )
+}
+
+// Human label for the broker `service` tag. Keys match what
+// kalit-usage reporters send (see broker/internal/broker/usage_report.go).
+const SERVICE_LABELS: Record<string, string> = {
+  findasset: "Asset search",
+  taskforce: "Project build",
+  agent: "Chat agent",
+  "broker-flow": "Chat agent",
+}
+
 type SessionBucket = {
   sessionId: string
   title: string
-  services: string[]
+  services: Map<string, { tokensIn: number; tokensOut: number; events: number }>
   events: number
   tokensIn: number
   tokensOut: number
+  credits: number
   lastActivity: Date
 }
 
@@ -39,31 +66,59 @@ function aggregateBySession(events: UsageEvent[]): SessionBucket[] {
   const map = new Map<string, SessionBucket>()
   for (const e of events) {
     const at = new Date(e.receivedAt)
-    const cur = map.get(e.sessionId)
+    let cur = map.get(e.sessionId)
     if (!cur) {
-      map.set(e.sessionId, {
+      cur = {
         sessionId: e.sessionId,
         title: e.sessionTitle?.trim() || `Session ${e.sessionId.slice(0, 8)}`,
-        services: e.service ? [e.service] : [],
-        events: 1,
-        tokensIn: e.tokensIn,
-        tokensOut: e.tokensOut,
+        services: new Map(),
+        events: 0,
+        tokensIn: 0,
+        tokensOut: 0,
+        credits: 0,
         lastActivity: at,
-      })
-      continue
+      }
+      map.set(e.sessionId, cur)
     }
     cur.events += 1
     cur.tokensIn += e.tokensIn
     cur.tokensOut += e.tokensOut
+    cur.credits += estimateCredits(e.tokensIn, e.tokensOut)
     if (at > cur.lastActivity) cur.lastActivity = at
-    if (e.service && !cur.services.includes(e.service)) cur.services.push(e.service)
-    if (!cur.title.startsWith("Session ") && !e.sessionTitle) continue
+    const svcKey = e.service || "unknown"
+    const svc = cur.services.get(svcKey) ?? { tokensIn: 0, tokensOut: 0, events: 0 }
+    svc.tokensIn += e.tokensIn
+    svc.tokensOut += e.tokensOut
+    svc.events += 1
+    cur.services.set(svcKey, svc)
     if (e.sessionTitle && cur.title.startsWith("Session ")) cur.title = e.sessionTitle.trim()
   }
   return [...map.values()].sort((a, b) => b.lastActivity.getTime() - a.lastActivity.getTime())
 }
 
+type ServiceTotal = { service: string; label: string; credits: number; tokensIn: number; tokensOut: number }
+
+function aggregateByService(events: UsageEvent[]): ServiceTotal[] {
+  const map = new Map<string, ServiceTotal>()
+  for (const e of events) {
+    const key = e.service || "unknown"
+    const cur = map.get(key) ?? {
+      service: key,
+      label: SERVICE_LABELS[key] ?? key,
+      credits: 0,
+      tokensIn: 0,
+      tokensOut: 0,
+    }
+    cur.credits += estimateCredits(e.tokensIn, e.tokensOut)
+    cur.tokensIn += e.tokensIn
+    cur.tokensOut += e.tokensOut
+    map.set(key, cur)
+  }
+  return [...map.values()].sort((a, b) => b.credits - a.credits)
+}
+
 const fmtNumber = new Intl.NumberFormat("en-US")
+const fmtCredits = new Intl.NumberFormat("en-US", { maximumFractionDigits: 3 })
 const fmtDate = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -84,9 +139,11 @@ export default async function UsagePage() {
     ? Math.round((used / entitlements.creditsPerMonth) * 100)
     : 0
 
-  const usage = await brokerFetchAs<UsageListResponse>("/api/usage/events?limit=200")
+  const usage = await brokerFetchAs<UsageListResponse>("/api/usage/events?limit=500")
   const events = usage?.events ?? []
   const sessions = aggregateBySession(events)
+  const byService = aggregateByService(events)
+  const totalEstimatedCredits = byService.reduce((sum, s) => sum + s.credits, 0)
 
   return (
     <>
@@ -109,6 +166,40 @@ export default async function UsagePage() {
         </div>
       </SurfacePanel>
 
+      {byService.length > 0 ? (
+        <SurfacePanel
+          title={t("settingsPages.byService")}
+          subtitle={t("settingsPages.byServiceDesc")}
+        >
+          <div className={s.serviceList}>
+            {byService.map((svc) => {
+              const pct = totalEstimatedCredits > 0
+                ? Math.round((svc.credits / totalEstimatedCredits) * 100)
+                : 0
+              return (
+                <div key={svc.service} className={s.serviceRow}>
+                  <div className={s.serviceHead}>
+                    <span className={s.serviceLabel}>{svc.label}</span>
+                    <span className={s.servicePct}>{pct}%</span>
+                  </div>
+                  <div className={s.serviceBar}>
+                    <div
+                      className={s.serviceFill}
+                      style={{ "--usage-fill-pct": `${pct}%` } as CSSProperties}
+                    />
+                  </div>
+                  <div className={s.serviceMeta}>
+                    <span>~{fmtCredits.format(svc.credits)} {t("settingsPages.creditsShort")}</span>
+                    <span>{fmtNumber.format(svc.tokensIn + svc.tokensOut)} tokens</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+          <p className={s.footnote}>{t("settingsPages.creditsEstimateNote")}</p>
+        </SurfacePanel>
+      ) : null}
+
       <SurfacePanel title={t("settingsPages.recentUsage")} subtitle={t("settingsPages.recentUsageDesc")}>
         {sessions.length === 0 ? (
           <EmptyPlaceholder
@@ -122,8 +213,8 @@ export default async function UsagePage() {
                 <div className={s.eventMain}>
                   <div className={s.eventTitle}>
                     <span>{row.title}</span>
-                    {row.services.map((svc) => (
-                      <span key={svc} className={s.service}>{svc}</span>
+                    {[...row.services.keys()].map((svc) => (
+                      <span key={svc} className={s.service}>{SERVICE_LABELS[svc] ?? svc}</span>
                     ))}
                   </div>
                   <div className={s.eventSubtitle}>
@@ -131,6 +222,7 @@ export default async function UsagePage() {
                   </div>
                 </div>
                 <div className={s.eventMeta}>
+                  <span className={s.credits}>~{fmtCredits.format(row.credits)} {t("settingsPages.creditsShort")}</span>
                   <span className={s.tokensIn}>{fmtNumber.format(row.tokensIn)} in</span>
                   <span className={s.tokensOut}>{fmtNumber.format(row.tokensOut)} out</span>
                 </div>
