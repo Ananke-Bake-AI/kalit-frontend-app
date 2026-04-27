@@ -4,12 +4,17 @@
   gap: 0.4rem;
   padding: 0.28rem 0.6rem;
   border-radius: 999px;
-  // Theme-aware background: derive from --text so the same rule
-  // produces a faint dark wash on light themes and a faint light
-  // wash on dark themes. The previous hard-coded `oklch(0 0 0 /
-  // 0.04)` was invisible in dark mode (black tint over black bg).
-  background: oklch(from var(--text) l c h / 0.06);
-  border: 1px solid oklch(from var(--text) l c h / 0.08);
+  // Theme-aware background: --glass-50 is defined per-theme in
+  // styles/_colors.scss (white/0.5 on light, dark navy/0.7 on
+  // dark) so it always reads against the topbar regardless of
+  // theme. The previous hard-coded `oklch(0 0 0 / 0.04)` was
+  // invisible in dark mode, and the `oklch(from var(--text) l c h
+  // / α)` relative-color attempt depends on browser support that
+  // isn't universal yet — sticking to vanilla CSS variables.
+  // Border: color-mix is well supported (Chrome 111+, Safari 16.2+,
+  // Firefox 113+) and renders a subtle 12% wash of the text color.
+  background: var(--glass-50);
+  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
   font-size: 0.76rem;
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
