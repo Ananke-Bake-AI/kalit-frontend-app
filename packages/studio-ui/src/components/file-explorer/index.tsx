@@ -155,19 +155,24 @@ function TreeNode({ node, depth, expanded, onToggle, onDelete, onPreview }: {
 
 function ProjectSection({ project, flowProjectId }: { project: ProjectStatus; flowProjectId?: string }) {
   const { t } = useI18n()
+  const stats = project.stats
   let phase = project.phase || project.status || "idle"
   // Empty-project false positive: Taskforce briefly reports phase=done
   // before the first sprint starts (no code generated yet, only assets).
-  // The broker only flips flow_projects.status to "completed" once real
-  // work has actually landed (see taskforceHasCompletedWork in
-  // broker/internal/widgets/project.go). If phase claims done but the
-  // underlying status hasn't caught up, fall back to "preparation" so the
-  // sidebar doesn't show a green "Completed" on an empty project.
-  if (phase === "done" && project.status && project.status !== "completed") {
+  // Mirror the broker-side taskforceHasCompletedWork check (see
+  // broker/internal/widgets/project.go) using the only signal we have
+  // client-side: `stats.total > 0` proves at least one task was registered,
+  // i.e. real work has happened. Without this, a freshly created project
+  // with empty stats would briefly flash "Completed" in the sidebar.
+  // Note: `workspace-tree` returns the live Taskforce status object (where
+  // `status` is "done"/"idle"/etc.), NOT the `flow_projects.status` DB
+  // column ("processing"/"completed"). Comparing project.status against
+  // "completed" was the previous mistake — it always failed for real-done
+  // projects too.
+  if (phase === "done" && (!stats || stats.total === 0)) {
     phase = "preparation"
   }
   const cfg = PHASE_CONFIG_KEYS[phase] || PHASE_CONFIG_KEYS[project.status || ""] || PHASE_CONFIG_KEYS.idle
-  const stats = project.stats
   const progress = stats && stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0
 
   return (
