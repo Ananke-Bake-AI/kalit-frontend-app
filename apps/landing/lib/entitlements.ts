@@ -102,8 +102,13 @@ export async function getRemainingCredits(orgId: string): Promise<number> {
     _sum: { amount: true },
   })
 
+  // UsageRecord.credits is now a Decimal column (Prisma returns Prisma.Decimal
+  // instances for sums). Coerce via Number() so the subtraction below stays
+  // numeric — without this the math silently produces NaN. CreditRecord.amount
+  // is still Int (whole-credit purchases), so its sums are plain numbers.
+  const usedCredits = used._sum.credits ? Number(used._sum.credits) : 0
   const totalAvailable = entitlements.creditsPerMonth + (bonus._sum.amount || 0)
-  const totalUsed = (used._sum.credits || 0) + (debits._sum.amount || 0)
+  const totalUsed = usedCredits + (debits._sum.amount || 0)
 
   return Math.max(0, totalAvailable - totalUsed)
 }

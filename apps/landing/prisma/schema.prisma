@@ -219,7 +219,12 @@ model UsageRecord {
   orgId     String
   suiteId   String
   action    String
-  credits   Int
+  // Decimal(12,4) — Int truncated all sub-credit values to 0 (every Haiku
+  // agent turn costs ~0.01-0.05 USD-equivalent), so the user-facing
+  // "remaining credits" counter never moved. 4 decimal places of precision
+  // with 12 digits covers every realistic billing event without rounding
+  // to zero. The broker reports fractional credits via /api/usage/report.
+  credits   Decimal  @db.Decimal(12, 4)
   jobId     String?
   metadata  Json?
   createdAt DateTime @default(now())
