@@ -99,20 +99,26 @@
     }
   }
 
-  // Phone format: the right panel slides in as a full-width overlay
-  // (the chat is hidden behind it). Default closed, opens via the
-  // existing toggle, closes via either the in-panel close button or
-  // the rightBackdrop click. Width:100vw + max-width caps so it never
-  // exceeds the viewport.
+  // Phone format: the right panel slides in as a full-width overlay.
+  // Default closed (off-screen + non-interactive), opens via the
+  // toggle, closes via the in-panel ✕ button or the rightBackdrop
+  // click. Explicitly resets transform/visibility/pointer-events at
+  // this breakpoint so no cascade gap leaves a half-shown overlay
+  // intercepting touches.
   @include max($responsive) {
     width: 100vw;
     max-width: 100vw;
+    transform: translateX(100%);
+    visibility: hidden;
+    pointer-events: none;
     box-shadow: -4px 0 24px oklch(0 0 0 / 0.2);
     overflow: visible;
 
     &.rightOpen {
       transform: translateX(0);
       width: 100vw;
+      visibility: visible;
+      pointer-events: auto;
     }
   }
 }
