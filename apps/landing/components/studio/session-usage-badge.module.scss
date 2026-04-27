@@ -4,8 +4,12 @@
   gap: 0.4rem;
   padding: 0.28rem 0.6rem;
   border-radius: 999px;
-  background: oklch(0 0 0 / 0.04);
-  border: 1px solid oklch(0 0 0 / 0.05);
+  // Theme-aware background: derive from --text so the same rule
+  // produces a faint dark wash on light themes and a faint light
+  // wash on dark themes. The previous hard-coded `oklch(0 0 0 /
+  // 0.04)` was invisible in dark mode (black tint over black bg).
+  background: oklch(from var(--text) l c h / 0.06);
+  border: 1px solid oklch(from var(--text) l c h / 0.08);
   font-size: 0.76rem;
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
