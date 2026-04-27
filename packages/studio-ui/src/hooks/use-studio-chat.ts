@@ -769,6 +769,20 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
                   const cost = ds.cost_credits || 0
                   const dur = ((ds.turn_duration_ms || 0) / 1000).toFixed(1)
                   clog("cost", "COST", `in=${inTok} out=${outTok} cost=${cost.toFixed(4)} credits turn=${dur}s model=${ds.model || "?"}`)
+                  // Optimistic quota decrement: apply this turn's cost
+                  // immediately so the sidebar badge ticks down without
+                  // waiting for the post-stream fetchQuota() HTTP round-trip.
+                  // The final fetchQuota() in the `finally` reconciles drift.
+                  if (cost > 0) {
+                    const current = useStudioStore.getState().quota
+                    if (current) {
+                      const remaining = Math.max(0, current.remainingCredits - cost)
+                      const percentage = current.creditsPerMonth > 0
+                        ? Math.min(100, ((current.creditsPerMonth - remaining) / current.creditsPerMonth) * 100)
+                        : current.percentage
+                      setQuota({ ...current, remainingCredits: remaining, percentage })
+                    }
+                  }
                   break
                 }
 
