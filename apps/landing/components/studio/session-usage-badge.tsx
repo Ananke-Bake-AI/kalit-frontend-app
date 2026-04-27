@@ -11,6 +11,14 @@ type UsageEvent = {
 }
 
 const fmt = new Intl.NumberFormat("en-US")
+// Compact form for the topbar pill on phone widths: 1,239,548 → 1.2M.
+// Uses Intl's "compact" notation so locale-appropriate suffixes are used
+// (en: K/M/B, fr: k/M/Md). Without this the pill content grew past the
+// pill boundary on long sessions and overlapped the model selector.
+const fmtCompact = new Intl.NumberFormat("en-US", {
+  notation: "compact",
+  maximumFractionDigits: 1,
+})
 const POLL_MS = 3000
 
 export function SessionUsageBadge({ sessionId }: { sessionId: string | null }) {
@@ -62,13 +70,18 @@ export function SessionUsageBadge({ sessionId }: { sessionId: string | null }) {
   if (!sessionId) return null
   const total = tokensIn + tokensOut
 
+  // Render full numbers in the title (hover) so the user can still see
+  // exact counts; the visible pill uses compact notation to fit the
+  // topbar width-budget on phone and avoid overlapping siblings.
+  const titleText = `Tokens consumed this session — in: ${fmt.format(tokensIn)} | out: ${fmt.format(tokensOut)} (broker usage events)`
+
   return (
-    <div className={s.badge} data-flash={flash ? "1" : undefined} title="Tokens consumed this session (broker usage events)">
+    <div className={s.badge} data-flash={flash ? "1" : undefined} title={titleText}>
       <span className={s.dot} />
       <span className={s.value}>
-        <span className={s.tokensIn}>{fmt.format(tokensIn)}</span>
+        <span className={s.tokensIn}>{fmtCompact.format(tokensIn)}</span>
         <span className={s.sep}>/</span>
-        <span className={s.tokensOut}>{fmt.format(tokensOut)}</span>
+        <span className={s.tokensOut}>{fmtCompact.format(tokensOut)}</span>
       </span>
       <span className={s.label}>tok{total === 1 ? "" : "s"}</span>
     </div>

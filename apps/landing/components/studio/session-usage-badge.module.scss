@@ -27,14 +27,16 @@
     border-color: oklch(0.78 0.18 150 / 0.5);
   }
 
-  // Phone: badge can otherwise reach ~200-250px once token counts grow
-  // (↓123,456 / ↑78,901 toks) and pushes the topRight toolbar out of
-  // the viewport. Compact form: drop padding, gap, and the trailing
-  // label; show only the in/out values.
+  // Phone: with the compact-notation numbers from the .tsx
+  // (1.2M / 44k instead of 1,239,548 / 44,305), the pill stays
+  // narrow. Tightened padding/gap/font to leave room for the
+  // model selector and toolbar buttons next to it.
   @media (max-width: 600px) {
     gap: 0.25rem;
     padding: 0.22rem 0.45rem;
     font-size: 0.7rem;
+    overflow: hidden;
+    white-space: nowrap;
   }
 }
 
