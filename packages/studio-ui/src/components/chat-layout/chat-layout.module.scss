@@ -98,4 +98,24 @@
       width: 18rem;
     }
   }
+
+  // Phone format: the right panel covers the whole chat at this width
+  // and there is no good place to put it. Keep it collapsed even when
+  // rightOpen — the user can still see the file tree by enlarging the
+  // window or using the desktop. The toggle button itself stays
+  // available so flipping back into a wider viewport restores the
+  // previous open/closed intent.
+  @include max($responsive) {
+    width: 0;
+    transform: translateX(100%);
+    overflow: hidden;
+    box-shadow: none;
+    pointer-events: none;
+
+    &.rightOpen {
+      width: 0;
+      transform: translateX(100%);
+      pointer-events: none;
+    }
+  }
 }
