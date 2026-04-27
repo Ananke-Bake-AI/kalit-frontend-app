@@ -238,6 +238,12 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
     }
   }, [setQuota])
 
+  // ── Bootstrap quota on mount so the sidebar badge is visible
+  //     immediately, not only after the first chat completes.
+  useEffect(() => {
+    if (ready) fetchQuota()
+  }, [ready, fetchQuota])
+
   // ── Honor initial `?session=` / `?prompt=` params ───────
 
   useEffect(() => {
