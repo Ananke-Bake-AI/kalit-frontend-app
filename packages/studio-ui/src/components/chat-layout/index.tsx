@@ -12,7 +12,8 @@ interface ChatLayoutProps {
 }
 
 export function ChatLayout({ sidebar, children, rightPanel }: ChatLayoutProps) {
-  const { sidebarOpen, rightPanelOpen } = useStudioStore()
+  const { sidebarOpen, rightPanelOpen, setRightPanelOpen } = useStudioStore()
+  const closeRight = () => setRightPanelOpen(false)
 
   return (
     <div className={s.layout}>
@@ -27,9 +28,24 @@ export function ChatLayout({ sidebar, children, rightPanel }: ChatLayoutProps) {
       </div>
 
       {rightPanel && (
-        <aside className={clsx(s.right, rightPanelOpen && s.rightOpen)}>
-          {rightPanel}
-        </aside>
+        <>
+          <div
+            className={s.rightBackdrop}
+            data-visible={rightPanelOpen}
+            onClick={closeRight}
+          />
+          <aside className={clsx(s.right, rightPanelOpen && s.rightOpen)}>
+            <button
+              className={s.rightCloseBtn}
+              onClick={closeRight}
+              aria-label="Close project panel"
+              type="button"
+            >
+              ×
+            </button>
+            {rightPanel}
+          </aside>
+        </>
       )}
     </div>
   )
