@@ -155,7 +155,17 @@ function TreeNode({ node, depth, expanded, onToggle, onDelete, onPreview }: {
 
 function ProjectSection({ project, flowProjectId }: { project: ProjectStatus; flowProjectId?: string }) {
   const { t } = useI18n()
-  const phase = project.phase || project.status || "idle"
+  let phase = project.phase || project.status || "idle"
+  // Empty-project false positive: Taskforce briefly reports phase=done
+  // before the first sprint starts (no code generated yet, only assets).
+  // The broker only flips flow_projects.status to "completed" once real
+  // work has actually landed (see taskforceHasCompletedWork in
+  // broker/internal/widgets/project.go). If phase claims done but the
+  // underlying status hasn't caught up, fall back to "preparation" so the
+  // sidebar doesn't show a green "Completed" on an empty project.
+  if (phase === "done" && project.status && project.status !== "completed") {
+    phase = "preparation"
+  }
   const cfg = PHASE_CONFIG_KEYS[phase] || PHASE_CONFIG_KEYS[project.status || ""] || PHASE_CONFIG_KEYS.idle
   const stats = project.stats
   const progress = stats && stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0
