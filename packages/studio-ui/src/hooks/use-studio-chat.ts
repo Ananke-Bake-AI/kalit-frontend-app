@@ -441,9 +441,19 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
   // ── Session selection ───────────────────────────────────
 
   const handleSessionSelect = useCallback((id: string) => {
+    if (id === activeSessionRef.current) return
+    // Clear residual stream UI from the previous session before switching.
+    // Without this, segments / thinking text / live widgets from the old
+    // session's in-flight agent stream remain visible on top of the new
+    // session's chat until its own follow-stream useEffect kicks in. The
+    // broker keeps the previous agent running (background ctx) — only the
+    // SSE subscription is aborted by the activeSessionId change — so this
+    // is safe: the work is preserved, only the UI state is reset.
+    resetStream()
+    setActiveWidgets([])
     setActiveSessionId(id)
     onSessionActivated?.(id, { clearPrompt: true, clearSuite: true })
-  }, [setActiveSessionId, onSessionActivated])
+  }, [resetStream, setActiveWidgets, setActiveSessionId, onSessionActivated])
 
   // ── Welcome prompt click ────────────────────────────────
 
