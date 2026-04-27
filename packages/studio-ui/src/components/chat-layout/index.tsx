@@ -2,6 +2,7 @@
 
 import { useEffect, type ReactNode } from "react"
 import { useStudioStore } from "../../store"
+import { Icon } from "../../primitives/icon"
 import clsx from "clsx"
 import s from "./chat-layout.module.scss"
 
@@ -65,7 +66,8 @@ export function ChatLayout({ sidebar, children, rightPanel }: ChatLayoutProps) {
               aria-label="Close project panel"
               type="button"
             >
-              ×
+              <Icon icon="hugeicons:arrow-right-01" />
+              <span className={s.rightCloseLabel}>Back to chat</span>
             </button>
             {rightPanel}
           </aside>

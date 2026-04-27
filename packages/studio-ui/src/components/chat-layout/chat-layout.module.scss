@@ -146,9 +146,12 @@
   }
 }
 
-// Close button anchored top-right of the panel itself; only visible
-// on phone where the panel covers the whole screen and the user has
-// no other obvious "back to chat" affordance.
+// "Back to chat" close button — only renders on phone where the
+// right panel covers the full viewport. Anchored at the top of the
+// panel so it sits above the file tree no matter how long the
+// content is. Pill-shaped, icon + label, full-width row inside the
+// panel for a clear tap target. Sticky so scrolling the file tree
+// doesn't push it off the visible area.
 .rightCloseBtn {
   display: none;
 
@@ -156,23 +159,42 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    width: 2rem;
-    height: 2rem;
-    border: 1px solid oklch(from var(--text) l c h / 0.12);
+    gap: 0.4rem;
+    position: sticky;
+    top: 0;
+    align-self: stretch;
+    margin: 0;
+    padding: 0.7rem 1rem;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid oklch(from var(--text) l c h / 0.08);
     background: var(--glass-50);
-    border-radius: 999px;
     color: var(--text);
+    font-size: 0.85rem;
+    font-weight: 500;
     cursor: pointer;
     z-index: 110;
-    font-size: 1rem;
     line-height: 1;
     transition: background 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
 
-    &:hover {
-      background: oklch(from var(--text) l c h / 0.08);
+    :global(svg) {
+      font-size: 1.05rem;
+      flex-shrink: 0;
+    }
+
+    &:hover,
+    &:active {
+      background: oklch(from var(--text) l c h / 0.06);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-2);
+      outline-offset: -2px;
     }
   }
+}
+
+.rightCloseLabel {
+  font-variant-numeric: tabular-nums;
 }
