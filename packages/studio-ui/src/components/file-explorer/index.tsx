@@ -205,10 +205,21 @@ function ProjectSection({ project, flowProjectId }: { project: ProjectStatus; fl
           </a>
         )}
         {flowProjectId && (
-          <a href={`/studio/project/${flowProjectId}/publish`} className={s.actionLinkPrimary}>
-            <Icon icon="hugeicons:rocket-01" />
-            {t("studio.publish")}
-          </a>
+          cfg.pulse ? (
+            <span
+              className={s.actionLinkDisabled}
+              title={t("studio.publishDisabledWhileBuilding") || "Publish unavailable while the project is being generated"}
+              aria-disabled="true"
+            >
+              <Icon icon="hugeicons:rocket-01" />
+              {t("studio.publish")}
+            </span>
+          ) : (
+            <a href={`/studio/project/${flowProjectId}/publish`} className={s.actionLinkPrimary}>
+              <Icon icon="hugeicons:rocket-01" />
+              {t("studio.publish")}
+            </a>
+          )
         )}
         {project.deployUrl && (
           <a href={project.deployUrl} target="_blank" rel="noopener noreferrer" className={s.actionLink}>
