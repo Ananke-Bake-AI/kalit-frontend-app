@@ -3,7 +3,13 @@
 import { usePathname } from "next/navigation"
 import { useEffect } from "react"
 
-function scrollToHash() {
+function getScrollOffset() {
+  const header = document.querySelector("header")
+  const headerHeight = header instanceof HTMLElement ? header.getBoundingClientRect().height : 0
+  return Math.max(96, Math.ceil(headerHeight + 24))
+}
+
+function scrollToHash(behavior: ScrollBehavior = "smooth") {
   const id = window.location.hash.slice(1)
   if (!id) return
 
@@ -11,7 +17,8 @@ function scrollToHash() {
   const tryScroll = () => {
     const target = document.getElementById(id)
     if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" })
+      const top = target.getBoundingClientRect().top + window.scrollY - getScrollOffset()
+      window.scrollTo({ top: Math.max(0, top), behavior })
       return
     }
     attempts += 1
@@ -23,20 +30,25 @@ function scrollToHash() {
   window.setTimeout(tryScroll, 0)
 }
 
+function scheduleHashScroll() {
+  window.setTimeout(() => scrollToHash("smooth"), 140)
+  window.setTimeout(() => scrollToHash("auto"), 420)
+}
+
 export function HashScroll() {
   const pathname = usePathname()
 
   useEffect(() => {
-    scrollToHash()
+    scheduleHashScroll()
   }, [pathname])
 
   useEffect(() => {
-    window.addEventListener("hashchange", scrollToHash)
-    window.addEventListener("kalit:hash-scroll", scrollToHash)
+    window.addEventListener("hashchange", scheduleHashScroll)
+    window.addEventListener("kalit:hash-scroll", scheduleHashScroll)
 
     return () => {
-      window.removeEventListener("hashchange", scrollToHash)
-      window.removeEventListener("kalit:hash-scroll", scrollToHash)
+      window.removeEventListener("hashchange", scheduleHashScroll)
+      window.removeEventListener("kalit:hash-scroll", scheduleHashScroll)
     }
   }, [])
 

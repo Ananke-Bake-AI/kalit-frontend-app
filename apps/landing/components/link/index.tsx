@@ -57,12 +57,8 @@ export const Link = forwardRef<HTMLAnchorElement | HTMLDivElement, LinkProps>(
       if (isSamePageAnchor) {
         e.preventDefault()
         if (targetId) {
-          const targetElement = document.getElementById(targetId)
-          if (targetElement) {
-            targetElement.scrollIntoView({ behavior: "smooth", block: "start" })
-            window.history.replaceState(null, "", resolvedHref)
-            window.dispatchEvent(new Event("kalit:hash-scroll"))
-          }
+          window.history.pushState(null, "", resolvedHref)
+          window.dispatchEvent(new Event("kalit:hash-scroll"))
         }
       }
       onClick?.(e)
