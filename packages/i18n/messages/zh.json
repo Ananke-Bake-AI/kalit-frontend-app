@@ -834,5 +834,54 @@
     "card3Text": "用研究笔记创建更好的页面、报价、FAQ 和发布文案。",
     "cta": "打开 Search",
     "secondaryCta": "创建免费账户"
+  },
+  "faqPage": {
+    "title": "Frequently Asked Questions",
+    "description": "Answers to common questions about Kalit AI, Flow, Pentest, Search, pricing, security, and support.",
+    "metaTitle": "FAQ - Kalit AI",
+    "metaDescription": "Frequently asked questions about Kalit AI, Flow, Pentest, Search, pricing, security, and support.",
+    "items": {
+      "1": {
+        "question": "What is Kalit AI?",
+        "answer": "Kalit AI helps founders launch faster with Flow, scan before go-live with Pentest, and research markets with Search."
+      },
+      "2": {
+        "question": "What is Kalit Flow?",
+        "answer": "Flow creates launch pages from a prompt, previews them, and helps you publish or iterate quickly."
+      },
+      "3": {
+        "question": "What is Kalit Pentest?",
+        "answer": "Pentest runs structured security checks on targets you own or are authorized to test before you send traffic to launch."
+      },
+      "4": {
+        "question": "Is Search free?",
+        "answer": "Yes. Search is included for Kalit users and helps you research positioning, competitors, and launch angles."
+      },
+      "5": {
+        "question": "Do I need a credit card to start?",
+        "answer": "No. You can create an account, try the workflow, and upgrade when you need more capacity."
+      },
+      "6": {
+        "question": "How do I get support?",
+        "answer": "Use the support page, email contact@kalit.ai, or join the Discord community."
+      }
+    }
+  },
+  "supportPage": {
+    "title": "Support",
+    "description": "Choose the support channel that fits your question.",
+    "metaTitle": "Support - Kalit AI",
+    "metaDescription": "Get help and support for Kalit AI, Flow, Pentest, Search, account access, and launch workflows.",
+    "emailTitle": "Email support",
+    "emailText": "Reach the Kalit team directly. We usually answer within one business day.",
+    "faqTitle": "FAQ",
+    "faqText": "Read quick answers about pricing, Flow, Pentest, Search, security, and account setup.",
+    "faqLink": "View FAQ",
+    "contactTitle": "Contact page",
+    "contactText": "Send a detailed message for partnerships, press, billing, or product questions.",
+    "contactLink": "Contact us",
+    "discordTitle": "Discord community",
+    "discordText": "Join the community to follow updates, share feedback, and get help from the team.",
+    "discordLink": "Join Discord"
   }
 }

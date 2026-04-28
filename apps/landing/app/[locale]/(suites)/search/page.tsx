@@ -45,23 +45,75 @@ export default async function SearchPage() {
     }
   ]
 
+  const signals = [
+    t("searchLanding.signal1"),
+    t("searchLanding.signal2"),
+    t("searchLanding.signal3")
+  ]
+
+  const steps = [
+    {
+      number: "01",
+      title: t("searchLanding.step1Title"),
+      text: t("searchLanding.step1Text")
+    },
+    {
+      number: "02",
+      title: t("searchLanding.step2Title"),
+      text: t("searchLanding.step2Text")
+    },
+    {
+      number: "03",
+      title: t("searchLanding.step3Title"),
+      text: t("searchLanding.step3Text")
+    }
+  ]
+
   return (
     <section className={s.page}>
       <Container className={s.container}>
-        <div className={s.hero}>
-          <div className={s.logo}>
-            <Logo id="search" />
+        <div className={s.heroGrid}>
+          <div className={s.hero}>
+            <div className={s.logo}>
+              <Logo id="search" />
+            </div>
+            <p className={s.kicker}>{t("searchLanding.kicker")}</p>
+            <h1>{t("searchLanding.title")}</h1>
+            <p className={s.description}>{t("searchLanding.description")}</p>
+            <div className={s.actions}>
+              <Button href="/search/open" icon="hugeicons:arrow-right-02">
+                {t("searchLanding.cta")}
+              </Button>
+              <Button href="/register" variant="secondary">
+                {t("searchLanding.secondaryCta")}
+              </Button>
+            </div>
           </div>
-          <p className={s.kicker}>{t("searchLanding.kicker")}</p>
-          <h1>{t("searchLanding.title")}</h1>
-          <p className={s.description}>{t("searchLanding.description")}</p>
-          <div className={s.actions}>
-            <Button href="/search/open" icon="hugeicons:arrow-right-02">
-              {t("searchLanding.cta")}
-            </Button>
-            <Button href="/register" variant="secondary">
-              {t("searchLanding.secondaryCta")}
-            </Button>
+
+          <div className={s.preview} aria-label={t("searchLanding.previewTitle")}>
+            <div className={s.previewTop}>
+              <div>
+                <span>{t("searchLanding.previewEyebrow")}</span>
+                <strong>{t("searchLanding.previewTitle")}</strong>
+              </div>
+              <Icon icon="hugeicons:ai-search-02" />
+            </div>
+            <div className={s.query}>
+              <span>{t("searchLanding.previewQueryLabel")}</span>
+              <p>{t("searchLanding.previewQuery")}</p>
+            </div>
+            <div className={s.signalList}>
+              {signals.map((signal) => (
+                <div className={s.signal} key={signal}>
+                  <Icon icon="hugeicons:tick-02" />
+                  <span>{signal}</span>
+                </div>
+              ))}
+            </div>
+            <div className={s.output}>
+              <span>{t("searchLanding.outputLabel")}</span>
+              <p>{t("searchLanding.outputText")}</p>
+            </div>
           </div>
         </div>
 
@@ -73,6 +125,22 @@ export default async function SearchPage() {
               <p>{card.text}</p>
             </article>
           ))}
+        </div>
+
+        <div className={s.workflow}>
+          <div className={s.workflowIntro}>
+            <span>{t("searchLanding.workflowEyebrow")}</span>
+            <h2>{t("searchLanding.workflowTitle")}</h2>
+          </div>
+          <div className={s.steps}>
+            {steps.map((step) => (
+              <div className={s.step} key={step.number}>
+                <span>{step.number}</span>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </Container>
     </section>

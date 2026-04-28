@@ -59,12 +59,9 @@ export const Link = forwardRef<HTMLAnchorElement | HTMLDivElement, LinkProps>(
         if (targetId) {
           const targetElement = document.getElementById(targetId)
           if (targetElement) {
-            const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - 110
-            window.scrollTo({
-              top: elementPosition,
-              behavior: "smooth"
-            })
+            targetElement.scrollIntoView({ behavior: "smooth", block: "start" })
             window.history.replaceState(null, "", resolvedHref)
+            window.dispatchEvent(new Event("kalit:hash-scroll"))
           }
         }
       }

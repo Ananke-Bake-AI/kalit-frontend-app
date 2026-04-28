@@ -1,7 +1,7 @@
 @use "@/styles/mixins" as *;
 
 .page {
-  padding: calc(var(--spacing-3) + 48px) 0 var(--spacing-3);
+  padding: calc(var(--spacing-2) + 72px) 0 var(--spacing-3);
 }
 
 .container {
@@ -9,20 +9,39 @@
   gap: var(--spacing-2);
 }
 
+.heroGrid {
+  min-height: calc(100svh - 160px);
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(360px, 0.75fr);
+  gap: var(--spacing-2);
+  align-items: center;
+
+  @include max(980px) {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    padding-top: var(--spacing-1);
+  }
+}
+
 .hero {
-  width: min(760px, 100%);
-  margin-inline: auto;
-  text-align: center;
+  width: min(720px, 100%);
+  text-align: left;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--size-5);
 
   h1 {
     font-family: var(--font-heading);
-    font-size: clamp(2.5rem, 6vw, 5.5rem);
+    font-size: clamp(3rem, 6vw, 6rem);
     line-height: 0.9;
     text-wrap: balance;
+  }
+
+  @include max(980px) {
+    margin-inline: auto;
+    text-align: center;
+    align-items: center;
   }
 }
 
@@ -73,6 +92,98 @@
   }
 }
 
+.preview {
+  position: relative;
+  border: 1px solid oklch(from var(--text) l c h / 0.12);
+  background:
+    linear-gradient(180deg, oklch(from var(--bg-1) l c h / 0.9), oklch(from var(--bg) l c h / 0.92)),
+    radial-gradient(circle at 20% 0%, oklch(from #8b5cf6 l c h / 0.28), transparent 32%);
+  border-radius: var(--radius-2);
+  padding: var(--size-6);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+
+.previewTop {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--size-5);
+  align-items: flex-start;
+  margin-bottom: var(--size-6);
+
+  div {
+    display: grid;
+    gap: var(--size-1);
+  }
+
+  span {
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  strong {
+    font-family: var(--font-heading);
+    font-size: 1.55rem;
+    line-height: 1;
+  }
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    color: #8b5cf6;
+  }
+}
+
+.query,
+.output {
+  border: 1px solid oklch(from var(--text) l c h / 0.1);
+  border-radius: var(--radius-2);
+  padding: var(--size-5);
+  background-color: oklch(from var(--bg-1) l c h / 0.58);
+
+  span {
+    display: block;
+    margin-bottom: var(--size-2);
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  p {
+    line-height: 1.55;
+  }
+}
+
+.signalList {
+  display: grid;
+  gap: var(--size-3);
+  margin: var(--size-4) 0;
+}
+
+.signal {
+  display: flex;
+  align-items: center;
+  gap: var(--size-3);
+  padding: var(--size-4);
+  border-radius: var(--radius-2);
+  background-color: oklch(from var(--text) l c h / 0.05);
+
+  svg {
+    flex: 0 0 auto;
+    width: 1.1rem;
+    height: 1.1rem;
+    color: #12bcff;
+  }
+
+  span {
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+}
+
 .card {
   min-height: 220px;
   padding: var(--size-7);
@@ -93,6 +204,69 @@
     font-family: var(--font-heading);
     font-size: clamp(1.35rem, 2vw, 1.8rem);
     line-height: 1;
+  }
+
+  p {
+    color: var(--text-secondary);
+    line-height: 1.65;
+  }
+}
+
+.workflow {
+  display: grid;
+  grid-template-columns: 0.8fr 1.4fr;
+  gap: var(--spacing-1);
+  align-items: start;
+  padding-top: var(--spacing-1);
+
+  @include max(900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workflowIntro {
+  display: grid;
+  gap: var(--size-3);
+
+  span {
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3.8rem);
+    line-height: 0.95;
+    text-wrap: balance;
+  }
+}
+
+.steps {
+  display: grid;
+  gap: var(--size-4);
+}
+
+.step {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  gap: var(--size-4);
+  align-items: start;
+  padding: var(--size-5) 0;
+  border-top: 1px solid oklch(from var(--text) l c h / 0.12);
+
+  span {
+    color: #8b5cf6;
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+  }
+
+  h3 {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    line-height: 1;
+    margin-bottom: var(--size-2);
   }
 
   p {

@@ -7,6 +7,7 @@ import { SessionProvider } from "next-auth/react"
 import type { ReactNode } from "react"
 
 import { AppThemeScope } from "./app-theme-scope"
+import { HashScroll } from "./hash-scroll"
 import { ThemeProvider } from "./theme-context"
 
 export function Providers({
@@ -24,6 +25,7 @@ export function Providers({
     <SessionProvider session={session}>
       <I18nProvider initialLocale={locale} initialMessages={messages}>
         <ThemeProvider>
+          <HashScroll />
           <AppThemeScope>{children}</AppThemeScope>
         </ThemeProvider>
       </I18nProvider>

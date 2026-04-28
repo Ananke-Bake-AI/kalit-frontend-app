@@ -834,5 +834,54 @@
     "card3Text": "Usa tus notas de investigación para crear mejores páginas, ofertas, FAQ y copy de lanzamiento.",
     "cta": "Abrir Search",
     "secondaryCta": "Crear cuenta gratis"
+  },
+  "faqPage": {
+    "title": "Preguntas frecuentes",
+    "description": "Respuestas a preguntas comunes sobre Kalit AI, Flow, Pentest, Search, precios, seguridad y soporte.",
+    "metaTitle": "FAQ - Kalit AI",
+    "metaDescription": "Preguntas frecuentes sobre Kalit AI, Flow, Pentest, Search, precios, seguridad y soporte.",
+    "items": {
+      "1": {
+        "question": "¿Qué es Kalit AI?",
+        "answer": "Kalit AI ayuda a fundadores a lanzar más rápido con Flow, escanear antes del go-live con Pentest e investigar mercados con Search."
+      },
+      "2": {
+        "question": "¿Qué es Kalit Flow?",
+        "answer": "Flow crea páginas de lanzamiento desde un prompt, las previsualiza y ayuda a publicar o iterar rápido."
+      },
+      "3": {
+        "question": "¿Qué es Kalit Pentest?",
+        "answer": "Pentest ejecuta controles de seguridad estructurados en objetivos que posees o tienes autorización para probar."
+      },
+      "4": {
+        "question": "¿Search es gratis?",
+        "answer": "Sí. Search está incluido para usuarios de Kalit y ayuda a investigar posicionamiento, competidores y ángulos de lanzamiento."
+      },
+      "5": {
+        "question": "¿Necesito tarjeta para empezar?",
+        "answer": "No. Puedes crear una cuenta, probar el workflow y mejorar el plan cuando necesites más capacidad."
+      },
+      "6": {
+        "question": "¿Cómo obtengo soporte?",
+        "answer": "Usa la página de soporte, escribe a contact@kalit.ai o únete a la comunidad de Discord."
+      }
+    }
+  },
+  "supportPage": {
+    "title": "Soporte",
+    "description": "Elige el canal de soporte que encaje con tu pregunta.",
+    "metaTitle": "Soporte - Kalit AI",
+    "metaDescription": "Obtén ayuda para Kalit AI, Flow, Pentest, Search, acceso de cuenta y workflows de lanzamiento.",
+    "emailTitle": "Soporte por email",
+    "emailText": "Contacta directamente con el equipo Kalit. Normalmente respondemos en un día laborable.",
+    "faqTitle": "FAQ",
+    "faqText": "Lee respuestas rápidas sobre precios, Flow, Pentest, Search, seguridad y configuración de cuenta.",
+    "faqLink": "Ver FAQ",
+    "contactTitle": "Página de contacto",
+    "contactText": "Envía un mensaje detallado para alianzas, prensa, facturación o preguntas de producto.",
+    "contactLink": "Contactar",
+    "discordTitle": "Comunidad Discord",
+    "discordText": "Únete para seguir novedades, compartir feedback y recibir ayuda del equipo.",
+    "discordLink": "Unirse a Discord"
   }
 }

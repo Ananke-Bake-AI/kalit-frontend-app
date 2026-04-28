@@ -1,30 +1,40 @@
 import { Container } from "@/components/container"
 import { Link } from "@/components/link"
-import { Metadata } from "next"
 import { PageHeader } from "@/components/page-header"
 import { PageSection } from "@/components/page-section"
+import { isValidLocale, type Locale } from "@/lib/i18n"
+import { getServerTranslation, getTranslationForLocale } from "@/lib/i18n-server"
+import { MetadataSeo } from "@/lib/metadata"
 import s from "./support.module.scss"
 
-export const metadata: Metadata = {
-  title: "Support - Kalit AI",
-  description: "Get help and support for the Kalit AI platform.",
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: raw } = await params
+  const locale = isValidLocale(raw) ? (raw as Locale) : "en"
+  const t = await getTranslationForLocale(locale)
+  return MetadataSeo({
+    fullTitle: t("supportPage.metaTitle"),
+    description: t("supportPage.metaDescription"),
+    locale,
+    pathname: "/support"
+  })
 }
 
-export default function SupportPage() {
+export default async function SupportPage() {
+  const { t } = await getServerTranslation()
+
   return (
     <PageSection>
       <Container>
         <PageHeader
-          title="Support"
-          description="We are here to help. Choose the support channel that works best for you."
+          title={t("supportPage.title")}
+          description={t("supportPage.description")}
         />
 
         <div className={s.grid}>
           <div className={s.card}>
-            <h2 className={s.cardTitle}>Email Support</h2>
+            <h2 className={s.cardTitle}>{t("supportPage.emailTitle")}</h2>
             <p className={s.cardText}>
-              Reach our support team directly by email. We aim to respond within 24 hours on
-              business days. Pro and Team plan users receive priority support.
+              {t("supportPage.emailText")}
             </p>
             <a href="mailto:contact@kalit.ai" className={s.cardLink}>
               contact@kalit.ai
@@ -32,35 +42,32 @@ export default function SupportPage() {
           </div>
 
           <div className={s.card}>
-            <h2 className={s.cardTitle}>FAQ</h2>
+            <h2 className={s.cardTitle}>{t("supportPage.faqTitle")}</h2>
             <p className={s.cardText}>
-              Browse our frequently asked questions for quick answers to common topics including
-              pricing, features, security, and account management.
+              {t("supportPage.faqText")}
             </p>
             <Link href="/faq" className={s.cardLink}>
-              View FAQ
+              {t("supportPage.faqLink")}
             </Link>
           </div>
 
           <div className={s.card}>
-            <h2 className={s.cardTitle}>Documentation</h2>
+            <h2 className={s.cardTitle}>{t("supportPage.contactTitle")}</h2>
             <p className={s.cardText}>
-              Explore our documentation for detailed guides on getting started, configuring suites,
-              using the API, and managing your account.
+              {t("supportPage.contactText")}
             </p>
-            <Link href="/docs" className={s.cardLink}>
-              Browse Docs
+            <Link href="/contact-us" className={s.cardLink}>
+              {t("supportPage.contactLink")}
             </Link>
           </div>
 
           <div className={s.card}>
-            <h2 className={s.cardTitle}>Discord Community</h2>
+            <h2 className={s.cardTitle}>{t("supportPage.discordTitle")}</h2>
             <p className={s.cardText}>
-              Join our Discord server to connect with other Kalit AI users, share tips, get
-              community support, and stay updated on new features.
+              {t("supportPage.discordText")}
             </p>
             <Link href="https://discord.gg/b3cvdcQBAs" className={s.cardLink}>
-              Join Discord
+              {t("supportPage.discordLink")}
             </Link>
           </div>
         </div>
