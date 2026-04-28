@@ -13,7 +13,7 @@ import { AnimatedLine } from "@/components/svg/animated-line"
 export const Architecture = () => {
   const t = useTranslation()
   return (
-    <section className={s.architecture}>
+    <section id="why-kalit" className={s.architecture}>
       <Container>
         <Heading className={s.heading} subtitle={t("architecture.subtitle")} paragraph={t("architecture.description")}>
           {t("architecture.title")} <br />

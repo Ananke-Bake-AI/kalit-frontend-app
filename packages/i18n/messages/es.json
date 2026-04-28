@@ -51,7 +51,8 @@
     "flowSmall": "Sitios web y landing pages en minutos.",
     "marketingSmall": "Campañas autónomas y crecimiento.",
     "projectSmall": "Del prompt a la app desplegada.",
-    "searchSmall": "Inteligencia I+D para emprendedores."
+    "searchSmall": "Inteligencia I+D para emprendedores.",
+    "searchFree": "Gratis"
   },
   "stack": {
     "subtitle": "Stack de lanzamiento",
@@ -412,7 +413,7 @@
     "projectMention": "Describe tu stack o pega un repo — Kalit provisiona builds, despliegues y monitorización para que te concentres en el código del producto.",
     "pentestPlaceholder": "Describe el objetivo autorizado o alcance a probar...",
     "pentestSendLabel": "Ejecutar escaneo",
-    "pentestMention": "Pega una URL, API o alcance de staging autorizado. Pentest lo convierte en un escaneo estructurado con hallazgos, evidencia y remediación.",
+    "pentestMention": "Pega una URL, API o alcance de staging autorizado. Pentest lo convierte en un escaneo estructurado con hallazgos, evidencia y remediación. Escanea solo objetivos que posees o que estás autorizado a probar.",
     "flowPlaceholder1": "Créame una landing page de startup con precios y FAQ...",
     "flowPlaceholder2": "Crea un sitio portfolio con modo oscuro y animaciones...",
     "flowPlaceholder3": "Diseña un panel SaaS con gráficos y gestión de usuarios...",

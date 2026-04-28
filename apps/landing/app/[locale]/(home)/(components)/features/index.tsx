@@ -17,7 +17,7 @@ export const Features = () => {
   const t = useTranslation()
 
   return (
-    <section className={s.features}>
+    <section id="how-it-works" className={s.features}>
       <Container>
         <Heading
           className={s.heading}

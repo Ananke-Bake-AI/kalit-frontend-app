@@ -51,7 +51,8 @@
     "flowSmall": "Websites and landing pages in minutes.",
     "marketingSmall": "Autonomous campaigns and growth.",
     "projectSmall": "From prompt to deployed app.",
-    "searchSmall": "R&D intelligence for entrepreneurs."
+    "searchSmall": "R&D intelligence for entrepreneurs.",
+    "searchFree": "Gratis"
   },
   "stack": {
     "subtitle": "Flow + Pentest",
@@ -412,7 +413,7 @@
     "projectMention": "Beskriv din stack eller klistra in ett repo — Kalit ordnar byggen, driftsättning och övervakning så du kan fokusera på produktkoden.",
     "pentestPlaceholder": "Beskriv lanseringssidan du behover...",
     "pentestSendLabel": "Kör skanning",
-    "pentestMention": "Kalit Flow skapar och publicerar lanseringssidor. Kalit Pentest skannar auktoriserade mal fore go-live.",
+    "pentestMention": "Klistra in en auktoriserad URL, API eller staging-scope. Pentest gör det till en strukturerad skanning med fynd, bevis och åtgärder. Skanna bara mål som du äger eller har tillstånd att testa.",
     "flowPlaceholder1": "Bygg en startup-landningssida med priser och FAQ...",
     "flowPlaceholder2": "Skapa en portfoliosida med mörkt läge och animationer...",
     "flowPlaceholder3": "Designa en SaaS-instrumentpanel med diagram och användarhantering...",

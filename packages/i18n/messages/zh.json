@@ -51,7 +51,8 @@
     "flowSmall": "Websites and landing pages in minutes.",
     "marketingSmall": "Autonomous campaigns and growth.",
     "projectSmall": "From prompt to deployed app.",
-    "searchSmall": "R&D intelligence for entrepreneurs."
+    "searchSmall": "R&D intelligence for entrepreneurs.",
+    "searchFree": "免费"
   },
   "stack": {
     "subtitle": "Flow + Pentest",
@@ -412,7 +413,7 @@
     "projectMention": "描述你的技术栈或粘贴仓库链接 - Kalit准备构建、部署和监控，让你专注于产品代码。",
     "pentestPlaceholder": "描述你需要的发布网站...",
     "pentestSendLabel": "运行扫描",
-    "pentestMention": "Kalit Flow 创建并部署发布页。Kalit Pentest 在上线前扫描已授权目标。",
+    "pentestMention": "粘贴已授权的 URL、API 或 staging 范围。Pentest 会生成包含发现、证据和修复建议的结构化扫描。仅扫描你拥有或被授权测试的目标。",
     "flowPlaceholder1": "为我创建一个带有定价和FAQ的创业公司落地页...",
     "flowPlaceholder2": "创建一个带暗色模式和动画的作品集网站...",
     "flowPlaceholder3": "设计一个带图表和用户管理的SaaS仪表盘...",

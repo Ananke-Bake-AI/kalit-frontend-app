@@ -51,7 +51,8 @@
     "flowSmall": "Dakikalar içinde web siteleri ve açılış sayfaları.",
     "marketingSmall": "Otonom kampanyalar ve büyüme.",
     "projectSmall": "Prompttan dağıtılmış uygulamaya.",
-    "searchSmall": "Girişimciler için Ar-Ge istihbaratı."
+    "searchSmall": "Girişimciler için Ar-Ge istihbaratı.",
+    "searchFree": "Ücretsiz"
   },
   "stack": {
     "subtitle": "Flow + Pentest",
@@ -412,7 +413,7 @@
     "projectMention": "Yığınınızı tanımlayın veya bir repo yapıştırın — Kalit derleme, dağıtım ve izlemeyi sağlar, siz ürün koduna odaklanın.",
     "pentestPlaceholder": "Ihtiyacin olan lansman sitesini anlat...",
     "pentestSendLabel": "Taramayı başlat",
-    "pentestMention": "Kalit Flow lansman sayfalari olusturur ve yayina alir. Kalit Pentest canliya gecmeden once yetkili hedefleri tarar.",
+    "pentestMention": "Yetkili bir URL, API veya staging kapsamı yapıştırın. Pentest bunu bulgular, kanıtlar ve düzeltme adımları içeren yapılandırılmış bir taramaya dönüştürür. Yalnızca sahibi olduğunuz veya test izniniz olan hedefleri tarayın.",
     "flowPlaceholder1": "Fiyatlandırma ve SSS içeren bir girişim açılış sayfası oluştur...",
     "flowPlaceholder2": "Karanlık mod ve animasyonlarla bir portföy sitesi oluştur...",
     "flowPlaceholder3": "Grafikler ve kullanıcı yönetimi içeren bir SaaS paneli tasarla...",

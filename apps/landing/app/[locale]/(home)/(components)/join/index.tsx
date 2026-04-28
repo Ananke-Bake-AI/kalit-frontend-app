@@ -46,7 +46,7 @@ export const Join = () => {
   }, [])
 
   return (
-    <section className={s.join}>
+    <section id="try-now" className={s.join}>
       <Container>
         <Heading
           className={s.heading}

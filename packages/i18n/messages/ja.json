@@ -51,7 +51,8 @@
     "flowSmall": "数分でウェブサイトとランディングページ。",
     "marketingSmall": "自動キャンペーンとグロース。",
     "projectSmall": "プロンプトからデプロイ済みアプリへ。",
-    "searchSmall": "起業家向けR&Dインテリジェンス。"
+    "searchSmall": "起業家向けR&Dインテリジェンス。",
+    "searchFree": "無料"
   },
   "stack": {
     "subtitle": "Flow + Pentest",
@@ -412,7 +413,7 @@
     "projectMention": "スタックを説明するかリポをペースト — Kalitがビルド、デプロイ、モニタリングを用意し、プロダクトコードに集中できます。",
     "pentestPlaceholder": "必要なローンチサイトを説明してください...",
     "pentestSendLabel": "スキャン実行",
-    "pentestMention": "Kalit Flow はローンチページを作成して公開します。Kalit Pentest は公開前に許可済みターゲットをスキャンします。",
+    "pentestMention": "許可済みのURL、API、またはステージング範囲を貼り付けます。Pentest は結果、証拠、修正手順を含む構造化スキャンに変換します。所有している、またはテスト許可を得ている対象のみをスキャンしてください。",
     "flowPlaceholder1": "価格とFAQ付きのスタートアップLP（ランディングページ）を作って...",
     "flowPlaceholder2": "ダークモードとアニメーション付きのポートフォリオサイトを作成...",
     "flowPlaceholder3": "チャートとユーザー管理機能付きのSaaSダッシュボードを設計...",

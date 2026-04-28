@@ -24,18 +24,15 @@ export const Footer = () => {
       title: t("footer.resources"),
       links: [
         { title: t("footer.faq"), href: "/faq" },
-        { title: t("footer.support"), href: "/support" },
-        { title: t("footer.documentation"), href: "/documentation" },
-        { title: "GitHub", href: "/github" }
+        { title: t("footer.support"), href: "/support" }
       ]
     },
     {
       title: t("footer.company"),
       links: [
         { title: t("footer.aboutUs"), href: "/about" },
-        { title: t("footer.careers"), href: "/careers" },
-        { title: t("footer.contactUs"), href: "/contact-us" },
-        { title: t("footer.brandingKit"), href: "/branding-kit" }
+        { title: t("footer.careers"), href: "/jobs" },
+        { title: t("footer.contactUs"), href: "/contact-us" }
       ]
     }
   ]

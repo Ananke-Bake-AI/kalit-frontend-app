@@ -49,7 +49,10 @@ export const Nav = () => {
                     <Logo id={id} />
                   </div>
                   <span className={s.content}>
-                    <strong>{title}</strong>
+                    <strong>
+                      {title}
+                      {id === "search" ? <span className={s.badge}>{t("suites.searchFree")}</span> : null}
+                    </strong>
                     <p>{t(`suites.${id}Small`)}</p>
                   </span>
                 </Link>
@@ -58,17 +61,17 @@ export const Nav = () => {
           </ul>
         </li>
         <li>
-          <Link href="/" className={s.link}>
+          <Link href="/#how-it-works" className={s.link}>
             {t("nav.howItWorks")}
           </Link>
         </li>
         <li>
-          <Link href="/" className={s.link}>
+          <Link href="/#try-now" className={s.link}>
             {t("nav.tryNow")}
           </Link>
         </li>
         <li>
-          <Link href="/" className={s.link}>
+          <Link href="/#why-kalit" className={s.link}>
             {t("nav.whyKalit")}
           </Link>
         </li>

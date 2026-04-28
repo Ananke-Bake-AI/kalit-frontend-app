@@ -222,7 +222,9 @@
       strong {
         font-family: var(--font-heading);
         font-size: calc(14px + 2 * (100vw - 320px) / 1080);
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 0.55em;
         margin-top: 1em;
         margin-bottom: 0.5em;
 
@@ -241,6 +243,18 @@
         }
       }
     }
+  }
+
+  .badge {
+    font-family: var(--font-body);
+    font-size: 0.62em;
+    line-height: 1;
+    color: var(--color);
+    border: 1px solid oklch(from var(--color) l c h / 0.35);
+    background-color: oklch(from var(--color) l c h / 0.1);
+    border-radius: var(--radius-rounded);
+    padding: 0.35em 0.55em;
+    white-space: nowrap;
   }
 
   // &:hover {

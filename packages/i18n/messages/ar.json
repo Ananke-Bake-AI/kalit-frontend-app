@@ -51,7 +51,8 @@
     "flowSmall": "Websites and landing pages in minutes.",
     "marketingSmall": "Autonomous campaigns and growth.",
     "projectSmall": "From prompt to deployed app.",
-    "searchSmall": "R&D intelligence for entrepreneurs."
+    "searchSmall": "R&D intelligence for entrepreneurs.",
+    "searchFree": "مجاني"
   },
   "stack": {
     "subtitle": "Flow + Pentest",
@@ -412,7 +413,7 @@
     "projectMention": "صف تقنياتك أو الصق مستودعاً — Kalit يجهز البناء والنشر والمراقبة لتركز على كود المنتج.",
     "pentestPlaceholder": "صف موقع الإطلاق الذي تحتاجه...",
     "pentestSendLabel": "تشغيل الفحص",
-    "pentestMention": "Kalit Flow ينشئ صفحات إطلاق وينشرها. Kalit Pentest يفحص الأهداف المصرح بها قبل النشر.",
+    "pentestMention": "الصق رابطًا أو API أو نطاق staging مصرحًا به. يحوله Pentest إلى فحص منظم مع نتائج وأدلة وخطوات معالجة. افحص فقط الأهداف التي تملكها أو لديك تصريح لاختبارها.",
     "flowPlaceholder1": "أنشئ لي صفحة هبوط لشركة ناشئة مع الأسعار والأسئلة الشائعة...",
     "flowPlaceholder2": "أنشئ موقع محفظة أعمال مع الوضع الداكن والرسوم المتحركة...",
     "flowPlaceholder3": "صمم لوحة تحكم SaaS مع رسوم بيانية وإدارة المستخدمين...",
