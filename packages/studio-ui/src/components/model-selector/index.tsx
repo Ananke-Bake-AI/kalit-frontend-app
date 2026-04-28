@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useStudioUser } from "../../host"
-import { useStudioStore } from "../../store"
+import { useStudioStore, type TaskforceStandard } from "../../store"
 import s from "./model-selector.module.scss"
 
 interface ModelOption {
@@ -48,6 +48,9 @@ const MODEL_GROUPS: { label: string; models: ModelOption[] }[] = [
   {
     label: "OpenAI",
     models: [
+      { id: "openai:gpt-5.5", label: "gpt-5.5", provider: "openai" },
+      { id: "openai:gpt-5.4", label: "gpt-5.4", provider: "openai" },
+      { id: "openai:gpt-5.3-codex", label: "gpt-5.3-codex", provider: "openai" },
       { id: "openai:gpt-4.1", label: "gpt-4.1", provider: "openai" },
       { id: "openai:gpt-4.1-mini", label: "gpt-4.1-mini", provider: "openai" },
       { id: "openai:gpt-4.1-nano", label: "gpt-4.1-nano", provider: "openai" },
@@ -58,25 +61,43 @@ const MODEL_GROUPS: { label: string; models: ModelOption[] }[] = [
 ]
 
 const STORAGE_KEY = "kalit_admin_model"
-const DEFAULT_MODEL = "anthropic:claude-haiku-4-5-20251001"
+const TASKFORCE_STORAGE_KEY = "kalit_admin_taskforce_standard"
+
+const TASKFORCE_STANDARDS: {
+  id: TaskforceStandard
+  label: string
+  shortLabel: string
+  provider: "anthropic" | "openai"
+}[] = [
+  { id: "anthropic", label: "Claude Taskforce", shortLabel: "TF: Claude", provider: "anthropic" },
+  { id: "openai", label: "GPT Taskforce", shortLabel: "TF: GPT", provider: "openai" },
+]
+
+function isTaskforceStandard(value: string | null): value is TaskforceStandard {
+  return value === "anthropic" || value === "openai"
+}
 
 export function ModelSelector() {
   const user = useStudioUser()
   const selectedModel = useStudioStore((st) => st.selectedModel)
   const setSelectedModel = useStudioStore((st) => st.setSelectedModel)
-  const [open, setOpen] = useState(false)
+  const taskforceStandard = useStudioStore((st) => st.taskforceStandard)
+  const setTaskforceStandard = useStudioStore((st) => st.setTaskforceStandard)
+  const [open, setOpen] = useState<"model" | "taskforce" | null>(null)
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY)
       if (saved) setSelectedModel(saved)
+      const savedTaskforce = localStorage.getItem(TASKFORCE_STORAGE_KEY)
+      if (isTaskforceStandard(savedTaskforce)) setTaskforceStandard(savedTaskforce)
     } catch { /* noop */ }
-  }, [setSelectedModel])
+  }, [setSelectedModel, setTaskforceStandard])
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(null)
     }
     if (open) document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
@@ -90,43 +111,87 @@ export function ModelSelector() {
   function handleSelect(modelId: string) {
     setSelectedModel(modelId)
     try { localStorage.setItem(STORAGE_KEY, modelId) } catch { /* noop */ }
-    setOpen(false)
+    setOpen(null)
+  }
+
+  const currentTaskforce = TASKFORCE_STANDARDS.find((item) => item.id === taskforceStandard)
+    ?? TASKFORCE_STANDARDS[0]
+
+  function handleTaskforceSelect(standard: TaskforceStandard) {
+    setTaskforceStandard(standard)
+    try { localStorage.setItem(TASKFORCE_STORAGE_KEY, standard) } catch { /* noop */ }
+    setOpen(null)
   }
 
   return (
-    <div className={s.wrapper} ref={ref}>
-      <button
-        type="button"
-        className={s.trigger}
-        onClick={() => setOpen(!open)}
-        title={`Model: ${selectedModel}`}
-      >
-        <span className={s.dot} data-provider={current?.provider ?? "ollama"} />
-        <span className={s.label}>{displayLabel}</span>
-        <span className={s.chevron} data-open={open}>▾</span>
-      </button>
+    <div className={s.selectorGroup} ref={ref}>
+      <div className={s.wrapper}>
+        <button
+          type="button"
+          className={s.trigger}
+          onClick={() => setOpen(open === "model" ? null : "model")}
+          title={`Model: ${selectedModel}`}
+        >
+          <span className={s.dot} data-provider={current?.provider ?? "ollama"} />
+          <span className={s.label}>{displayLabel}</span>
+          <span className={s.chevron} data-open={open === "model"}>▾</span>
+        </button>
 
-      {open && (
-        <div className={s.dropdown}>
-          {MODEL_GROUPS.map((group) => (
-            <div key={group.label} className={s.group}>
-              <div className={s.groupLabel}>{group.label}</div>
-              {group.models.map((model) => (
+        {open === "model" && (
+          <div className={s.dropdown}>
+            {MODEL_GROUPS.map((group) => (
+              <div key={group.label} className={s.group}>
+                <div className={s.groupLabel}>{group.label}</div>
+                {group.models.map((model) => (
+                  <button
+                    key={model.id}
+                    type="button"
+                    className={s.item}
+                    data-active={model.id === selectedModel}
+                    onClick={() => handleSelect(model.id)}
+                  >
+                    <span className={s.dot} data-provider={model.provider} />
+                    <span className={s.modelName}>{model.label}</span>
+                  </button>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className={s.wrapper}>
+        <button
+          type="button"
+          className={s.trigger}
+          onClick={() => setOpen(open === "taskforce" ? null : "taskforce")}
+          title={`Taskforce: ${currentTaskforce.label}`}
+        >
+          <span className={s.dot} data-provider={currentTaskforce.provider} />
+          <span className={s.label}>{currentTaskforce.shortLabel}</span>
+          <span className={s.chevron} data-open={open === "taskforce"}>▾</span>
+        </button>
+
+        {open === "taskforce" && (
+          <div className={s.dropdown}>
+            <div className={s.group}>
+              <div className={s.groupLabel}>Taskforce</div>
+              {TASKFORCE_STANDARDS.map((standard) => (
                 <button
-                  key={model.id}
+                  key={standard.id}
                   type="button"
                   className={s.item}
-                  data-active={model.id === selectedModel}
-                  onClick={() => handleSelect(model.id)}
+                  data-active={standard.id === taskforceStandard}
+                  onClick={() => handleTaskforceSelect(standard.id)}
                 >
-                  <span className={s.dot} data-provider={model.provider} />
-                  <span className={s.modelName}>{model.label}</span>
+                  <span className={s.dot} data-provider={standard.provider} />
+                  <span className={s.modelName}>{standard.label}</span>
                 </button>
               ))}
             </div>
-          ))}
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

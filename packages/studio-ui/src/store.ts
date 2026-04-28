@@ -11,6 +11,8 @@ import type {
   WidgetPayload,
 } from "./types"
 
+export type TaskforceStandard = "anthropic" | "openai"
+
 interface StudioStore {
   // Sessions
   sessions: ChatSession[]
@@ -90,6 +92,8 @@ interface StudioStore {
   // Admin model override
   selectedModel: string
   setSelectedModel: (model: string) => void
+  taskforceStandard: TaskforceStandard
+  setTaskforceStandard: (standard: TaskforceStandard) => void
 
   // Error
   error: string | null
@@ -276,6 +280,8 @@ export const useStudioStore = create<StudioStore>((set) => ({
   // Admin model override
   selectedModel: "anthropic:claude-haiku-4-5-20251001",
   setSelectedModel: (selectedModel) => set({ selectedModel }),
+  taskforceStandard: "anthropic",
+  setTaskforceStandard: (taskforceStandard) => set({ taskforceStandard }),
 
   // Error
   error: null,

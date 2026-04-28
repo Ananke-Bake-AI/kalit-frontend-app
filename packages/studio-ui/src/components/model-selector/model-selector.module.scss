@@ -4,6 +4,12 @@
   position: relative;
 }
 
+.selectorGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
 .trigger {
   display: flex;
   align-items: center;

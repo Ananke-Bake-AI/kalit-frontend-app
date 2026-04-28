@@ -486,10 +486,11 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
   const ensureSession = useCallback(async (): Promise<string | null> => {
     if (activeSessionRef.current) return activeSessionRef.current
     try {
+      const { selectedModel, taskforceStandard } = useStudioStore.getState()
       const createRes = await brokerFetch("/api/broker/sessions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: useStudioStore.getState().selectedModel }),
+        body: JSON.stringify({ model: selectedModel, taskforceModelProvider: taskforceStandard }),
       })
       if (!createRes.ok) {
         setError(t("studio.connectionError"))
@@ -565,6 +566,7 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
         message,
         language: locale,
         progressMode,
+        taskforceModelProvider: useStudioStore.getState().taskforceStandard,
         requestId: `req-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       }
       if (files && files.length > 0) body.files = files
@@ -919,10 +921,11 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
 
   const handleNewChat = useCallback(async () => {
     try {
+      const { selectedModel, taskforceStandard } = useStudioStore.getState()
       const res = await brokerFetch("/api/broker/sessions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ model: useStudioStore.getState().selectedModel }),
+        body: JSON.stringify({ model: selectedModel, taskforceModelProvider: taskforceStandard }),
       })
       if (res.ok) {
         const data = await res.json()
