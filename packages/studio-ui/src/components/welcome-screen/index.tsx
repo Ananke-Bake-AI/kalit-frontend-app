@@ -4,7 +4,6 @@ import { useState } from "react"
 import { SUITES, type SuiteId } from "../../lib/suites"
 import { useI18n } from "@kalit/i18n/react"
 import { useStudioStore } from "../../store"
-import { Logo } from "../../primitives/logo"
 import { Icon } from "../../primitives/icon"
 import { ImportRepoModal } from "../import-repo-modal"
 import s from "./welcome-screen.module.scss"
@@ -24,14 +23,6 @@ const QUICK_PROMPT_KEYS: {
       { labelKey: "studio.promptFlow1", promptKey: "studio.promptFlow1Prompt" },
       { labelKey: "studio.promptFlow2", promptKey: "studio.promptFlow2Prompt" },
       { labelKey: "studio.promptFlow3", promptKey: "studio.promptFlow3Prompt" },
-    ],
-  },
-  {
-    suite: "project",
-    entries: [
-      { labelKey: "studio.promptProject1", promptKey: "studio.promptProject1Prompt" },
-      { labelKey: "studio.promptProject2", promptKey: "studio.promptProject2Prompt" },
-      { labelKey: "studio.promptProject3", promptKey: "studio.promptProject3Prompt" },
     ],
   },
   {
@@ -118,7 +109,6 @@ export function WelcomeScreen({ onPromptSelect, activeSuite, onEnsureSession }: 
           return (
             <div key={suite} className={s.suiteGroup}>
               <div className={s.suiteHeader} style={{ "--suite-color": config.color } as React.CSSProperties}>
-                <Logo id={suite} width={20} height={20} />
                 <span className={s.suiteName}>{config.title}</span>
               </div>
               <div className={s.promptList}>

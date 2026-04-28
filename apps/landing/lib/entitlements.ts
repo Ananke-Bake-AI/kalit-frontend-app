@@ -13,7 +13,7 @@ export interface ResolvedEntitlements {
 
 export async function resolveEntitlements(orgId: string): Promise<ResolvedEntitlements> {
   const defaults: ResolvedEntitlements = {
-    suites: { project: false, flow: true, marketing: false, pentest: false, search: false },
+    suites: { flow: true, marketing: false, pentest: false, search: false },
     creditsPerMonth: FREE_PLAN.creditsPerMonth,
     maxMembers: 1,
     planKey: "free",
