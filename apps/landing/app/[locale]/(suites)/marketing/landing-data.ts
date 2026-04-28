@@ -1,5 +1,6 @@
 import type { PlanProps } from "@/components/plan"
 import type { SuiteLandingFeatureCard } from "@/components/suite-landing"
+import { createPublicPaidPlans } from "@/lib/public-paid-plans"
 import { MARKETING_MARKETING_PATH } from "@/lib/suite-marketing-paths"
 
 export const marketingMarketingPath = MARKETING_MARKETING_PATH
@@ -54,52 +55,8 @@ export const marketingFeatureCards: SuiteLandingFeatureCard[] = [
   }
 ]
 
-export const marketingPlans: Omit<PlanProps, "action">[] = [
-  {
-    name: "Free",
-    tagline: "Perfect for individuals and small teams.",
-    price: "Free",
-    features: [
-      "Up to 2 active campaigns",
-      "Connect 2 ad accounts",
-      "Basic reporting & exports",
-      "Email support",
-      "14-day access to Pro features"
-    ],
-    buttonText: "Get started"
-  },
-  {
-    name: "Pro",
-    recommended: true,
-    tagline: "For growing businesses and agencies.",
-    price: "$29",
-    priceSuffix: "per month",
-    features: [
-      "Unlimited active campaigns",
-      "Meta, Google, LinkedIn & TikTok",
-      "AI copy, image & video drafts",
-      "Advanced analytics & attribution",
-      "Real-time performance alerts",
-      "Priority email support",
-      "API access"
-    ],
-    buttonText: "Start free trial"
-  },
-  {
-    name: "Enterprise",
-    tagline: "For large organizations and high-volume campaigns.",
-    price: "$89",
-    priceSuffix: "per month",
-    features: [
-      "Unlimited ad accounts & spend tiers",
-      "Custom integrations & webhooks",
-      "Dedicated customer success manager",
-      "SLA-backed uptime & support",
-      "SSO / SAML and audit logs",
-      "Real-time data sync",
-      "Custom reporting & BigQuery export",
-      "Volume-based pricing"
-    ],
-    buttonText: "Contact sales"
-  }
-]
+export const marketingPlans: Omit<PlanProps, "action">[] = createPublicPaidPlans({
+  starterButtonText: "Get started",
+  proButtonText: "Start free trial",
+  enterpriseButtonText: "Get started",
+})

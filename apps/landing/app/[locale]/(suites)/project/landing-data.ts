@@ -1,5 +1,6 @@
 import type { PlanProps } from "@/components/plan"
 import type { SuiteLandingFeatureCard } from "@/components/suite-landing"
+import { createPublicPaidPlans } from "@/lib/public-paid-plans"
 import { PROJECT_MARKETING_PATH } from "@/lib/suite-marketing-paths"
 
 export const projectMarketingPath = PROJECT_MARKETING_PATH
@@ -51,29 +52,8 @@ export const projectFeatureCards: SuiteLandingFeatureCard[] = [
   }
 ]
 
-export const projectPlans: Omit<PlanProps, "action">[] = [
-  {
-    name: "Free",
-    tagline: "Perfect for side projects and experiments.",
-    price: "Free",
-    features: ["1 project", "100MB storage", "1GB bandwidth", "Community support"],
-    buttonText: "Start Project"
-  },
-  {
-    name: "Pro",
-    recommended: true,
-    tagline: "For production apps and growing teams.",
-    price: "$29",
-    priceSuffix: "per month",
-    features: ["Unlimited projects", "10GB storage", "100GB bandwidth", "Priority support", "Custom domains"],
-    buttonText: "Start free trial"
-  },
-  {
-    name: "Enterprise",
-    tagline: "For orgs with advanced needs.",
-    price: "$99",
-    priceSuffix: "per month",
-    features: ["Everything in Pro", "Custom storage", "Custom bandwidth", "24/7 support", "Dedicated account manager"],
-    buttonText: "Start Project"
-  }
-]
+export const projectPlans: Omit<PlanProps, "action">[] = createPublicPaidPlans({
+  starterButtonText: "Start Project",
+  proButtonText: "Start free trial",
+  enterpriseButtonText: "Start Project",
+})

@@ -25,12 +25,12 @@ const faqs = [
   {
     question: "What pricing plans are available?",
     answer:
-      "We offer three plans: a Free tier with limited usage for individual users, a Pro plan with expanded limits and priority access for professionals, and a Team plan with collaboration features, shared workspaces, and dedicated support. Visit our pricing page for current details.",
+      "We offer three paid plans: Starter, Pro, and Enterprise. Starter includes Kalit Flow with 100 credits per month for 2 team members. Pro includes Flow, Project, and Marketing with 500 credits per month for 10 team members. Enterprise includes all 4 suites with 2,000 credits per month, unlimited team members, priority execution, pentest scanning, and custom integrations. Visit our pricing page for current details.",
   },
   {
     question: "Is there a free trial?",
     answer:
-      "Yes. Every new account starts with access to our Free tier, which includes a generous set of credits to explore the platform. No credit card is required to sign up. If you want to try Pro features, we offer a 14-day free trial of the Pro plan.",
+      "Yes. You can create an account and explore Kalit before upgrading to a paid plan. If you want to evaluate higher-capacity features, contact us and we can guide you to the right plan or trial path.",
   },
   {
     question: "How does Kalit AI handle data security?",
@@ -40,12 +40,12 @@ const faqs = [
   {
     question: "Can I collaborate with my team?",
     answer:
-      "Absolutely. Our Team plan includes shared workspaces, team member management with role-based permissions, shared suite configurations, and centralized billing. You can invite team members from your dashboard settings and manage access levels for each member.",
+      "Absolutely. Starter includes 2 team members, Pro includes 10 team members, and Enterprise includes unlimited members. Teams can collaborate through shared workspaces, member management, shared suite configurations, and centralized billing.",
   },
   {
     question: "Which platforms and integrations are supported?",
     answer:
-      "Kalit AI is a web-based platform accessible from any modern browser on desktop, tablet, or mobile. We also provide a REST API for programmatic access and integrations. Webhook support and third-party integrations (Slack, GitHub, etc.) are available on Pro and Team plans.",
+      "Kalit AI is a web-based platform accessible from any modern browser on desktop, tablet, or mobile. We also provide API and integration support depending on plan. Pro includes production deployment support, and Enterprise adds custom integrations and dedicated support for advanced workflows.",
   },
   {
     question: "What is the cancellation policy?",
@@ -60,7 +60,7 @@ const faqs = [
   {
     question: "What kind of support do you offer?",
     answer:
-      "We provide email support at contact@kalit.ai for all users. Pro and Team plan users receive priority response times. We also have a Discord community where you can connect with other users, share tips, and get help. Visit our Support page for all contact options.",
+      "We provide email support at contact@kalit.ai for all users. Starter includes email support, Pro includes priority support, and Enterprise includes dedicated support. We also have a Discord community where you can connect with other users, share tips, and get help. Visit our Support page for all contact options.",
   },
 ]
 

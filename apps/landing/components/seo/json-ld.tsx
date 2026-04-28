@@ -48,14 +48,14 @@ export function JsonLd({ locale = "en" }: { locale?: Locale }) {
         price: "29",
         priceCurrency: "USD",
         name: "Starter",
-        description: "Kalit Flow access with 100 credits per month",
+        description: "Kalit Flow access with 100 credits per month and 2 team members",
       },
       {
         "@type": "Offer",
         price: "99",
         priceCurrency: "USD",
         name: "Pro",
-        description: "Flow, Project, and Marketing suites with 500 credits per month",
+        description: "Flow, Project, and Marketing suites with 500 credits per month and 10 team members",
       },
       {
         "@type": "Offer",

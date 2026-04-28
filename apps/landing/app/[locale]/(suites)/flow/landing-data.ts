@@ -1,5 +1,6 @@
 import type { PlanProps } from "@/components/plan"
 import type { SuiteLandingFeatureCard } from "@/components/suite-landing"
+import { createPublicPaidPlans } from "@/lib/public-paid-plans"
 import { FLOW_MARKETING_PATH } from "@/lib/flow-suite-entry"
 
 export const flowMarketingPath = FLOW_MARKETING_PATH
@@ -51,54 +52,8 @@ export const flowFeatureCards: SuiteLandingFeatureCard[] = [
   }
 ]
 
-export const flowPlans: Omit<PlanProps, "action">[] = [
-  {
-    name: "Free",
-    tagline: "Perfect for getting started.",
-    price: "Free",
-    features: [
-      "1 landing page per month",
-      "Extra landings at $3 each",
-      "Downloads at 10 tokens each",
-      "Community support",
-      "Hotfixes at 5 tokens each",
-      "Subdomain deploys at 5 tokens each"
-    ],
-    buttonText: "Get started"
-  },
-  {
-    name: "Pro",
-    recommended: true,
-    tagline: "For power users and creators.",
-    price: "$29",
-    priceSuffix: "per month",
-    features: [
-      "10 landing pages per month",
-      "Extra landings at $2 each",
-      "30 downloads per month",
-      "Priority email support",
-      "Custom domains",
-      "5 hotfixes/month",
-      "5 subdomain deploys/month"
-    ],
-    buttonText: "Get started"
-  },
-  {
-    name: "Max",
-    tagline: "Scale without limits.",
-    price: "$99",
-    priceSuffix: "per month",
-    features: [
-      "30 landing pages per month",
-      "Extra landings at $1.50 each",
-      "300 downloads per month",
-      "Early access",
-      "Dedicated support",
-      "Custom branding",
-      "Team collaboration",
-      "30 hotfixes/month",
-      "30 subdomain deploys/month"
-    ],
-    buttonText: "Get started"
-  }
-]
+export const flowPlans: Omit<PlanProps, "action">[] = createPublicPaidPlans({
+  starterButtonText: "Get started",
+  proButtonText: "Get started",
+  enterpriseButtonText: "Get started",
+})

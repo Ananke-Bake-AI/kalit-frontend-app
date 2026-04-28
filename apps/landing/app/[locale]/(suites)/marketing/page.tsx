@@ -11,10 +11,10 @@ import { getServerTranslation, getTranslationForLocale } from "@/lib/i18n-server
 import { MetadataSeo } from "@/lib/metadata"
 import { getSuiteById } from "@/lib/suites"
 import {
-  marketingEnterpriseMailHref,
   marketingGradientColors,
   marketingHowLine,
-  marketingMarketingPath
+  marketingMarketingPath,
+  marketingPlans,
 } from "./landing-data"
 import s from "./marketing.module.scss"
 
@@ -76,56 +76,6 @@ export default async function MarketingPage() {
       title: t("suiteLanding.marketing.feat4Title"),
       text: t("suiteLanding.marketing.feat4Desc"),
       ctaLabel: t("suiteLanding.startCampaign")
-    }
-  ]
-
-  const plans = [
-    {
-      name: "Free",
-      tagline: t("suiteLanding.pricingDesc"),
-      price: "Free",
-      features: [
-        "Up to 2 active campaigns",
-        "Connect 2 ad accounts",
-        "Basic reporting & exports",
-        "Email support",
-        "14-day access to Pro features"
-      ],
-      buttonText: t("suiteLanding.getStarted")
-    },
-    {
-      name: "Pro",
-      recommended: true,
-      tagline: t("suiteLanding.pricingDesc"),
-      price: "$29",
-      priceSuffix: t("suiteLanding.perMonth"),
-      features: [
-        "Unlimited active campaigns",
-        "Meta, Google, LinkedIn & TikTok",
-        "AI copy, image & video drafts",
-        "Advanced analytics & attribution",
-        "Real-time performance alerts",
-        "Priority email support",
-        "API access"
-      ],
-      buttonText: t("suiteLanding.startFreeTrial")
-    },
-    {
-      name: "Enterprise",
-      tagline: t("suiteLanding.pricingDesc"),
-      price: "$89",
-      priceSuffix: t("suiteLanding.perMonth"),
-      features: [
-        "Unlimited ad accounts & spend tiers",
-        "Custom integrations & webhooks",
-        "Dedicated customer success manager",
-        "SLA-backed uptime & support",
-        "SSO / SAML and audit logs",
-        "Real-time data sync",
-        "Custom reporting & BigQuery export",
-        "Volume-based pricing"
-      ],
-      buttonText: t("suiteLanding.contactSales")
     }
   ]
 
@@ -246,9 +196,7 @@ export default async function MarketingPage() {
               ))}
           </>
         }
-        plans={plans}
-        mailtoPlanNames={["Enterprise"]}
-        mailtoHref={marketingEnterpriseMailHref}
+        plans={marketingPlans}
       />
     </>
   )
