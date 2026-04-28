@@ -20,6 +20,7 @@ interface StudioStore {
   addSession: (session: ChatSession) => void
   removeSession: (id: string) => void
   updateSessionTitle: (id: string, title: string) => void
+  markSessionProcessing: (id: string, isProcessing: boolean) => void
 
   // Messages
   messages: ChatMessage[]
@@ -192,6 +193,12 @@ export const useStudioStore = create<StudioStore>((set) => ({
   updateSessionTitle: (id, title) =>
     set((s) => ({
       sessions: s.sessions.map((sess) => (sess.id === id ? { ...sess, title } : sess)),
+    })),
+  markSessionProcessing: (id, isProcessing) =>
+    set((s) => ({
+      sessions: s.sessions.map((sess) =>
+        sess.id === id ? { ...sess, isProcessing } : sess,
+      ),
     })),
 
   // Messages

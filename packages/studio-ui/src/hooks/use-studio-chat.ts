@@ -101,6 +101,7 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
     setPreferredLang,
     isStreaming,
     addSession,
+    markSessionProcessing,
     setIsStreaming,
     setStreamSegments,
     setStreamThinking,
@@ -517,6 +518,15 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
     setStreamSegments([])
     setStreamThinking("")
 
+    // Mirror the broker-side TryLockSession into the local sessions
+    // cache so a later session-switch+return correctly identifies this
+    // session as in-flight. Without this, `sessions.find(id).isProcessing`
+    // is read from a stale snapshot taken at page-load (false), and the
+    // follow-stream useEffect's `if (!session?.isProcessing) return`
+    // guard kills the reconnect — that's why thinking icons disappeared
+    // when the user switched away mid-stream and came back.
+    markSessionProcessing(sessionId, true)
+
     const controller = new AbortController()
     abortRef.current = controller
 
@@ -827,6 +837,9 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
         fetchSessions()
         fetchQuota()
       }
+      // Mirror the broker-side UnlockSession in the local cache so the
+      // session no longer reports as processing once the stream is done.
+      if (sessionId) markSessionProcessing(sessionId, false)
       resetStream()
       abortRef.current = null
       sendingRef.current = false
@@ -836,7 +849,7 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
     activeSessionId, isStreaming, locale, progressMode, addMessage, removeMessage,
     ensureSession, setError, setIsStreaming, setStreamSegments, setStreamThinking,
     resetStream, setActiveWidgets, addActiveWidget, fetchMessages, fetchSessions,
-    fetchQuota, notify, addConsoleLog, setConsoleSummary, setConsoleOpen,
+    fetchQuota, notify, addConsoleLog, setConsoleSummary, setConsoleOpen, markSessionProcessing,
     setLastRouting, onSuiteChange, t, enableAdminConsole,
   ])
 
@@ -849,8 +862,24 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
   // ── Stop streaming ──────────────────────────────────────
 
   const handleStop = useCallback(() => {
+    // Abort the client-side fetch + follow-stream subscription regardless
+    // of whether the broker cancel succeeds.
     abortRef.current?.abort()
+    followRef.current?.abort()
+    abortRef.current = null
+    followRef.current = null
+
+    // Force-reset the local streaming state IMMEDIATELY. Previously we
+    // only reset in handleSend's finally block — if the broker cancel
+    // failed silently (.catch noop) and no SSE error came back, the UI
+    // stayed pinned at isStreaming=true forever and the user couldn't
+    // send a new message (the `if (isStreaming) return` guard at the top
+    // of handleSend rejected every attempt). The audit's lacuna #12.
+    resetStream()
+    sendingRef.current = false
     if (activeSessionId) {
+      markSessionProcessing(activeSessionId, false)
+
       brokerFetch(`/api/broker/cancel/${activeSessionId}`, { method: "POST" }).catch(() => {})
 
       const widgets = useStudioStore.getState().activeWidgets
@@ -866,7 +895,7 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
         }
       }
     }
-  }, [activeSessionId])
+  }, [activeSessionId, resetStream, markSessionProcessing])
 
   // ── New chat ───────────────────────────────────────────
 
