@@ -1,4 +1,4 @@
-export type SuiteId = "pentest" | "flow" | "marketing" | "project" | "search"
+export type SuiteId = "pentest" | "flow" | "marketing" | "search"
 
 /** Contexte d’URL / store : hors suite ou id de suite active */
 export type AppPageState = "default" | SuiteId
@@ -40,12 +40,12 @@ export const SUITES: SuiteConfig[] = [
     gradient: "var(--gradient-color-1)",
     gradientRadial: "var(--gradient-color-1-radial)",
     title: "pentest",
-    button: "Secure my product",
+    button: "Run a pre-launch scan",
     description:
-      "Detect vulnerabilities before they become costly. AI scans your apps and systems, uncovers risks, and delivers actionable fixes.",
-    smallDescription: "Find and fix vulnerabilities automatically.",
-    matchDescription: "AI will scan your systems, find vulnerabilities, and suggest fixes.",
-    quickPrompt: "Scan my web application for security vulnerabilities",
+      "Pre-launch security scan for your authorized app, API, or staging target. Pentest finds the issues, shows the evidence, and tells you how to fix them.",
+    smallDescription: "Pre-launch security scan with actionable findings.",
+    matchDescription: "Pentest will scan your authorized target and surface findings with evidence and fixes.",
+    quickPrompt: "Run a pre-launch security scan on my staging app",
     logoD:
       "M20.366 10.1298H30.6829C42.0383 10.1298 51.2437 19.3351 51.2437 30.6906C51.2437 42.046 42.0383 51.2513 30.6829 51.2513C19.3274 51.2513 10.1221 42.046 10.1221 30.6906V82.0436",
     logoTitle: "Kalit — Pentest Suite",
@@ -57,14 +57,14 @@ export const SUITES: SuiteConfig[] = [
     gradient: "var(--gradient-color-2)",
     gradientRadial: "var(--gradient-color-2-radial)",
     title: "flow",
-    button: "Create my site",
+    button: "Build with Flow",
     description:
-      "Launch high-converting websites and landing pages in minutes. Design, copy, structure, and hosting included.",
-    smallDescription: "Websites and landing pages in minutes.",
-    matchDescription: "Design, copy, and structure — your site will be live in minutes.",
-    quickPrompt: "Create a landing page for my product with pricing",
+      "Go from prompt to a live launch page or a full app, hosted and deployable in minutes — design, copy, structure, frontend, backend, and deploy included.",
+    smallDescription: "Launch pages and full apps from a prompt.",
+    matchDescription: "Flow turns your prompt into a launch-ready page or a full app — preview, deploy, iterate.",
+    quickPrompt: "Build me a SaaS landing page with pricing, FAQ, and signup",
     logoD: "M61.3701 10.5157H40.9951C16.2951 10.5157 10.1201 31.099 10.1201 41.3907V81.9811M40.9951 50.7657H61.3701",
-    logoTitle: "Kalit — Flow Orchestration",
+    logoTitle: "Kalit — Flow",
     appUrl: process.env.SUITE_FLOW_URL || "http://localhost:3004"
   },
   {
@@ -85,34 +85,17 @@ export const SUITES: SuiteConfig[] = [
     appUrl: process.env.SUITE_MARKETING_URL || "http://localhost:3002"
   },
   {
-    id: "project",
-    color: "var(--color-4)",
-    gradient: "var(--gradient-color-4)",
-    gradientRadial: "var(--gradient-color-4-radial)",
-    title: "project",
-    button: "Build my app",
-    description:
-      "Turn a prompt into a fully deployed application. AI agents plan, build, test, and ship your product end-to-end.",
-    smallDescription: "From prompt to deployed app.",
-    matchDescription: "AI agents will plan, build, test, and deploy your app end-to-end.",
-    quickPrompt: "Build me a SaaS application with authentication and billing",
-    logoD:
-      "M30.6809 51.2513C42.0363 51.2513 51.2417 42.046 51.2417 30.6905C51.2417 19.3351 42.0363 10.1298 30.6809 10.1298C19.3255 10.1298 10.1201 19.3351 10.1201 30.6906L10.1201 81.9968",
-    logoTitle: "Kalit — Project Workspace",
-    appUrl: process.env.SUITE_PROJECT_URL || "http://localhost:3003"
-  },
-  {
     id: "search",
     color: "var(--color-5)",
     gradient: "var(--gradient-color-5)",
     gradientRadial: "var(--gradient-color-5-radial)",
     title: "search",
-    button: "Find ideas",
+    button: "Run research",
     description:
-      "Discover trending project ideas backed by real data. AI agents analyze markets, score viability, and generate build-ready specs for entrepreneurs.",
-    smallDescription: "R&D intelligence for entrepreneurs.",
-    matchDescription: "AI will scan trends, analyze markets, and surface the best project ideas to build.",
-    quickPrompt: "Find trending SaaS ideas with high monetization potential",
+      "Pre-launch research on markets, competitors, audience pains, and angles. Search hands the strongest output to Flow so the page or app you build hits.",
+    smallDescription: "Market research that feeds your launch.",
+    matchDescription: "Search will research the market, score the angles, and pass the strongest one to Flow.",
+    quickPrompt: "Research the market and angles for a B2B SaaS launch in fintech",
     logoD:
       "M30.5918 30.4995C30.5918 19.1779 39.7697 10 51.0913 10C62.4129 10 71.5908 19.1779 71.5908 30.4995C71.5908 41.8211 62.4129 50.999 51.0913 50.999L30.6721 50.999L7.07098 74.6001",
     logoTitle: "Kalit — Search Suite",
@@ -121,29 +104,45 @@ export const SUITES: SuiteConfig[] = [
 ]
 
 /** Ordre des boutons suite sous le prompt hero */
-export const HERO_PROMPT_SUITE_ORDER: readonly SuiteId[] = ["flow", "pentest"]
+export const HERO_PROMPT_SUITE_ORDER: readonly SuiteId[] = ["flow", "pentest", "search"]
 
 const SUITE_KEYWORD_TO_ID: Record<string, SuiteId> = {
-  app: "project",
-  application: "project",
-  saas: "project",
-  dashboard: "project",
-  backend: "project",
-  api: "project",
-  database: "project",
-  fullstack: "project",
-  "full-stack": "project",
-  mobile: "project",
-  ios: "project",
-  android: "project",
-  deploy: "project",
-  software: "project",
-  platform: "project",
-  crud: "project",
-  auth: "project",
-  authentication: "project",
-  billing: "project",
-  stripe: "project",
+  app: "flow",
+  application: "flow",
+  saas: "flow",
+  dashboard: "flow",
+  backend: "flow",
+  api: "flow",
+  database: "flow",
+  fullstack: "flow",
+  "full-stack": "flow",
+  mobile: "flow",
+  ios: "flow",
+  android: "flow",
+  deploy: "flow",
+  software: "flow",
+  platform: "flow",
+  crud: "flow",
+  auth: "flow",
+  authentication: "flow",
+  billing: "flow",
+  stripe: "flow",
+  "trending ideas": "search",
+  "trending saas ideas": "search",
+  "startup ideas": "search",
+  "project ideas": "search",
+  "business ideas": "search",
+  "market opportunities": "search",
+  "opportunity analysis": "search",
+  "what should i build": "search",
+  "find ideas": "search",
+  "find trending": "search",
+  "analyze market": "search",
+  "validate idea": "search",
+  research: "search",
+  trends: "search",
+  ideas: "search",
+  opportunity: "search",
   landing: "flow",
   website: "flow",
   "landing page": "flow",
@@ -222,7 +221,6 @@ export function getHeroPromptSuites(): SuiteConfig[] {
 export function detectSuiteFromPrompt(input: string): SuiteConfig {
   const lower = input.toLowerCase()
   const scores: Record<SuiteId, number> = {
-    project: 0,
     flow: 0,
     marketing: 0,
     pentest: 0,

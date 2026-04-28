@@ -1,7 +1,6 @@
 export { FlowHeroPrompt, type FlowHeroPromptProps } from "./flow-hero-prompt"
 export { MarketingHeroPrompt, type MarketingHeroPromptProps } from "./marketing-hero-prompt"
 export { PentestHeroPrompt, type PentestHeroPromptProps } from "./pentest-hero-prompt"
-export { ProjectHeroPrompt, type ProjectHeroPromptProps } from "./project-hero-prompt"
 export { SearchHeroPrompt, type SearchHeroPromptProps } from "./search-hero-prompt"
 export {
   SuiteLandingFeatures,

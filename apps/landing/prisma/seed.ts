@@ -42,7 +42,7 @@ async function main() {
   })
 
   // Grant all suites for testing
-  const suites = ["project", "flow", "marketing", "pentest"]
+  const suites = ["flow", "marketing", "pentest", "search"]
   for (const suiteId of suites) {
     await prisma.entitlement.upsert({
       where: { orgId_key: { orgId: org.id, key: `suite.${suiteId}.access` } },

@@ -5,7 +5,7 @@ import { checkSuiteAccess, resolveEntitlements } from "@/lib/entitlements"
 import { prisma } from "@/lib/prisma"
 import { getSuiteAppUrl, type SuiteId } from "@/lib/suites"
 
-const VALID_SUITE_IDS: SuiteId[] = ["marketing", "project", "flow", "pentest", "search"]
+const VALID_SUITE_IDS: SuiteId[] = ["marketing", "flow", "pentest", "search"]
 
 export async function POST(req: NextRequest) {
   try {
@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 
     if (!suiteId || !VALID_SUITE_IDS.includes(suiteId)) {
       return NextResponse.json(
-        { error: "Invalid suiteId. Must be one of: marketing, project, flow, pentest" },
+        { error: "Invalid suiteId. Must be one of: marketing, flow, pentest, search" },
         { status: 400 }
       )
     }
@@ -86,7 +86,6 @@ export async function POST(req: NextRequest) {
       marketing: process.env.SUITE_MARKETING_URL || "https://marketing.kalit.ai",
       search: process.env.SUITE_SEARCH_URL || "https://search.kalit.ai",
       flow: process.env.SUITE_FLOW_URL || "http://localhost:3004",
-      project: process.env.SUITE_PROJECT_URL || "http://localhost:3003",
       pentest: process.env.SUITE_PENTEST_URL || "http://localhost:3005",
     }
     const baseUrl = SUITE_URLS[suiteId] || getSuiteAppUrl(suiteId)

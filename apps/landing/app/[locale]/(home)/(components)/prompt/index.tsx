@@ -18,79 +18,62 @@ import s from "./prompt.module.scss"
 const COLORS = ["#91E500", "#8200DF", "#12BCFF", "#91E500", "#2F44FF", "#8200DF", "#91E500"]
 
 const PLACEHOLDERS = [
+  "Create a launch page for my AI startup with pricing tiers...",
   "Build me a SaaS app with auth, billing, and a dashboard...",
-  "Create a landing page for my AI startup with pricing tiers...",
-  "Run a marketing campaign across Instagram and Google Ads...",
-  "Scan my web app for security vulnerabilities and fix them..."
+  "Generate a portfolio site with case studies and contact form...",
+  "Scan my web app for security vulnerabilities before launch..."
 ]
 
 type SuiteMatch = {
-  id: "project" | "flow" | "marketing" | "pentest"
+  id: "flow" | "pentest"
   name: string
   description: string
   color: string
   icon: string
-  logo: "project" | "flow" | "marketing" | "pentest"
+  logo: "flow" | "pentest"
 }
 
 const SUITE_MATCHES: SuiteMatch[] = [
   {
-    id: "project",
-    name: "Project",
-    description: "AI agents will plan, build, test, and deploy your app end-to-end.",
-    color: "#8200DF",
-    icon: "hugeicons:developer",
-    logo: "project"
-  },
-  {
     id: "flow",
     name: "Flow",
-    description: "Design, copy, and structure, your site will be live in minutes.",
+    description: "From prompt to a live launch page or a full app — design, copy, frontend, backend, and deploy included.",
     color: "#2F44FF",
     icon: "hugeicons:paint-bucket",
     logo: "flow"
   },
   {
-    id: "marketing",
-    name: "Marketing",
-    description: "AI will plan, create, and optimize your campaigns across channels.",
-    color: "#12BCFF",
-    icon: "hugeicons:megaphone-02",
-    logo: "marketing"
-  },
-  {
     id: "pentest",
     name: "Pentest",
-    description: "AI will scan your systems, find vulnerabilities, and suggest fixes.",
+    description: "AI scans your authorized app, API, or staging target before traffic and surfaces actionable findings.",
     color: "#91E500",
     icon: "hugeicons:shield-01",
     logo: "pentest"
   }
 ]
 
-const SUITE_KEYWORDS: Record<string, string> = {
-  // Project
-  app: "project",
-  application: "project",
-  saas: "project",
-  dashboard: "project",
-  backend: "project",
-  api: "project",
-  database: "project",
-  fullstack: "project",
-  "full-stack": "project",
-  mobile: "project",
-  ios: "project",
-  android: "project",
-  deploy: "project",
-  software: "project",
-  platform: "project",
-  crud: "project",
-  auth: "project",
-  authentication: "project",
-  billing: "project",
-  stripe: "project",
-  // Flow
+const SUITE_KEYWORDS: Record<string, "flow" | "pentest"> = {
+  // Flow — pages and apps
+  app: "flow",
+  application: "flow",
+  saas: "flow",
+  dashboard: "flow",
+  backend: "flow",
+  api: "flow",
+  database: "flow",
+  fullstack: "flow",
+  "full-stack": "flow",
+  mobile: "flow",
+  ios: "flow",
+  android: "flow",
+  deploy: "flow",
+  software: "flow",
+  platform: "flow",
+  crud: "flow",
+  auth: "flow",
+  authentication: "flow",
+  billing: "flow",
+  stripe: "flow",
   landing: "flow",
   website: "flow",
   "landing page": "flow",
@@ -102,23 +85,6 @@ const SUITE_KEYWORDS: Record<string, string> = {
   design: "flow",
   restaurant: "flow",
   agency: "flow",
-  // Marketing
-  marketing: "marketing",
-  campaign: "marketing",
-  ads: "marketing",
-  seo: "marketing",
-  social: "marketing",
-  growth: "marketing",
-  acquisition: "marketing",
-  instagram: "marketing",
-  facebook: "marketing",
-  google: "marketing",
-  tiktok: "marketing",
-  email: "marketing",
-  newsletter: "marketing",
-  content: "marketing",
-  leads: "marketing",
-  funnel: "marketing",
   // Pentest
   security: "pentest",
   pentest: "pentest",
@@ -137,7 +103,7 @@ const SUITE_KEYWORDS: Record<string, string> = {
 
 function detectSuite(input: string): SuiteMatch | null {
   const lower = input.toLowerCase()
-  const scores: Record<string, number> = { project: 0, flow: 0, marketing: 0, pentest: 0 }
+  const scores: Record<"flow" | "pentest", number> = { flow: 0, pentest: 0 }
 
   for (const [keyword, suiteId] of Object.entries(SUITE_KEYWORDS)) {
     if (lower.includes(keyword)) {
@@ -145,7 +111,7 @@ function detectSuite(input: string): SuiteMatch | null {
     }
   }
 
-  const best = Object.entries(scores).sort((a, b) => b[1] - a[1])[0]
+  const best = (Object.entries(scores) as ["flow" | "pentest", number][]).sort((a, b) => b[1] - a[1])[0]
   if (best[1] === 0) return null
 
   return SUITE_MATCHES.find((s) => s.id === best[0]) || null
@@ -358,13 +324,9 @@ export const Prompt = () => {
                 onClick={() =>
                   handleQuickSelect(
                     suite,
-                    suite.id === "project"
-                      ? "Build me a SaaS application with authentication and billing"
-                      : suite.id === "flow"
-                        ? "Create a landing page for my product with pricing"
-                        : suite.id === "marketing"
-                          ? "Launch a growth campaign across social media channels"
-                          : "Scan my web application for security vulnerabilities"
+                    suite.id === "flow"
+                      ? "Build me a SaaS launch page with pricing, FAQ, and signup"
+                      : "Scan my web application for vulnerabilities before launch"
                   )
                 }
               >

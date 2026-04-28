@@ -6,6 +6,15 @@ const nextConfig: NextConfig = {
   images: {
     qualities: [25, 50, 75, 80, 100]
   },
+  async redirects() {
+    // Project was folded into Flow — preserve any inbound links/SEO.
+    return [
+      { source: "/project", destination: "/flow", permanent: true },
+      { source: "/project/:path*", destination: "/flow/:path*", permanent: true },
+      { source: "/:locale/project", destination: "/:locale/flow", permanent: true },
+      { source: "/:locale/project/:path*", destination: "/:locale/flow/:path*", permanent: true }
+    ]
+  },
   async rewrites() {
     const brokerUrl = (process.env.BROKER_URL || "http://localhost:9000").replace(/\/+$/, "")
     // Use `fallback` so Next.js filesystem routes (including dynamic catch-all

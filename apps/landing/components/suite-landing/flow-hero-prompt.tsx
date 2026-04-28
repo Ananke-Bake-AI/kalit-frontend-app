@@ -13,11 +13,11 @@ import { useCallback, useRef, useState } from "react"
 import s from "./suite-landing-hero.module.scss"
 
 const BUTTONS = [
-  { icon: "hugeicons:rocket-01", label: "Startup" },
-  { icon: "hugeicons:test-tube-01", label: "SaaS" },
+  { icon: "hugeicons:rocket-01", label: "Launch page" },
+  { icon: "hugeicons:test-tube-01", label: "SaaS app" },
+  { icon: "hugeicons:dashboard-square-01", label: "Dashboard" },
   { icon: "hugeicons:user-story", label: "Portfolio" },
-  { icon: "hugeicons:serving-food", label: "Restaurant" },
-  { icon: "hugeicons:game-controller-01", label: "Game" }
+  { icon: "hugeicons:server-stack-03", label: "API" }
 ]
 
 export interface FlowHeroPromptProps {

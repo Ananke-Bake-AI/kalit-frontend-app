@@ -1,4 +1,4 @@
-export type SuiteId = "project" | "flow" | "marketing" | "pentest"
+export type SuiteId = "flow" | "marketing" | "pentest"
 
 export interface SuiteConfig {
   id: SuiteId
@@ -11,17 +11,9 @@ export interface SuiteConfig {
 
 export const SUITES: SuiteConfig[] = [
   {
-    id: "project",
-    name: "Project",
-    description: "Build and deploy full applications from a prompt. AI agents plan, build, test, and ship your product end-to-end.",
-    color: "#8200DF",
-    icon: "code",
-    href: "/project",
-  },
-  {
     id: "flow",
     name: "Flow",
-    description: "Launch high-converting websites and landing pages in minutes. Design, copy, structure, and hosting included.",
+    description: "From prompt to a live launch page or a full app — design, copy, frontend, backend, and deploy included.",
     color: "#2F44FF",
     icon: "globe",
     href: "/flow",

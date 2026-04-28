@@ -33,7 +33,7 @@ export async function completeOnboarding(input: OnboardingInput) {
   const trialExpiry = new Date()
   trialExpiry.setDate(trialExpiry.getDate() + 14)
 
-  const trialSuites = ["project", "flow", "marketing", "pentest", "search"]
+  const trialSuites = ["flow", "marketing", "pentest", "search"]
 
   const result = await prisma.$transaction(async (tx) => {
     const org = await tx.organization.create({
