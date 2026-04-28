@@ -37,47 +37,53 @@ export const Link = forwardRef<HTMLAnchorElement | HTMLDivElement, LinkProps>(
     const pathname = usePathname()
     const { locale } = useI18n()
     const isExternal = href.startsWith("http")
-    const isAnchor = href.startsWith("#") || href.startsWith(`${pathname}#`)
     const barePath = stripLocalePrefix(pathname)
-    const isCurrentPath = !isExternal && !isAnchor && barePath === href
+    const hashIndex = href.indexOf("#")
+    const hasHash = !isExternal && hashIndex >= 0
+    const hrefPath = hasHash ? href.slice(0, hashIndex) : href
+    const targetId = hasHash ? href.slice(hashIndex + 1) : ""
+    const normalizedHrefPath = hrefPath ? stripLocalePrefix(hrefPath) : barePath
+    const isSamePageAnchor = hasHash && (!hrefPath || normalizedHrefPath === barePath)
+    const isCurrentPath = !isExternal && !hasHash && barePath === href
     const isCurrentActive = isActive !== undefined ? isActive : isCurrentPath
 
-    // Auto-prepend locale for internal links
-    const resolvedHref = !isExternal && !isAnchor ? localePath(href, locale) : href
+    const resolvedHref = isExternal || href.startsWith("#") ? href : localePath(href, locale)
 
     const attr = isExternal
       ? { target: "_blank", rel: "noopener noreferrer" }
       : {}
 
     const handleClick = (e: MouseEvent<HTMLAnchorElement | HTMLDivElement>) => {
-      if (isAnchor) {
+      if (isSamePageAnchor) {
         e.preventDefault()
-        const targetId = href.includes("#") ? href.split("#")[1] : ""
         if (targetId) {
           const targetElement = document.getElementById(targetId)
           if (targetElement) {
-            const elementPosition = targetElement.offsetTop - 100
+            const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY - 110
             window.scrollTo({
               top: elementPosition,
               behavior: "smooth"
             })
+            window.history.replaceState(null, "", resolvedHref)
           }
         }
       }
       onClick?.(e)
     }
 
-    if (isAnchor) {
+    if (isSamePageAnchor) {
       return (
-        <div
+        <a
+          ref={ref as React.Ref<HTMLAnchorElement>}
           onClick={handleClick}
+          href={resolvedHref}
           title={title}
           className={className}
           style={style}
           data-pointer
         >
           {children}
-        </div>
+        </a>
       )
     }
 

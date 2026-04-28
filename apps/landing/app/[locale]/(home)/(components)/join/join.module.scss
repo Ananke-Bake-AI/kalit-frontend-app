@@ -7,6 +7,7 @@ $responsiveJoinItem2: 500px;
 .join {
   --screen-width: calc(700px + 200 * (100vw - 320px) / 1080);
   @include section;
+  scroll-margin-top: 110px;
   padding-bottom: 0;
   text-align: center;
   overflow: hidden;

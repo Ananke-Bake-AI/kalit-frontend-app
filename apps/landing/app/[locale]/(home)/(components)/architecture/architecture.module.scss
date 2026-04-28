@@ -5,6 +5,7 @@ $responsiveArchitecture: 900px;
 .architecture {
   --width-line: calc(500px + 100 * (100vw - 320px) / 1080);
   @include section;
+  scroll-margin-top: 110px;
   margin-top: var(--spacing-4);
   overflow: hidden;
 

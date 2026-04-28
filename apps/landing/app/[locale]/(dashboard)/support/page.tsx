@@ -6,7 +6,7 @@ import { PageSection } from "@/components/page-section"
 import s from "./support.module.scss"
 
 export const metadata: Metadata = {
-  title: "Support — Kalit AI",
+  title: "Support - Kalit AI",
   description: "Get help and support for the Kalit AI platform.",
 }
 

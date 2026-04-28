@@ -6,7 +6,7 @@ import { PageSection } from "@/components/page-section"
 import legal from "@/components/legal-document/legal-document.module.scss"
 
 export const metadata: Metadata = {
-  title: "Terms of Service — Kalit AI",
+  title: "Terms of Service - Kalit AI",
   description: "Terms of Service for the Kalit AI platform.",
 }
 
@@ -188,7 +188,7 @@ export default function TermsOfServicePage() {
             If you have any questions about these Terms of Service, please contact us at:
           </p>
           <p>
-            <strong>Kalit AI</strong> — a product of Merkle Tech Labs LTD.
+            <strong>Kalit AI</strong> - a product of Merkle Tech Labs LTD.
             <br />
             Company registration: C 107851 (Malta)
             <br />

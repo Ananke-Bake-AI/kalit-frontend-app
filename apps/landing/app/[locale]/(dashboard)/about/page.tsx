@@ -10,7 +10,7 @@ import { getServerTranslation } from "@/lib/i18n-server"
 import s from "./about.module.scss"
 
 export const metadata: Metadata = {
-  title: "About Us — Kalit AI",
+  title: "About Us - Kalit AI",
   description:
     "Meet the team behind Kalit AI. Experienced engineers and entrepreneurs building the AI execution platform for startups and digital teams.",
 }

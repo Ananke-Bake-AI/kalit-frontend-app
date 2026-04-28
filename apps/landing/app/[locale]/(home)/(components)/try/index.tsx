@@ -106,7 +106,7 @@ export const Try = () => {
         <Heading
           className={s.heading}
           subtitle="Try Kalit Flow"
-          paragraph="Describe your site. Kalit builds the page, the copy, and the structure — ready to publish in minutes."
+          paragraph="Describe your site. Kalit builds the page, the copy, and the structure, ready to publish in minutes."
         >
           Describe your vision, <br />
           <Underline>Kalit builds it</Underline>

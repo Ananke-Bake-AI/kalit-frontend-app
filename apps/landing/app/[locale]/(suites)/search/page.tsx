@@ -1,54 +1,80 @@
-import { auth } from "@/lib/auth"
-import { checkSuiteAccess } from "@/lib/entitlements"
-import { localeHref } from "@/lib/i18n-server"
-import { redirect } from "next/navigation"
-import { SignJWT } from "jose"
-import { prisma } from "@/lib/prisma"
+import { Button } from "@/components/button"
+import { Container } from "@/components/container"
+import { Icon } from "@/components/icon"
+import { Logo } from "@/components/logo"
+import { isValidLocale, type Locale } from "@/lib/i18n"
+import { getServerTranslation, getTranslationForLocale } from "@/lib/i18n-server"
+import { MetadataSeo } from "@/lib/metadata"
+import s from "./search.module.scss"
 
-/**
- * Search suite page — generates SSO token server-side and redirects directly.
- * No client-side launcher to avoid Vercel edge caching issues.
- */
+export const viewport = {
+  themeColor: "#8B5CF6"
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: raw } = await params
+  const locale = isValidLocale(raw) ? (raw as Locale) : "en"
+  const t = await getTranslationForLocale(locale)
+  return MetadataSeo({
+    fullTitle: t("seo.searchTitle"),
+    description: t("seo.searchDescription"),
+    image: "/img/thumbnail.jpg",
+    locale,
+    pathname: "/search"
+  })
+}
+
 export default async function SearchPage() {
-  const session = await auth()
-  if (!session?.user?.orgId || !session?.user?.id || !session?.user?.email) {
-    redirect(await localeHref("/login"))
-  }
+  const { t } = await getServerTranslation()
 
-  const hasAccess = await checkSuiteAccess(session.user.orgId, "search")
-  if (!hasAccess) {
-    redirect(await localeHref("/dashboard"))
-  }
+  const cards = [
+    {
+      icon: "hugeicons:search-01",
+      title: t("searchLanding.card1Title"),
+      text: t("searchLanding.card1Text")
+    },
+    {
+      icon: "hugeicons:chart-evaluation",
+      title: t("searchLanding.card2Title"),
+      text: t("searchLanding.card2Text")
+    },
+    {
+      icon: "hugeicons:rocket-01",
+      title: t("searchLanding.card3Title"),
+      text: t("searchLanding.card3Text")
+    }
+  ]
 
-  // Generate SSO token server-side
-  const secret = process.env.SUITE_JWT_SECRET || process.env.AUTH_SECRET
-  if (!secret) {
-    redirect(await localeHref("/dashboard"))
-  }
+  return (
+    <section className={s.page}>
+      <Container className={s.container}>
+        <div className={s.hero}>
+          <div className={s.logo}>
+            <Logo id="search" />
+          </div>
+          <p className={s.kicker}>{t("searchLanding.kicker")}</p>
+          <h1>{t("searchLanding.title")}</h1>
+          <p className={s.description}>{t("searchLanding.description")}</p>
+          <div className={s.actions}>
+            <Button href="/login?suite=search" icon="hugeicons:arrow-right-02">
+              {t("searchLanding.cta")}
+            </Button>
+            <Button href="/register" variant="secondary">
+              {t("searchLanding.secondaryCta")}
+            </Button>
+          </div>
+        </div>
 
-  const membership = await prisma.membership.findFirst({
-    where: { userId: session.user.id, orgId: session.user.orgId },
-  })
-
-  const encoder = new TextEncoder()
-  const token = await new SignJWT({
-    userId: session.user.id,
-    email: session.user.email,
-    name: session.user.name || null,
-    orgId: session.user.orgId,
-    suiteId: "search",
-    role: membership?.role || "MEMBER",
-  })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime("15m")
-    .setSubject(session.user.id)
-    .setIssuer("kalit-main")
-    .setAudience("search")
-    .sign(encoder.encode(secret))
-
-  const baseUrl = process.env.SUITE_SEARCH_URL || "https://search.kalit.ai"
-  const redirectUrl = `${baseUrl}/api/auth/sso/callback?token=${encodeURIComponent(token)}`
-
-  redirect(redirectUrl)
+        <div className={s.cards}>
+          {cards.map((card) => (
+            <article className={s.card} key={card.title}>
+              <Icon icon={card.icon} />
+              <h2>{card.title}</h2>
+              <p>{card.text}</p>
+            </article>
+          ))}
+        </div>
+      </Container>
+    </section>
+  )
 }

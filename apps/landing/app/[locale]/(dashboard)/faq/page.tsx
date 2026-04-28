@@ -7,7 +7,7 @@ import legal from "@/components/legal-document/legal-document.module.scss"
 import s from "./faq.module.scss"
 
 export const metadata: Metadata = {
-  title: "FAQ — Kalit AI",
+  title: "FAQ - Kalit AI",
   description: "Frequently asked questions about the Kalit AI platform.",
 }
 
@@ -55,7 +55,7 @@ const faqs = [
   {
     question: "How do I get started?",
     answer:
-      "Simply create an account on our website — no credit card required. Once signed in, you can explore available suites from your dashboard, run your first tasks using the Free tier credits, and upgrade to a paid plan whenever you need more capacity.",
+      "Simply create an account on our website. No credit card required. Once signed in, you can explore available suites from your dashboard, run your first tasks using the Free tier credits, and upgrade to a paid plan whenever you need more capacity.",
   },
   {
     question: "What kind of support do you offer?",

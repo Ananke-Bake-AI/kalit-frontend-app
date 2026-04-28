@@ -6,7 +6,7 @@ import { PageSection } from "@/components/page-section"
 import legal from "@/components/legal-document/legal-document.module.scss"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — Kalit AI",
+  title: "Privacy Policy - Kalit AI",
   description: "Privacy Policy for the Kalit AI platform.",
 }
 
@@ -216,7 +216,7 @@ export default function PrivacyPolicyPage() {
             please contact us at:
           </p>
           <p>
-            <strong>Kalit AI</strong> — a product of Merkle Tech Labs LTD.
+            <strong>Kalit AI</strong> - a product of Merkle Tech Labs LTD.
             <br />
             Northlink Business Centre, Level 2, Triq Burmarrad, Naxxar, NXR 6345, Malta
             <br />

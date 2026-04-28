@@ -45,7 +45,7 @@ const SUITE_MATCHES: SuiteMatch[] = [
   {
     id: "flow",
     name: "Flow",
-    description: "Design, copy, and structure — your site will be live in minutes.",
+    description: "Design, copy, and structure, your site will be live in minutes.",
     color: "#2F44FF",
     icon: "hugeicons:paint-bucket",
     logo: "flow"
@@ -283,7 +283,7 @@ export const Prompt = () => {
         </h1>
 
         <p className={s.subtitle}>
-          Describe your project — Kalit finds the best suite and gets to work.
+          Describe your project, Kalit finds the best suite and gets to work.
         </p>
 
         <div className={s.formWrapper}>

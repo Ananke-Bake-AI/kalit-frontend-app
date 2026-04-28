@@ -40,8 +40,8 @@ export const MetadataSeo = ({
   noIndex = false,
   favicon = "/favicon.svg"
 }: MetadataSeoProps): Metadata => {
-  const headTitle = fullTitle ? fullTitle : `${APP_NAME} — ${title}`
-  const fullUrl = url ? new URL(url, APP_BASE_URL) : APP_BASE_URL
+  const headTitle = fullTitle ? fullTitle : `${APP_NAME} - ${title}`
+  const fullUrl = url ? new URL(url, APP_BASE_URL) : pathname ? new URL(localePath(pathname, locale), APP_BASE_URL) : APP_BASE_URL
   const icon = favicon || "/favicon.svg"
 
   const defaultKeywords = [

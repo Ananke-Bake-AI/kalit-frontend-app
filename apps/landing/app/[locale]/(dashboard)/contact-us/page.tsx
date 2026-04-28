@@ -8,8 +8,8 @@ import { ContactForm } from "./form"
 import s from "./contact.module.scss"
 
 export const metadata: Metadata = {
-  title: "Contact Us — Kalit AI",
-  description: "Get in touch with the Kalit AI team. Questions, partnerships, press, or support — we'd love to hear from you.",
+  title: "Contact Us - Kalit AI",
+  description: "Get in touch with the Kalit AI team. Questions, partnerships, press, or support, we'd love to hear from you.",
 }
 
 export default async function ContactPage() {
