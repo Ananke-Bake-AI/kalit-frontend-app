@@ -227,30 +227,6 @@ export function SessionSidebar({ onSessionSelect, onNewChat }: SessionSidebarPro
     })
   }, [])
 
-  // ── Regenerate session title via broker LLM ─────────────
-  // Optimistically show a "..." placeholder so the user has feedback
-  // (the broker call sleeps ~2.5s waiting on the LLM). On success,
-  // overwrite with the polished title; on error, restore the previous
-  // title so we don't leave the user with a "..." stuck label.
-  const handleRegenerateTitle = useCallback(async (session: ChatSession) => {
-    setMenuOpenId(null)
-    const previous = session.title || ""
-    updateSessionTitle(session.id, "…")
-    try {
-      const res = await brokerFetch(`/api/broker/sessions/${session.id}/regenerate-title`, {
-        method: "POST",
-      })
-      if (!res.ok) {
-        updateSessionTitle(session.id, previous)
-        return
-      }
-      const data = (await res.json()) as { title?: string }
-      const next = (data?.title || "").trim()
-      updateSessionTitle(session.id, next || previous)
-    } catch {
-      updateSessionTitle(session.id, previous)
-    }
-  }, [updateSessionTitle])
 
   // ── Mode toggle ────────────────────────────────────────
   const handleToggleProgressMode = useCallback(() => {
@@ -384,17 +360,6 @@ export function SessionSidebar({ onSessionSelect, onNewChat }: SessionSidebarPro
                   >
                     <Icon icon="hugeicons:edit-02" />
                     <span>{t("studio.rename")}</span>
-                  </button>
-                  <button
-                    className={s.menuItem}
-                    role="menuitem"
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleRegenerateTitle(session)
-                    }}
-                  >
-                    <Icon icon="hugeicons:refresh" />
-                    <span>{t("studio.regenerateTitle") || "Regenerate title"}</span>
                   </button>
                   <button
                     className={clsx(s.menuItem, s.menuItemDanger)}
