@@ -214,8 +214,8 @@
 
 .workflow {
   display: grid;
-  grid-template-columns: 0.8fr 1.4fr;
-  gap: var(--spacing-1);
+  grid-template-columns: minmax(320px, 0.75fr) minmax(0, 1.35fr);
+  gap: var(--spacing-2);
   align-items: start;
   padding-top: var(--spacing-1);
 
@@ -250,8 +250,8 @@
 
 .step {
   display: grid;
-  grid-template-columns: 4rem 1fr;
-  gap: var(--size-4);
+  grid-template-columns: 4.5rem minmax(220px, 0.7fr) minmax(320px, 1fr);
+  gap: var(--size-6);
   align-items: start;
   padding: var(--size-5) 0;
   border-top: 1px solid oklch(from var(--text) l c h / 0.12);
@@ -266,11 +266,20 @@
     font-family: var(--font-heading);
     font-size: 1.35rem;
     line-height: 1;
-    margin-bottom: var(--size-2);
+    text-wrap: balance;
   }
 
   p {
     color: var(--text-secondary);
     line-height: 1.65;
+    max-width: 44rem;
+  }
+
+  @include max(760px) {
+    grid-template-columns: 3.5rem 1fr;
+
+    p {
+      grid-column: 2;
+    }
   }
 }
