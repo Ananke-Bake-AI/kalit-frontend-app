@@ -10,6 +10,9 @@ import clsx from "clsx"
 import type { MouseEvent } from "react"
 import s from "./nav.module.scss"
 
+const LAUNCH_SUITE_IDS = new Set(["flow", "pentest"])
+const launchSuites = SUITES.filter((suite) => LAUNCH_SUITE_IDS.has(suite.id))
+
 export const Nav = () => {
   const { nav, subOpen, setSubOpen, setNav } = useAppStore()
   const t = useTranslation()
@@ -39,7 +42,7 @@ export const Nav = () => {
             onMouseLeave={() => setSubOpen(false)}
             onClick={() => setSubOpen(false)}
           >
-            {SUITES.map(({ id, title, color }) => (
+            {launchSuites.map(({ id, title, color }) => (
               <li key={id} style={{ "--color": color } as React.CSSProperties}>
                 <Link href={`/${id}`}>
                   <div className={s.logo}>

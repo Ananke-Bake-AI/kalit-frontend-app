@@ -121,7 +121,7 @@ export const SUITES: SuiteConfig[] = [
 ]
 
 /** Ordre des boutons suite sous le prompt hero */
-export const HERO_PROMPT_SUITE_ORDER: readonly SuiteId[] = ["project", "flow", "marketing", "pentest"]
+export const HERO_PROMPT_SUITE_ORDER: readonly SuiteId[] = ["flow", "pentest"]
 
 const SUITE_KEYWORD_TO_ID: Record<string, SuiteId> = {
   app: "project",
@@ -232,6 +232,6 @@ export function detectSuiteFromPrompt(input: string): SuiteConfig {
     if (lower.includes(keyword)) scores[suiteId] += keyword.split(" ").length
   }
   const best = Object.entries(scores).sort((a, b) => b[1] - a[1])[0] as [SuiteId, number]
-  if (best[1] === 0) return getSuiteById("project")!
+  if (best[1] === 0) return getSuiteById("flow")!
   return getSuiteById(best[0])!
 }

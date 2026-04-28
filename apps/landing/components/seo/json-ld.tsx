@@ -8,7 +8,7 @@ export function JsonLd({ locale = "en" }: { locale?: Locale }) {
     url: "https://kalit.ai",
     logo: "https://kalit.ai/favicon.svg",
     description:
-      "Kalit is the AI suite for startups and digital teams. Build apps, launch landing pages, run marketing campaigns, and secure your product.",
+      "Kalit helps founders create AI launch pages with Flow, deploy them live, and run authorized pre-launch security scans with Pentest.",
     sameAs: [
       "https://x.com/kalit_ai",
       "https://www.linkedin.com/company/kalit-ai",
@@ -24,7 +24,7 @@ export function JsonLd({ locale = "en" }: { locale?: Locale }) {
     url: "https://kalit.ai",
     inLanguage: locale,
     description:
-      "Build, launch, grow, and secure your startup with AI. Four specialized AI suites for apps, websites, acquisition, and security.",
+      "Launch your site with AI, deploy it live, and scan authorized targets before go-live.",
     potentialAction: {
       "@type": "SearchAction",
       target: "https://kalit.ai/?q={search_term_string}",
@@ -41,28 +41,28 @@ export function JsonLd({ locale = "en" }: { locale?: Locale }) {
     url: "https://kalit.ai",
     inLanguage: locale,
     description:
-      "AI-powered platform to build apps, launch websites, run marketing campaigns, and scan for security vulnerabilities.",
+      "AI-powered platform to create launch pages with Flow and run authorized pre-launch security scans with Pentest.",
     offers: [
       {
         "@type": "Offer",
         price: "29",
         priceCurrency: "USD",
         name: "Starter",
-        description: "Kalit Flow access with 100 credits per month and 2 team members",
+        description: "Kalit Flow access for AI-generated launch pages and live previews",
       },
       {
         "@type": "Offer",
         price: "99",
         priceCurrency: "USD",
-        name: "Pro",
-        description: "Flow, Project, and Marketing suites with 500 credits per month and 10 team members",
+        name: "Launch",
+        description: "Flow launch pages with deploy/redeploy workflow and priority support",
       },
       {
         "@type": "Offer",
         price: "299",
         priceCurrency: "USD",
-        name: "Enterprise",
-        description: "All 4 suites with 2000 credits per month and unlimited team members",
+        name: "Launch Pro",
+        description: "Flow plus Pentest access for pre-launch scans and report export",
       },
     ],
   }

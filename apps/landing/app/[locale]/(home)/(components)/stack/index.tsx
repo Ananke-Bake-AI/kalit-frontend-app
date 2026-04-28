@@ -16,6 +16,9 @@ import { Navigation } from "swiper/modules"
 import { Swiper, SwiperRef, SwiperSlide } from "swiper/react"
 import s from "./stack.module.scss"
 
+const LAUNCH_SUITE_IDS = new Set(["flow", "pentest"])
+const launchSuites = SUITES.filter((suite) => LAUNCH_SUITE_IDS.has(suite.id))
+
 export const Stack = () => {
   const t = useTranslation()
   const sliderRef = useRef<SwiperRef>(null)
@@ -71,7 +74,7 @@ export const Stack = () => {
             }
           }}
         >
-          {SUITES.map(({ id, color, title }) => (
+          {launchSuites.map(({ id, color, title }) => (
             <SwiperSlide key={id} className={s.slide}>
               <div id={id} className={s.item} style={{ "--color": color } as React.CSSProperties}>
                 <div className={s.middle}>

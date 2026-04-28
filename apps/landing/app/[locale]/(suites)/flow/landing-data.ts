@@ -1,6 +1,5 @@
 import type { PlanProps } from "@/components/plan"
 import type { SuiteLandingFeatureCard } from "@/components/suite-landing"
-import { createPublicPaidPlans } from "@/lib/public-paid-plans"
 import { FLOW_MARKETING_PATH } from "@/lib/flow-suite-entry"
 
 export const flowMarketingPath = FLOW_MARKETING_PATH
@@ -52,8 +51,49 @@ export const flowFeatureCards: SuiteLandingFeatureCard[] = [
   }
 ]
 
-export const flowPlans: Omit<PlanProps, "action">[] = createPublicPaidPlans({
-  starterButtonText: "Get started",
-  proButtonText: "Get started",
-  enterpriseButtonText: "Get started",
-})
+export const flowPlans: Omit<PlanProps, "action">[] = [
+  {
+    name: "Starter",
+    tagline: "For testing Flow and shipping a first page.",
+    price: "$29",
+    priceSuffix: "per month",
+    features: [
+      "Kalit Flow access",
+      "100 credits / month",
+      "AI-generated landing pages",
+      "Live previews",
+      "Custom domain support",
+    ],
+    buttonText: "Start with Flow",
+  },
+  {
+    name: "Launch",
+    tagline: "For founders preparing a public launch.",
+    recommended: true,
+    titleBadge: "Launch pick",
+    price: "$99",
+    priceSuffix: "per month",
+    features: [
+      "Flow + Kalit Studio",
+      "500 credits / month",
+      "Deploy and redeploy pages",
+      "Project files and exports",
+      "Priority support",
+    ],
+    buttonText: "Build my launch site",
+  },
+  {
+    name: "Launch Pro",
+    tagline: "For teams that want launch pages plus security review.",
+    price: "$299",
+    priceSuffix: "per month",
+    features: [
+      "Flow + Pentest access",
+      "2,000 credits / month",
+      "Pre-launch security scan",
+      "Report export",
+      "Custom onboarding",
+    ],
+    buttonText: "Launch with scan",
+  },
+]

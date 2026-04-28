@@ -14,6 +14,9 @@ import gsap from "gsap"
 import { useRef } from "react"
 import s from "./join.module.scss"
 
+const LAUNCH_SUITE_IDS = new Set(["flow", "pentest"])
+const launchSuites = SUITES.filter((suite) => LAUNCH_SUITE_IDS.has(suite.id))
+
 export const Join = () => {
   const t = useTranslation()
   const listRef = useRef<HTMLDivElement>(null)
@@ -83,7 +86,7 @@ export const Join = () => {
             />
           </svg>
           <div ref={listRef} className={s.list}>
-            {SUITES.map((suite) => (
+            {launchSuites.map((suite) => (
               <div className={s.item} key={suite.id} style={{ "--color": suite.color } as React.CSSProperties}>
                 <div className={s.top}>
                   <Link href={`/${suite.id}`} className={s.icon}>

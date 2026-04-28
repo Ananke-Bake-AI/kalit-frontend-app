@@ -4,6 +4,7 @@ import { Color4Bg } from "@/components/color4bg"
 import { Container } from "@/components/container"
 import { Heading } from "@/components/heading"
 import { Icon } from "@/components/icon"
+import { FlowSuiteCtaButton } from "@/components/flow-suite-cta-button"
 import { AnimatedLine } from "@/components/svg/animated-line"
 import type { SuiteId } from "@/lib/suites"
 import type { Tag } from "@/types/Tag"
@@ -74,11 +75,11 @@ export function SuiteLandingHero({
                 ))}
               </ul>
             ) : null}
-            {/* <div className={s.ctaBlock}>
+            <div className={s.ctaBlock}>
               <FlowSuiteCtaButton suiteId={suiteId} suiteAppUrl={suiteAppUrl} marketingPath={marketingPath} circle className={s.button}>
                 {ctaLabel}
               </FlowSuiteCtaButton>
-            </div> */}
+            </div>
           </div>
           <div className={s.right}>
             {rightSlot}

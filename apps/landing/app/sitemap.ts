@@ -7,9 +7,7 @@ const PAGES = [
   { path: "/", changeFrequency: "weekly" as const, priority: 1 },
   { path: "/register", changeFrequency: "monthly" as const, priority: 0.9 },
   { path: "/login", changeFrequency: "monthly" as const, priority: 0.5 },
-  { path: "/project", changeFrequency: "weekly" as const, priority: 0.8 },
   { path: "/flow", changeFrequency: "weekly" as const, priority: 0.8 },
-  { path: "/marketing", changeFrequency: "weekly" as const, priority: 0.8 },
   { path: "/pentest", changeFrequency: "weekly" as const, priority: 0.8 },
 ]
 

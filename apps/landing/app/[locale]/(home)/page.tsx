@@ -4,7 +4,6 @@ import { Portfolio } from "@/components/portfolio"
 import { Underline } from "@/components/underline"
 import { useI18n } from "@/stores/i18n"
 import { Architecture } from "./(components)/architecture"
-import { Choose } from "./(components)/choose"
 import { Features } from "./(components)/features"
 import { Hero } from "./(components)/hero"
 import { Join } from "./(components)/join"
@@ -33,7 +32,6 @@ export default function HomePage() {
         buttonText={t("portfolio.exploreMore")}
         link="/flow"
       />
-      <Choose />
     </>
   )
 }
