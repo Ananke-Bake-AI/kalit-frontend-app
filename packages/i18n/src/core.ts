@@ -17,7 +17,7 @@ export const LOCALE_CONFIG: Record<Locale, { label: string; flag: string; name: 
   fr: { label: "FR", flag: "🇫🇷", name: "Français" },
   es: { label: "ES", flag: "🇪🇸", name: "Español" },
   de: { label: "DE", flag: "🇩🇪", name: "Deutsch" },
-  pt: { label: "PT", flag: "🇧🇷", name: "Português" },
+  pt: { label: "PT", flag: "🇵🇹", name: "Português" },
   ja: { label: "JA", flag: "🇯🇵", name: "日本語" },
   it: { label: "IT", flag: "🇮🇹", name: "Italiano" },
   nl: { label: "NL", flag: "🇳🇱", name: "Nederlands" },
