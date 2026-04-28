@@ -14,7 +14,7 @@ import gsap from "gsap"
 import { useRef } from "react"
 import s from "./join.module.scss"
 
-const LAUNCH_SUITE_IDS = new Set(["flow", "pentest"])
+const LAUNCH_SUITE_IDS = new Set(["flow", "pentest", "search"])
 const launchSuites = SUITES.filter((suite) => LAUNCH_SUITE_IDS.has(suite.id))
 
 export const Join = () => {
