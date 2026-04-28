@@ -300,6 +300,32 @@ export function FileExplorer({ sessionId, onPreviewFile }: FileExplorerProps) {
     setExpanded((prev) => { const n = new Set(prev); n.has(p) ? n.delete(p) : n.add(p); return n })
   }, [])
 
+  const [downloading, setDownloading] = useState(false)
+  const handleDownloadZip = useCallback(async () => {
+    if (!flowProjectId || downloading) return
+    setDownloading(true)
+    try {
+      const res = await brokerFetch(`/api/broker/project/${flowProjectId}/download`, { method: "POST" })
+      if (!res.ok) {
+        setDownloading(false)
+        return
+      }
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `project-${flowProjectId}.zip`
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch {
+      // silent — browser surfaces fetch errors via the network tab
+    } finally {
+      setDownloading(false)
+    }
+  }, [flowProjectId, downloading])
+
   const deleteFile = useCallback(async (path: string) => {
     if (!sessionId) return
     try {
@@ -347,6 +373,20 @@ export function FileExplorer({ sessionId, onPreviewFile }: FileExplorerProps) {
       <div className={s.content}>
         {tab === "files" && (
           <div style={{ padding: "4px 0" }}>
+            {flowProjectId && tree.length > 0 && (
+              <button
+                type="button"
+                className={s.downloadZipBtn}
+                onClick={handleDownloadZip}
+                disabled={downloading}
+                title={t("studio.downloadZipTitle") || "Download the whole project as a .zip"}
+              >
+                <Icon icon={downloading ? "hugeicons:loading-03" : "hugeicons:download-04"} />
+                <span>{downloading
+                  ? (t("studio.downloadingZip") || "Preparing zip…")
+                  : (t("studio.downloadZip") || "Download .zip")}</span>
+              </button>
+            )}
             {loading && tree.length === 0 ? (
               <div className={s.empty}>
                 <span className={s.emptyTitle}>{t("studio.loading")}</span>
