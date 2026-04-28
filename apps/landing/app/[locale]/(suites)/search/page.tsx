@@ -56,7 +56,7 @@ export default async function SearchPage() {
           <h1>{t("searchLanding.title")}</h1>
           <p className={s.description}>{t("searchLanding.description")}</p>
           <div className={s.actions}>
-            <Button href="/login?suite=search" icon="hugeicons:arrow-right-02">
+            <Button href="/search/open" icon="hugeicons:arrow-right-02">
               {t("searchLanding.cta")}
             </Button>
             <Button href="/register" variant="secondary">
