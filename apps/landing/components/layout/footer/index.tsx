@@ -16,7 +16,8 @@ export const Footer = () => {
       title: t("footer.suites"),
       links: [
         { title: "Flow", href: "/flow" },
-        { title: "Pentest", href: "/pentest" }
+        { title: "Pentest", href: "/pentest" },
+        { title: "Search", href: "/search" }
       ]
     },
     {
