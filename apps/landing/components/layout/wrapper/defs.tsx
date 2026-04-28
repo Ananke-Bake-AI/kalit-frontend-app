@@ -139,6 +139,30 @@ export const Defs = () => {
           ]}
         />
         <LinearGradient
+          id="color-5_1"
+          gradientUnits="userSpaceOnUse"
+          x1={529.607}
+          y1={350.5}
+          x2={-4.39255}
+          y2={6.49997}
+          stops={[
+            { offset: 0, color: "var(--color-5)" },
+            { offset: 1, color: "var(--color-5-secondary)" }
+          ]}
+        />
+        <LinearGradient
+          id="color-5_2"
+          gradientUnits="userSpaceOnUse"
+          x1={0}
+          y1={366.5}
+          x2={485.929}
+          y2={-30.7928}
+          stops={[
+            { offset: 0, color: "var(--color-5)" },
+            { offset: 1, color: "var(--color-5-secondary)" }
+          ]}
+        />
+        <LinearGradient
           id="architecture_line_1"
           gradientUnits="userSpaceOnUse"
           x1={6.74999}
@@ -216,7 +240,7 @@ export const Defs = () => {
             { offset: 1, color: "var(--color-4)" }
           ]}
         />
-        {Array.from({ length: 4 }).map((_, i) => (
+        {Array.from({ length: 5 }).map((_, i) => (
           <LinearGradient
             key={i}
             id={`color-${i + 1}`}

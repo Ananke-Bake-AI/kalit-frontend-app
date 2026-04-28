@@ -47,6 +47,10 @@ $responsive: 1200px;
   color: var(--color-4);
 }
 
+.how[data-accent="5"] .top {
+  color: var(--color-5);
+}
+
 .steps {
   --step-width: calc(350px + 100 * (100vw - 320px) / 1080);
   --gap: var(--spacing-2-5);

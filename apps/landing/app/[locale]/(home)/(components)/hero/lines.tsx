@@ -4,7 +4,7 @@ import { HeroCard } from "./card"
 import s from "./hero.module.scss"
 
 interface LinesProps {
-  gradient?: "hero-line" | "color-1" | "color-2" | "color-3" | "color-4"
+  gradient?: "hero-line" | "color-1" | "color-2" | "color-3" | "color-4" | "color-5"
   cards?: boolean
 }
 

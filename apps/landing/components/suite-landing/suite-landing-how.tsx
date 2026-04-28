@@ -7,7 +7,7 @@ import { type ReactNode } from "react"
 import s from "./suite-landing-how.module.scss"
 import { SuiteLandingStep, type SuiteLandingStepProps } from "./suite-landing-step"
 
-export type SuiteLandingAccent = 1 | 2 | 3 | 4
+export type SuiteLandingAccent = 1 | 2 | 3 | 4 | 5
 
 export interface SuiteLandingHowProps {
   accent: SuiteLandingAccent
