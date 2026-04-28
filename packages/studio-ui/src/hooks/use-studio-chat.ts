@@ -369,6 +369,24 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
     setStreamSegments([])
     setStreamThinking("")
 
+    // Drop the most-recent in-progress assistant from messages[] before the
+    // live stream rebuilds it. The broker's persistSegments() writes the
+    // partial content to DB on every significant event, so fetchMessages()
+    // returns that partial as a regular assistant entry — and the SSE
+    // replay then re-renders the same content as a streamSegments live
+    // bubble. Without this prune the user sees the message twice on
+    // session switch-back. Identifying the in-progress bubble: the latest
+    // entry whose role is "assistant", since the broker only ever has one
+    // partial assistant per session at a time.
+    const msgs = useStudioStore.getState().messages
+    for (let i = msgs.length - 1; i >= 0; i--) {
+      if (msgs[i].role === "assistant") {
+        removeMessage(msgs[i].id)
+        break
+      }
+      if (msgs[i].role === "user") break
+    }
+
     ;(async () => {
       try {
         const res = await brokerFetch(
@@ -436,7 +454,7 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
     activeSessionId, messagesLoading, sessions,
     setIsStreaming, setStreamSegments, setStreamThinking, setActiveWidgets,
     addActiveWidget, setLastRouting, onSuiteChange, setError, resetStream,
-    fetchMessages, fetchSessions, fetchQuota, notify,
+    fetchMessages, fetchSessions, fetchQuota, notify, removeMessage,
   ])
 
   // ── Session selection ───────────────────────────────────
