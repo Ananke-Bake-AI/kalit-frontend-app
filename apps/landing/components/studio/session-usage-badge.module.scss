@@ -4,16 +4,39 @@
   gap: 0.4rem;
   padding: 0.28rem 0.6rem;
   border-radius: 999px;
-  background: oklch(0 0 0 / 0.04);
-  border: 1px solid oklch(0 0 0 / 0.05);
+  // Theme-aware background: --glass-50 is defined per-theme in
+  // styles/_colors.scss (white/0.5 on light, dark navy/0.7 on
+  // dark) so it always reads against the topbar regardless of
+  // theme. The previous hard-coded `oklch(0 0 0 / 0.04)` was
+  // invisible in dark mode, and the `oklch(from var(--text) l c h
+  // / α)` relative-color attempt depends on browser support that
+  // isn't universal yet — sticking to vanilla CSS variables.
+  // Border: color-mix is well supported (Chrome 111+, Safari 16.2+,
+  // Firefox 113+) and renders a subtle 12% wash of the text color.
+  background: var(--glass-50);
+  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
   font-size: 0.76rem;
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
   transition: background 0.35s ease, border-color 0.35s ease;
+  flex-shrink: 1;
+  min-width: 0;
 
   &[data-flash] {
     background: oklch(0.88 0.15 150 / 0.22);
     border-color: oklch(0.78 0.18 150 / 0.5);
+  }
+
+  // Phone: with the compact-notation numbers from the .tsx
+  // (1.2M / 44k instead of 1,239,548 / 44,305), the pill stays
+  // narrow. Tightened padding/gap/font to leave room for the
+  // model selector and toolbar buttons next to it.
+  @media (max-width: 600px) {
+    gap: 0.25rem;
+    padding: 0.22rem 0.45rem;
+    font-size: 0.7rem;
+    overflow: hidden;
+    white-space: nowrap;
   }
 }
 
@@ -51,4 +74,10 @@
 .label {
   font-size: 0.68rem;
   opacity: 0.6;
+
+  // Phone: drop the "toks" suffix to reclaim ~30px so the topRight
+  // toolbar fits without horizontal overflow.
+  @media (max-width: 600px) {
+    display: none;
+  }
 }

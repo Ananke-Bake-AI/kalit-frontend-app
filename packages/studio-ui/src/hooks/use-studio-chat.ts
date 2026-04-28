@@ -238,6 +238,12 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
     }
   }, [setQuota])
 
+  // ── Bootstrap quota on mount so the sidebar badge is visible
+  //     immediately, not only after the first chat completes.
+  useEffect(() => {
+    if (ready) fetchQuota()
+  }, [ready, fetchQuota])
+
   // ── Honor initial `?session=` / `?prompt=` params ───────
 
   useEffect(() => {
@@ -435,9 +441,19 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
   // ── Session selection ───────────────────────────────────
 
   const handleSessionSelect = useCallback((id: string) => {
+    if (id === activeSessionRef.current) return
+    // Clear residual stream UI from the previous session before switching.
+    // Without this, segments / thinking text / live widgets from the old
+    // session's in-flight agent stream remain visible on top of the new
+    // session's chat until its own follow-stream useEffect kicks in. The
+    // broker keeps the previous agent running (background ctx) — only the
+    // SSE subscription is aborted by the activeSessionId change — so this
+    // is safe: the work is preserved, only the UI state is reset.
+    resetStream()
+    setActiveWidgets([])
     setActiveSessionId(id)
     onSessionActivated?.(id, { clearPrompt: true, clearSuite: true })
-  }, [setActiveSessionId, onSessionActivated])
+  }, [resetStream, setActiveWidgets, setActiveSessionId, onSessionActivated])
 
   // ── Welcome prompt click ────────────────────────────────
 
@@ -763,6 +779,20 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
                   const cost = ds.cost_credits || 0
                   const dur = ((ds.turn_duration_ms || 0) / 1000).toFixed(1)
                   clog("cost", "COST", `in=${inTok} out=${outTok} cost=${cost.toFixed(4)} credits turn=${dur}s model=${ds.model || "?"}`)
+                  // Optimistic quota decrement: apply this turn's cost
+                  // immediately so the sidebar badge ticks down without
+                  // waiting for the post-stream fetchQuota() HTTP round-trip.
+                  // The final fetchQuota() in the `finally` reconciles drift.
+                  if (cost > 0) {
+                    const current = useStudioStore.getState().quota
+                    if (current) {
+                      const remaining = Math.max(0, current.remainingCredits - cost)
+                      const percentage = current.creditsPerMonth > 0
+                        ? Math.min(100, ((current.creditsPerMonth - remaining) / current.creditsPerMonth) * 100)
+                        : current.percentage
+                      setQuota({ ...current, remainingCredits: remaining, percentage })
+                    }
+                  }
                   break
                 }
 

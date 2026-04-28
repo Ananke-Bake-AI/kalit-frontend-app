@@ -17,6 +17,6 @@ export function getIdenticonDataUri(seed: string, options: IdenticonOptions = {}
     seed: seed || "anonymous",
     size,
     radius,
-    randomizeIds: true
+    randomizeIds: false
   }).toDataUri()
 }

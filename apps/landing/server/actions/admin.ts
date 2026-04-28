@@ -183,11 +183,15 @@ export async function getAdminMetrics() {
     activeJobs,
     completedJobs,
     failedJobs,
-    creditsUsedThisMonth: creditsUsed._sum.credits ?? 0,
-    creditsUsedLastMonth: creditsUsedLastMonth._sum.credits ?? 0,
+    // UsageRecord.credits is now Decimal — Prisma returns Prisma.Decimal
+    // for sums on this column. Coerce to plain numbers at the boundary so
+    // the dashboard widgets that consume these fields can keep doing
+    // arithmetic and render directly.
+    creditsUsedThisMonth: creditsUsed._sum.credits ? Number(creditsUsed._sum.credits) : 0,
+    creditsUsedLastMonth: creditsUsedLastMonth._sum.credits ? Number(creditsUsedLastMonth._sum.credits) : 0,
     totalUsageRecords,
     activeTrials: trialEntitlements,
-    creditsBySuite: creditsBySuite.map((r) => ({ suite: r.suiteId, credits: r._sum.credits ?? 0 })),
+    creditsBySuite: creditsBySuite.map((r) => ({ suite: r.suiteId, credits: r._sum.credits ? Number(r._sum.credits) : 0 })),
     signupsByDay
   }
 }
@@ -486,7 +490,11 @@ export async function getAdminUsageRecords(params: { page?: number; limit?: numb
     prisma.usageRecord.count()
   ])
 
-  return { records, total, page, limit, totalPages: Math.ceil(total / limit) }
+  // credits is Decimal — coerce to number at the boundary so the admin
+  // monitoring table can render it directly and the parent component
+  // doesn't need to know about the Prisma.Decimal type.
+  const normalized = records.map((r) => ({ ...r, credits: Number(r.credits) }))
+  return { records: normalized, total, page, limit, totalPages: Math.ceil(total / limit) }
 }
 
 export async function getRecentSignups(limit = 10) {

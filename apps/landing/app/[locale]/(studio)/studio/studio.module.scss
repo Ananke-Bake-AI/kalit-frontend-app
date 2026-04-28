@@ -93,7 +93,20 @@
   display: flex;
   align-items: center;
   gap: var(--size-1);
-  flex-shrink: 0;
+  flex-shrink: 1;
+  min-width: 0;
+
+  // Phone: the topbar's left half (hamburger + brand + active session
+  // title) competes with topRight (badge + model selector + 3-4 icon
+  // buttons) for the same flex row. With flex-shrink:0 the row would
+  // exceed viewport and toolbar buttons disappear off the right edge.
+  // Allow shrinking + tighter gaps; the badge has its own compact
+  // overrides below 600px.
+  @media (max-width: 600px) {
+    gap: 0.25rem;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
 }
 
 .topLeft {

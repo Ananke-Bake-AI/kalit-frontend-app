@@ -18,6 +18,6 @@ export function getAvatarDataUri(seed: string, options: DicebearAvatarOptions = 
     seed: seed || "anonymous",
     size,
     radius,
-    randomizeIds: true
+    randomizeIds: false
   }).toDataUri()
 }
