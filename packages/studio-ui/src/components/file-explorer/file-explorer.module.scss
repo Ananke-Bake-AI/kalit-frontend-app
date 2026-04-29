@@ -359,6 +359,18 @@
   }
 }
 
+.downloadError {
+  margin: -0.25rem 0 0.5rem 0;
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-4);
+  background: oklch(from var(--danger) l c h / 0.08);
+  border: 1px solid oklch(from var(--danger) l c h / 0.2);
+  color: var(--danger);
+  font-size: 0.65rem;
+  line-height: 1.3;
+  text-align: center;
+}
+
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

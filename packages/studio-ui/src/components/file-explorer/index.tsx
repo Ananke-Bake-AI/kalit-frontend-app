@@ -301,12 +301,16 @@ export function FileExplorer({ sessionId, onPreviewFile }: FileExplorerProps) {
   }, [])
 
   const [downloading, setDownloading] = useState(false)
+  const [downloadError, setDownloadError] = useState<string | null>(null)
   const handleDownloadZip = useCallback(async () => {
     if (!flowProjectId || downloading) return
     setDownloading(true)
+    setDownloadError(null)
     try {
       const res = await brokerFetch(`/api/broker/project/${flowProjectId}/download`, { method: "POST" })
       if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        setDownloadError((data as { error?: string }).error || `Download failed (${res.status})`)
         setDownloading(false)
         return
       }
@@ -318,9 +322,9 @@ export function FileExplorer({ sessionId, onPreviewFile }: FileExplorerProps) {
       document.body.appendChild(a)
       a.click()
       a.remove()
-      URL.revokeObjectURL(url)
-    } catch {
-      // silent — browser surfaces fetch errors via the network tab
+      setTimeout(() => URL.revokeObjectURL(url), 1000)
+    } catch (err) {
+      setDownloadError(err instanceof Error ? err.message : "Download failed")
     } finally {
       setDownloading(false)
     }
@@ -386,6 +390,9 @@ export function FileExplorer({ sessionId, onPreviewFile }: FileExplorerProps) {
                   ? (t("studio.downloadingZip") || "Preparing zip…")
                   : (t("studio.downloadZip") || "Download .zip")}</span>
               </button>
+            )}
+            {downloadError && (
+              <div className={s.downloadError}>{downloadError}</div>
             )}
             {loading && tree.length === 0 ? (
               <div className={s.empty}>
