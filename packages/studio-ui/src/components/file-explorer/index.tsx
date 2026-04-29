@@ -376,7 +376,7 @@ export function FileExplorer({ sessionId, onPreviewFile }: FileExplorerProps) {
       {/* Content */}
       <div className={s.content}>
         {tab === "files" && (
-          <div style={{ padding: "4px 0" }}>
+          <div>
             {flowProjectId && tree.length > 0 && (
               <button
                 type="button"

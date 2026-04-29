@@ -328,12 +328,15 @@
   justify-content: center;
   gap: 0.4rem;
   width: 100%;
-  margin: 0 0 0.5rem 0;
+  margin: 0;
   padding: 0.5rem 0.75rem;
   font-size: 0.72rem;
   font-weight: 500;
-  border-radius: var(--radius-4);
+  border-radius: 0;
   border: 1px solid oklch(from var(--text) l c h / 0.12);
+  border-left: none;
+  border-right: none;
+  border-top: none;
   background: oklch(from var(--text) l c h / 0.04);
   color: var(--text);
   cursor: pointer;
@@ -360,11 +363,11 @@
 }
 
 .downloadError {
-  margin: -0.25rem 0 0.5rem 0;
-  padding: 0.4rem 0.6rem;
-  border-radius: var(--radius-4);
+  margin: 0;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0;
   background: oklch(from var(--danger) l c h / 0.08);
-  border: 1px solid oklch(from var(--danger) l c h / 0.2);
+  border-bottom: 1px solid oklch(from var(--danger) l c h / 0.2);
   color: var(--danger);
   font-size: 0.65rem;
   line-height: 1.3;
