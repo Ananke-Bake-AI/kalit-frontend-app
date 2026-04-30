@@ -1,6 +1,6 @@
 "use client"
 
-import { memo } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { Icon } from "../../primitives/icon"
@@ -9,6 +9,109 @@ import { WidgetRenderer } from "../widget-renderer"
 import { useI18n } from "@kalit/i18n/react"
 import type { StreamSegment } from "../../types"
 import s from "./stream-segments.module.scss"
+
+// ---------------------------------------------------------------------------
+// TypewriterMarkdown — paces in-flight LLM chunks so the text appears at a
+// human-feeling rate instead of arriving in jagged bursts. Only the live
+// (last + active) text segment animates; on initial mount or when streaming
+// is over, the content shows in full immediately.
+// ---------------------------------------------------------------------------
+
+// Tick every 50ms. At low backlog reveal 1 char per tick (≈ 20 chars/sec —
+// distinctly letter-by-letter). Past BACKLOG_THRESHOLD chars buffered, step
+// up to a max of 3 chars/tick so a long answer eventually finishes without
+// the user waiting forever, but never fast enough to look like a block.
+const BACKLOG_THRESHOLD = 100
+const TICK_MS = 25
+const MAX_STEP = 4
+
+function TypewriterMarkdown({
+  content,
+  animate,
+  onCaughtUp,
+}: {
+  content: string
+  animate: boolean
+  onCaughtUp?: () => void
+}) {
+  // Letter-by-letter reveal driven by a fixed-interval setInterval. The
+  // target text is updated via ref so incoming SSE chunks don't disturb the
+  // running interval — they just extend the target the interval is walking
+  // toward. The interval keeps running even after `animate` flips false:
+  // we want the typewriter to drain whatever buffered content remains,
+  // then fire `onCaughtUp` so the parent can replace the live view with
+  // the persisted message bubble seamlessly.
+  const [revealed, setRevealed] = useState<string>(() => (animate ? "" : content))
+  const targetRef = useRef(content)
+  const lenRef = useRef<number>(animate ? 0 : content.length)
+  const animateRef = useRef(animate)
+  const caughtUpFiredRef = useRef(false)
+  const onCaughtUpRef = useRef(onCaughtUp)
+
+  useEffect(() => {
+    onCaughtUpRef.current = onCaughtUp
+  }, [onCaughtUp])
+
+  useEffect(() => {
+    targetRef.current = content
+  }, [content])
+
+  useEffect(() => {
+    animateRef.current = animate
+    // When `animate` flips back to true (next stream starts), give the
+    // typewriter another chance to fire onCaughtUp at the new endpoint.
+    if (animate) caughtUpFiredRef.current = false
+  }, [animate])
+
+  // The interval lives once per mount; it walks toward the current target
+  // and watches `animateRef` to know whether it should ever stop early
+  // (it should not — the contract is: drain to the end at human pace).
+  useEffect(() => {
+    if (!animate && lenRef.current >= content.length) {
+      // Past message rendered for the first time — snap.
+      setRevealed(content)
+      return
+    }
+    const interval = setInterval(() => {
+      const target = targetRef.current
+      let len = lenRef.current
+      if (len >= target.length) {
+        // Caught up. If the stream is no longer live, signal parent so it
+        // can swap to the persisted message bubble.
+        if (!animateRef.current && !caughtUpFiredRef.current) {
+          caughtUpFiredRef.current = true
+          onCaughtUpRef.current?.()
+        }
+        return
+      }
+      const backlog = target.length - len
+      const step = backlog > BACKLOG_THRESHOLD
+        ? Math.min(MAX_STEP, 1 + Math.floor(backlog / 200))
+        : 1
+      len = Math.min(target.length, len + step)
+      lenRef.current = len
+      setRevealed(target.slice(0, len))
+    }, TICK_MS)
+    return () => clearInterval(interval)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // While the typewriter is still revealing, render as plain text with
+  // preserved whitespace. ReactMarkdown re-parses on every state update,
+  // and an unstable trailing character (mid `**`, `[`, etc.) makes the
+  // last position briefly switch between text/strong/link nodes — visible
+  // as a "rotation" of letters at the cursor. The persisted message bubble
+  // takes over with full markdown rendering once onCaughtUp fires.
+  const fullyRevealed = lenRef.current >= targetRef.current.length && !animate
+  if (fullyRevealed) {
+    return (
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ a: MarkdownLink }}>
+        {revealed}
+      </ReactMarkdown>
+    )
+  }
+  return <span style={{ whiteSpace: "pre-wrap" }}>{revealed}</span>
+}
 
 // ---------------------------------------------------------------------------
 // Tool step helpers
@@ -51,6 +154,12 @@ interface StreamSegmentsProps {
   thinking?: string
   onStop?: () => void
   onPreviewFile?: (file: { url: string; name: string }, images?: { url: string; name: string }[]) => void
+  /** Whether new content can still arrive. When false, the typewriter drains
+   * the existing buffer at human pace and then signals `onCaughtUp`. */
+  live?: boolean
+  /** Called once the live tail has been fully revealed and the parent can
+   * swap the persisted message bubble in. */
+  onCaughtUp?: () => void
 }
 
 export const StreamSegments = memo(function StreamSegments({
@@ -58,6 +167,8 @@ export const StreamSegments = memo(function StreamSegments({
   thinking,
   onStop,
   onPreviewFile,
+  live,
+  onCaughtUp,
 }: StreamSegmentsProps) {
   const { t } = useI18n()
 
@@ -75,15 +186,27 @@ export const StreamSegments = memo(function StreamSegments({
       {(() => {
         const rendered: React.ReactNode[] = []
         let i = 0
+        // Last text-segment index — only that one is "live" / drains.
+        let lastTextIdx = -1
+        for (let k = segments.length - 1; k >= 0; k--) {
+          if (segments[k].type === "text") { lastTextIdx = k; break }
+        }
+        // `live` from parent (true while broker is still streaming). When
+        // omitted, fall back to the legacy heuristic (onStop defined).
+        const isStreaming = live ?? !!onStop
         while (i < segments.length) {
           const seg = segments[i]
 
           if (seg.type === "text") {
+            const isTail = i === lastTextIdx
+            const animate = isStreaming && isTail
             rendered.push(
               <div key={i} className={s.textSegment}>
-                <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ a: MarkdownLink }}>
-                  {seg.content}
-                </ReactMarkdown>
+                <TypewriterMarkdown
+                  content={seg.content}
+                  animate={animate}
+                  onCaughtUp={isTail ? onCaughtUp : undefined}
+                />
               </div>
             )
             i++

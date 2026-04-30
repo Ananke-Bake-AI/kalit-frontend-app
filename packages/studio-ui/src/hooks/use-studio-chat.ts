@@ -439,7 +439,11 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
           try { await fetchMessages(activeSessionId) } catch { /* silent */ }
           fetchSessions()
           fetchQuota()
-          resetStream()
+          // Drop the live flags but leave streamSegments populated; the
+          // typewriter drains the buffered text at human pace and clears
+          // segments via its onCaughtUp callback once revealed.
+          setIsStreaming(false)
+          setStreamThinking("")
           notify()
         }
         if (followRef.current === controller) followRef.current = null
@@ -860,7 +864,12 @@ export function useStudioChat(options: UseStudioChatOptions): UseStudioChatApi {
       // Mirror the broker-side UnlockSession in the local cache so the
       // session no longer reports as processing once the stream is done.
       if (sessionId) markSessionProcessing(sessionId, false)
-      resetStream()
+      // Drop the live flags but leave streamSegments populated; the
+      // typewriter drains the buffered text and clears segments via its
+      // onCaughtUp callback. Avoids the persisted bubble snapping in with
+      // the full text the moment the broker's stream closes.
+      setIsStreaming(false)
+      setStreamThinking("")
       abortRef.current = null
       sendingRef.current = false
       notify()
