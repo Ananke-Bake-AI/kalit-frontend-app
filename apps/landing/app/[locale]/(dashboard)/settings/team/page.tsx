@@ -36,6 +36,16 @@ export default async function TeamPage() {
     ? t("settingsPages.unlimitedMembers")
     : `${entitlements.maxMembers} ${t("dashboard.seats")}`
 
+  // Pending invitations count toward seat usage — seat is "spoken for" the
+  // moment the invite is sent, not when it's accepted. Anything else lets a
+  // 1-seat free user spam invitations.
+  const pendingCount = invitations.filter(
+    (i) => i.status === "PENDING" && i.expiresAt.getTime() > Date.now(),
+  ).length
+  const seatsTaken = members.length + pendingCount
+  const seatsFull =
+    entitlements.maxMembers !== -1 && seatsTaken >= entitlements.maxMembers
+
   return (
     <TeamClient
       currentUserId={session.user.id}
@@ -55,6 +65,8 @@ export default async function TeamPage() {
       }))}
       seatsLabel={seatsLabel}
       count={members.length}
+      seatsFull={seatsFull}
+      maxMembers={entitlements.maxMembers}
     />
   )
 }

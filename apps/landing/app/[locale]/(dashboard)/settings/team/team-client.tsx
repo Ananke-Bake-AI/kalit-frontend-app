@@ -36,6 +36,8 @@ export interface TeamClientProps {
   }>
   seatsLabel: string
   count: number
+  seatsFull: boolean
+  maxMembers: number
 }
 
 const ROLE_OPTIONS: { value: MemberRole; label: string }[] = [
@@ -51,6 +53,8 @@ export function TeamClient({
   invitations,
   seatsLabel,
   count,
+  seatsFull,
+  maxMembers,
 }: TeamClientProps) {
   const [email, setEmail] = useState("")
   const [role, setRole] = useState<MemberRole>("MEMBER")
@@ -127,7 +131,7 @@ export function TeamClient({
         </div>
       }
     >
-      {canManage && (
+      {canManage && !seatsFull && (
         <>
           <form className={s.inviteForm} onSubmit={handleInvite}>
             <input
@@ -156,6 +160,18 @@ export function TeamClient({
           {error && <p className={s.inviteError}>{error}</p>}
           {success && <p className={s.inviteSuccess}>{success}</p>}
         </>
+      )}
+      {canManage && seatsFull && (
+        <div className={s.seatsFull}>
+          <strong>Seat limit reached.</strong>{" "}
+          {maxMembers === 1
+            ? "Your current plan only includes 1 seat."
+            : `Your plan is capped at ${maxMembers} seats.`}{" "}
+          Upgrade to invite teammates, or revoke a pending invitation below to free a seat.
+          <a href="/pricing" className={s.seatsFullCta}>
+            Upgrade plan →
+          </a>
+        </div>
       )}
 
       {/* ── Active members ── */}
