@@ -320,6 +320,98 @@ export async function addCredits(orgId: string, amount: number, reason: string) 
   return { success: true }
 }
 
+// ─── Deployments ────────────────────────────────────────
+
+interface DeploymentRow {
+  id: string
+  title: string | null
+  status: string
+  vercel_project_name: string | null
+  vercel_url: string | null
+  vercel_deployed_at: Date | null
+  subdomain: string | null
+  subdomain_deployed_at: Date | null
+  broker_session_id: string | null
+  session_exists: boolean
+  user_email: string | null
+  created_at: Date
+}
+
+export async function getDeployments() {
+  await requireAdmin()
+
+  // Raw query — flow_projects is broker-managed and not modeled in Prisma.
+  // LEFT JOIN flow_chat_sessions to figure out whether each deployment is
+  // still "linked" to an existing session. Orphan = broker_session_id is
+  // NULL OR the referenced session row no longer exists.
+  const rows = await prisma.$queryRaw<DeploymentRow[]>`
+    SELECT
+      p.id,
+      p.title,
+      p.status,
+      p.vercel_project_name,
+      p.vercel_url,
+      p.vercel_deployed_at,
+      p.subdomain,
+      p.subdomain_deployed_at,
+      p.broker_session_id,
+      (s.id IS NOT NULL) AS session_exists,
+      u.email AS user_email,
+      p.created_at
+    FROM flow_projects p
+    LEFT JOIN flow_chat_sessions s ON s.id = p.broker_session_id
+    LEFT JOIN "User" u ON u.id = p.user_id
+    WHERE p.vercel_project_name IS NOT NULL
+       OR p.subdomain IS NOT NULL
+    ORDER BY COALESCE(p.vercel_deployed_at, p.subdomain_deployed_at, p.created_at) DESC
+    LIMIT 500
+  `
+
+  return rows.map((r) => ({
+    id: r.id,
+    title: r.title,
+    status: r.status,
+    vercelProjectName: r.vercel_project_name,
+    vercelUrl: r.vercel_url,
+    vercelDeployedAt: r.vercel_deployed_at?.toISOString() ?? null,
+    subdomain: r.subdomain,
+    subdomainDeployedAt: r.subdomain_deployed_at?.toISOString() ?? null,
+    brokerSessionId: r.broker_session_id,
+    sessionExists: r.session_exists,
+    userEmail: r.user_email,
+    createdAt: r.created_at.toISOString(),
+    isOrphaned: !r.broker_session_id || !r.session_exists,
+  }))
+}
+
+export async function deleteVercelDeployment(flowProjectId: string, vercelProjectName: string) {
+  await requireAdmin()
+
+  const brokerUrl = process.env.BROKER_URL?.replace(/\/+$/, "") || "http://localhost:9000"
+  const internalToken = process.env.BROKER_INTERNAL_TOKEN
+  if (!internalToken) {
+    return { error: "BROKER_INTERNAL_TOKEN not configured on landing — cannot reach broker admin endpoint" }
+  }
+
+  try {
+    const res = await fetch(`${brokerUrl}/internal/admin/vercel/delete`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${internalToken}`,
+      },
+      body: JSON.stringify({ projectName: vercelProjectName, flowProjectId }),
+    })
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      return { error: (data as { error?: string }).error || `Broker returned ${res.status}` }
+    }
+    return { success: true }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Unknown error" }
+  }
+}
+
 // ─── Plan Assignment ────────────────────────────────────
 
 export async function assignPlan(orgId: string, planKey: string, expiresAt?: string) {

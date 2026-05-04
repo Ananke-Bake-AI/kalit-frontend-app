@@ -1,0 +1,177 @@
+"use client"
+
+import { Badge } from "@/components/badge"
+import { Button } from "@/components/button"
+import { Icon } from "@/components/icon"
+import { SurfacePanel } from "@/components/surface-panel"
+import { TextField } from "@/components/text-field"
+import { deleteVercelDeployment, getDeployments } from "@/server/actions/admin"
+import { useMemo, useState, useTransition } from "react"
+import { toast } from "sonner"
+import s from "./deployments.module.scss"
+
+type Deployment = Awaited<ReturnType<typeof getDeployments>>[number]
+
+type Filter = "all" | "orphaned" | "linked" | "vercel" | "subdomain"
+
+export function DeploymentsClient({ initialData }: { initialData: Deployment[] }) {
+  const [data, setData] = useState(initialData)
+  const [search, setSearch] = useState("")
+  const [filter, setFilter] = useState<Filter>("all")
+  const [pendingId, setPendingId] = useState<string | null>(null)
+  const [pending, startTransition] = useTransition()
+
+  const refresh = () => {
+    startTransition(async () => {
+      const next = await getDeployments()
+      setData(next)
+    })
+  }
+
+  const visible = useMemo(() => {
+    const q = search.trim().toLowerCase()
+    return data.filter((d) => {
+      if (filter === "orphaned" && !d.isOrphaned) return false
+      if (filter === "linked" && d.isOrphaned) return false
+      if (filter === "vercel" && !d.vercelProjectName) return false
+      if (filter === "subdomain" && !d.subdomain) return false
+      if (!q) return true
+      return (
+        d.vercelProjectName?.toLowerCase().includes(q) ||
+        d.subdomain?.toLowerCase().includes(q) ||
+        d.vercelUrl?.toLowerCase().includes(q) ||
+        d.title?.toLowerCase().includes(q) ||
+        d.userEmail?.toLowerCase().includes(q)
+      )
+    })
+  }, [data, search, filter])
+
+  const orphanCount = data.filter((d) => d.isOrphaned).length
+  const vercelCount = data.filter((d) => d.vercelProjectName).length
+
+  const handleDeleteVercel = async (d: Deployment) => {
+    if (!d.vercelProjectName) return
+    if (
+      !confirm(
+        `Delete the Vercel project "${d.vercelProjectName}"?\n\nThis retracts the live site at ${d.vercelUrl || "—"} and removes the project from Vercel. This cannot be undone.`,
+      )
+    ) {
+      return
+    }
+    setPendingId(d.id)
+    startTransition(async () => {
+      const result = await deleteVercelDeployment(d.id, d.vercelProjectName!)
+      setPendingId(null)
+      if ("error" in result) {
+        toast.error(result.error || "Delete failed")
+        return
+      }
+      toast.success(`Deleted ${d.vercelProjectName} on Vercel`)
+      refresh()
+    })
+  }
+
+  return (
+    <SurfacePanel
+      spaced
+      title="Live deployments"
+      subtitle={`${data.length} total · ${vercelCount} on Vercel · ${orphanCount} orphaned (no owning session)`}
+      headerAside={
+        <TextField
+          placeholder="Search by name, URL, title, email…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className={s.search}
+        />
+      }
+    >
+      <div className={s.filters}>
+        {(["all", "orphaned", "linked", "vercel", "subdomain"] as Filter[]).map((f) => (
+          <button
+            key={f}
+            type="button"
+            className={filter === f ? s.filterActive : s.filterBtn}
+            onClick={() => setFilter(f)}
+          >
+            {f === "all"
+              ? `All (${data.length})`
+              : f === "orphaned"
+                ? `Orphaned (${orphanCount})`
+                : f === "linked"
+                  ? `Linked (${data.length - orphanCount})`
+                  : f === "vercel"
+                    ? `Vercel (${vercelCount})`
+                    : `Subdomain (${data.filter((d) => d.subdomain).length})`}
+          </button>
+        ))}
+      </div>
+
+      <div className={s.list}>
+        {visible.length === 0 && (
+          <div className={s.empty}>No deployments match the current filter.</div>
+        )}
+        {visible.map((d) => {
+          const deployedDate = d.vercelDeployedAt || d.subdomainDeployedAt || d.createdAt
+          return (
+            <div key={d.id} className={s.row}>
+              <div className={s.rowLead}>
+                <div className={s.rowTitle}>
+                  {d.title || "(untitled)"}
+                  {d.isOrphaned ? (
+                    <span className={s.orphanTag}>orphaned</span>
+                  ) : (
+                    <Badge variant="success">linked</Badge>
+                  )}
+                </div>
+                <div className={s.rowMeta}>
+                  <span className={s.metaLabel}>
+                    {d.vercelUrl ? (
+                      <>
+                        <Icon icon="hugeicons:link-square-02" />{" "}
+                        <a href={d.vercelUrl} target="_blank" rel="noreferrer">
+                          {d.vercelUrl.replace(/^https?:\/\//, "")}
+                        </a>
+                      </>
+                    ) : d.subdomain ? (
+                      <>
+                        <Icon icon="hugeicons:globe-02" />{" "}
+                        {d.subdomain}.flow.kalit.ai
+                      </>
+                    ) : null}
+                  </span>
+                  {d.userEmail && (
+                    <span className={s.metaEmail}>
+                      <Icon icon="hugeicons:user-02" /> {d.userEmail}
+                    </span>
+                  )}
+                  <span className={s.metaDate}>
+                    <Icon icon="hugeicons:clock-01" />{" "}
+                    {new Date(deployedDate).toLocaleString()}
+                  </span>
+                </div>
+                <div className={s.rowSub}>
+                  {d.vercelProjectName && (
+                    <code className={s.code}>vercel: {d.vercelProjectName}</code>
+                  )}
+                  {d.subdomain && <code className={s.code}>subdomain: {d.subdomain}</code>}
+                  <span className={s.statusTag}>{d.status}</span>
+                </div>
+              </div>
+              <div className={s.rowActions}>
+                {d.vercelProjectName && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => handleDeleteVercel(d)}
+                    disabled={pending && pendingId === d.id}
+                  >
+                    {pending && pendingId === d.id ? "Deleting…" : "Delete on Vercel"}
+                  </Button>
+                )}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </SurfacePanel>
+  )
+}
