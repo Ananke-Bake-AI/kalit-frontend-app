@@ -142,7 +142,13 @@ export function DeploymentsClient({ initialData }: { initialData: Deployment[] }
                     ) : d.subdomain ? (
                       <>
                         <Icon icon="hugeicons:globe-02" />{" "}
-                        {d.subdomain}.flow.kalit.ai
+                        <a
+                          href={`https://${d.subdomain}.flow.kalit.ai`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {d.subdomain}.flow.kalit.ai
+                        </a>
                       </>
                     ) : null}
                   </span>
