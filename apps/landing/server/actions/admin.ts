@@ -359,7 +359,7 @@ export async function getDeployments() {
       u.email AS user_email,
       p.created_at
     FROM flow_projects p
-    LEFT JOIN flow_chat_sessions s ON s.id = p.broker_session_id
+    LEFT JOIN flow_chat_sessions s ON s.id::text = p.broker_session_id
     LEFT JOIN "User" u ON u.id = p.user_id
     WHERE p.vercel_project_name IS NOT NULL
        OR p.subdomain IS NOT NULL
