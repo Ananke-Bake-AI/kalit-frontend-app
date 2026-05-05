@@ -141,23 +141,14 @@
   gap: 0.5rem;
 }
 
-.dropBtn {
-  padding: 0.4rem 0.75rem;
-  border-radius: var(--radius-4);
-  border: 1px solid oklch(from var(--danger) l c h / 0.3);
-  background: transparent;
-  color: var(--danger);
-  font-size: 0.78rem;
-  cursor: pointer;
-  transition: background 0.15s ease;
+.deleteBtn {
+  // Tint the secondary Button red to mark it as destructive without
+  // adding a new variant to the global Button component.
+  color: var(--danger) !important;
+  border-color: oklch(from var(--danger) l c h / 0.35) !important;
 
   &:hover:not(:disabled) {
-    background: oklch(from var(--danger) l c h / 0.08);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+    background: oklch(from var(--danger) l c h / 0.08) !important;
   }
 }
 
