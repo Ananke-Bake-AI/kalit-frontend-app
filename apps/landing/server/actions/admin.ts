@@ -384,7 +384,7 @@ export async function getDeployments() {
   }))
 }
 
-export async function deleteVercelDeployment(flowProjectId: string, vercelProjectName: string) {
+export async function teardownDeployment(flowProjectId: string, opts?: { dropRow?: boolean }) {
   await requireAdmin()
 
   const brokerUrl = process.env.BROKER_URL?.replace(/\/+$/, "") || "http://localhost:9000"
@@ -394,19 +394,25 @@ export async function deleteVercelDeployment(flowProjectId: string, vercelProjec
   }
 
   try {
-    const res = await fetch(`${brokerUrl}/internal/admin/vercel/delete`, {
+    const res = await fetch(`${brokerUrl}/internal/admin/project/teardown`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${internalToken}`,
       },
-      body: JSON.stringify({ projectName: vercelProjectName, flowProjectId }),
+      body: JSON.stringify({ flowProjectId, dropRow: opts?.dropRow ?? false }),
     })
     if (!res.ok) {
       const data = await res.json().catch(() => ({}))
       return { error: (data as { error?: string }).error || `Broker returned ${res.status}` }
     }
-    return { success: true }
+    return (await res.json()) as {
+      success: boolean
+      vercelDeleted?: boolean
+      subdomainCleared?: boolean
+      rowDropped?: boolean
+      vercelError?: string
+    }
   } catch (err) {
     return { error: err instanceof Error ? err.message : "Unknown error" }
   }

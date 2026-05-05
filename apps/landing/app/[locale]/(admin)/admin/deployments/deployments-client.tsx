@@ -5,7 +5,7 @@ import { Button } from "@/components/button"
 import { Icon } from "@/components/icon"
 import { SurfacePanel } from "@/components/surface-panel"
 import { TextField } from "@/components/text-field"
-import { deleteVercelDeployment, getDeployments } from "@/server/actions/admin"
+import { getDeployments, teardownDeployment } from "@/server/actions/admin"
 import { useMemo, useState, useTransition } from "react"
 import { toast } from "sonner"
 import s from "./deployments.module.scss"
@@ -49,24 +49,32 @@ export function DeploymentsClient({ initialData }: { initialData: Deployment[] }
   const orphanCount = data.filter((d) => d.isOrphaned).length
   const vercelCount = data.filter((d) => d.vercelProjectName).length
 
-  const handleDeleteVercel = async (d: Deployment) => {
-    if (!d.vercelProjectName) return
-    if (
-      !confirm(
-        `Delete the Vercel project "${d.vercelProjectName}"?\n\nThis retracts the live site at ${d.vercelUrl || "—"} and removes the project from Vercel. This cannot be undone.`,
-      )
-    ) {
+  const handleTeardown = async (d: Deployment, dropRow = false) => {
+    const targets: string[] = []
+    if (d.vercelProjectName) targets.push(`Vercel project "${d.vercelProjectName}"`)
+    if (d.subdomain) targets.push(`subdomain "${d.subdomain}.flow.kalit.ai" (DB record only — CF Pages not yet teardown)`)
+    if (dropRow) targets.push("the entire flow_projects record")
+    if (targets.length === 0) {
+      toast.error("Nothing to remove on this row.")
+      return
+    }
+    if (!confirm(`This will remove:\n\n• ${targets.join("\n• ")}\n\nIrreversible. Continue?`)) {
       return
     }
     setPendingId(d.id)
     startTransition(async () => {
-      const result = await deleteVercelDeployment(d.id, d.vercelProjectName!)
+      const result = await teardownDeployment(d.id, { dropRow })
       setPendingId(null)
       if ("error" in result) {
-        toast.error(result.error || "Delete failed")
+        toast.error(result.error || "Teardown failed")
         return
       }
-      toast.success(`Deleted ${d.vercelProjectName} on Vercel`)
+      const bits: string[] = []
+      if (result.vercelDeleted) bits.push("Vercel project removed")
+      if (result.vercelError) bits.push(`Vercel error: ${result.vercelError}`)
+      if (result.subdomainCleared) bits.push("subdomain cleared in DB")
+      if (result.rowDropped) bits.push("record dropped")
+      toast.success(bits.join(" · ") || "Done")
       refresh()
     })
   }
@@ -158,15 +166,26 @@ export function DeploymentsClient({ initialData }: { initialData: Deployment[] }
                 </div>
               </div>
               <div className={s.rowActions}>
-                {d.vercelProjectName && (
-                  <Button
-                    variant="secondary"
-                    onClick={() => handleDeleteVercel(d)}
-                    disabled={pending && pendingId === d.id}
-                  >
-                    {pending && pendingId === d.id ? "Deleting…" : "Delete on Vercel"}
-                  </Button>
-                )}
+                <Button
+                  variant="secondary"
+                  onClick={() => handleTeardown(d, false)}
+                  disabled={pending && pendingId === d.id}
+                >
+                  {pending && pendingId === d.id
+                    ? "Removing…"
+                    : d.vercelProjectName
+                      ? "Remove (Vercel + DB)"
+                      : "Remove (DB only)"}
+                </Button>
+                <button
+                  type="button"
+                  className={s.dropBtn}
+                  onClick={() => handleTeardown(d, true)}
+                  disabled={pending && pendingId === d.id}
+                  title="Remove deployment AND drop the flow_projects record entirely"
+                >
+                  Drop record
+                </button>
               </div>
             </div>
           )

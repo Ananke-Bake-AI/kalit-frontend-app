@@ -141,6 +141,26 @@
   gap: 0.5rem;
 }
 
+.dropBtn {
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-4);
+  border: 1px solid oklch(from var(--danger) l c h / 0.3);
+  background: transparent;
+  color: var(--danger);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: oklch(from var(--danger) l c h / 0.08);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
 .empty {
   padding: 3rem 1rem;
   text-align: center;
