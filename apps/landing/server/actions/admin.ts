@@ -425,6 +425,40 @@ export async function teardownDeployment(flowProjectId: string, opts?: { dropRow
   }
 }
 
+export async function teardownAllOrphans() {
+  await requireAdmin()
+
+  const brokerUrl = process.env.BROKER_URL?.replace(/\/+$/, "") || "http://localhost:9000"
+  const internalToken = process.env.BROKER_INTERNAL_TOKEN
+  if (!internalToken) {
+    return { error: "BROKER_INTERNAL_TOKEN not configured on landing — cannot reach broker admin endpoint" }
+  }
+
+  try {
+    const res = await fetch(`${brokerUrl}/internal/admin/project/teardown-orphans`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${internalToken}`,
+      },
+    })
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}))
+      return { error: (data as { error?: string }).error || `Broker returned ${res.status}` }
+    }
+    return (await res.json()) as {
+      success: boolean
+      orphans: number
+      vercelOK: number
+      vercelFail: number
+      rowsDropped: number
+      lastError?: string
+    }
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : "Unknown error" }
+  }
+}
+
 // ─── Plan Assignment ────────────────────────────────────
 
 export async function assignPlan(orgId: string, planKey: string, expiresAt?: string) {

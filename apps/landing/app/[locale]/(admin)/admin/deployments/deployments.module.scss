@@ -2,6 +2,14 @@
   width: 320px;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;

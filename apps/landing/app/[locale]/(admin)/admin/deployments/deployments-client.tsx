@@ -5,7 +5,7 @@ import { Button } from "@/components/button"
 import { Icon } from "@/components/icon"
 import { SurfacePanel } from "@/components/surface-panel"
 import { TextField } from "@/components/text-field"
-import { getDeployments, teardownDeployment } from "@/server/actions/admin"
+import { getDeployments, teardownAllOrphans, teardownDeployment } from "@/server/actions/admin"
 import { useMemo, useState, useTransition } from "react"
 import { toast } from "sonner"
 import s from "./deployments.module.scss"
@@ -52,6 +52,31 @@ export function DeploymentsClient({ initialData }: { initialData: Deployment[] }
   // real prod deploy convention).
   const vercelCount = data.filter((d) => d.vercelProjectName).length
 
+  const handleRemoveAllOrphans = () => {
+    if (orphanCount === 0) return
+    if (
+      !confirm(
+        `This will remove ${orphanCount} orphaned deployment${orphanCount === 1 ? "" : "s"}:\n\n• DELETE every Vercel project owned by them\n• DROP every flow_projects row\n\nIrreversible. Continue?`,
+      )
+    ) {
+      return
+    }
+    startTransition(async () => {
+      const result = await teardownAllOrphans()
+      if ("error" in result) {
+        toast.error(result.error || "Bulk teardown failed")
+        return
+      }
+      const summary = `${result.rowsDropped}/${result.orphans} dropped · Vercel OK ${result.vercelOK}, fail ${result.vercelFail}`
+      if (result.vercelFail > 0) {
+        toast.error(`${summary}${result.lastError ? ` — last: ${result.lastError}` : ""}`)
+      } else {
+        toast.success(summary)
+      }
+      refresh()
+    })
+  }
+
   const handleTeardown = async (d: Deployment, dropRow = true) => {
     const targets: string[] = []
     if (d.vercelProjectName) targets.push(`Vercel project "${d.vercelProjectName}" (live site retracted)`)
@@ -84,12 +109,24 @@ export function DeploymentsClient({ initialData }: { initialData: Deployment[] }
       title="Live deployments"
       subtitle={`${data.length} total · ${vercelCount} on Vercel · ${orphanCount} orphaned (no owning session)`}
       headerAside={
-        <TextField
-          placeholder="Search by name, URL, title, email…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className={s.search}
-        />
+        <div className={s.headerActions}>
+          {orphanCount > 0 && (
+            <Button
+              variant="secondary"
+              onClick={handleRemoveAllOrphans}
+              disabled={pending}
+              className={s.deleteBtn}
+            >
+              {pending ? "Removing…" : `Remove all ${orphanCount} orphan${orphanCount === 1 ? "" : "s"}`}
+            </Button>
+          )}
+          <TextField
+            placeholder="Search by name, URL, title, email…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className={s.search}
+          />
+        </div>
       }
     >
       <div className={s.filters}>
