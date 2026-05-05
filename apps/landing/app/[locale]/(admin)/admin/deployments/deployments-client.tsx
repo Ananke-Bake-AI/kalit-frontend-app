@@ -47,6 +47,9 @@ export function DeploymentsClient({ initialData }: { initialData: Deployment[] }
   }, [data, search, filter])
 
   const orphanCount = data.filter((d) => d.isOrphaned).length
+  // vercel_project_name is COALESCEd to `flow-<subdomain>` server-side, so
+  // every row with a subdomain is now treated as Vercel-backed (matches the
+  // real prod deploy convention).
   const vercelCount = data.filter((d) => d.vercelProjectName).length
 
   const handleTeardown = async (d: Deployment, dropRow = true) => {

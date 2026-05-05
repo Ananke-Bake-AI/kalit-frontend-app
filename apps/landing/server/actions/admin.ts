@@ -344,12 +344,19 @@ export async function getDeployments() {
   // LEFT JOIN flow_chat_sessions to figure out whether each deployment is
   // still "linked" to an existing session. Orphan = broker_session_id is
   // NULL OR the referenced session row no longer exists.
+  //
+  // We COALESCE vercel_project_name with `'flow-' || subdomain` because the
+  // older deploySubdomain path historically deployed to Vercel under that
+  // exact name pattern (see broker deploy_service.go: vercelProjectName =
+  // "flow-" + slug) but never persisted the field. So every row with a
+  // subdomain IS effectively a Vercel project — derive the name so the
+  // admin can hit Vercel's DELETE endpoint for it.
   const rows = await prisma.$queryRaw<DeploymentRow[]>`
     SELECT
       p.id,
       p.title,
       p.status,
-      p.vercel_project_name,
+      COALESCE(p.vercel_project_name, 'flow-' || p.subdomain) AS vercel_project_name,
       p.vercel_url,
       p.vercel_deployed_at,
       p.subdomain,
