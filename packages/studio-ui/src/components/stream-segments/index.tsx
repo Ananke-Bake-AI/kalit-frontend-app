@@ -28,10 +28,15 @@ const MAX_STEP = 4
 function TypewriterMarkdown({
   content,
   animate,
+  forceComplete,
   onCaughtUp,
 }: {
   content: string
   animate: boolean
+  /** When true, the parent has decided this segment is no longer the live
+   * tail (a sibling text segment took over). Snap to full content
+   * immediately so we don't have two typewriters typing in parallel. */
+  forceComplete?: boolean
   onCaughtUp?: () => void
 }) {
   // Letter-by-letter reveal driven by a fixed-interval setInterval. The
@@ -41,9 +46,11 @@ function TypewriterMarkdown({
   // we want the typewriter to drain whatever buffered content remains,
   // then fire `onCaughtUp` so the parent can replace the live view with
   // the persisted message bubble seamlessly.
-  const [revealed, setRevealed] = useState<string>(() => (animate ? "" : content))
+  const [revealed, setRevealed] = useState<string>(() =>
+    !animate || forceComplete ? content : "",
+  )
   const targetRef = useRef(content)
-  const lenRef = useRef<number>(animate ? 0 : content.length)
+  const lenRef = useRef<number>(!animate || forceComplete ? content.length : 0)
   const animateRef = useRef(animate)
   const caughtUpFiredRef = useRef(false)
   const onCaughtUpRef = useRef(onCaughtUp)
@@ -63,11 +70,23 @@ function TypewriterMarkdown({
     if (animate) caughtUpFiredRef.current = false
   }, [animate])
 
+  // When this segment loses tail status (a newer text segment from the
+  // SAME turn took over the typewriter), snap to full immediately so the
+  // user sees a single active typewriter — not multiple overlapping ones
+  // crawling at human pace. Without this, the agent emitting "I'll do X"
+  // → tool → "Done" would have both messages typing in parallel.
+  useEffect(() => {
+    if (forceComplete && lenRef.current < targetRef.current.length) {
+      lenRef.current = targetRef.current.length
+      setRevealed(targetRef.current)
+    }
+  }, [forceComplete])
+
   // The interval lives once per mount; it walks toward the current target
   // and watches `animateRef` to know whether it should ever stop early
   // (it should not — the contract is: drain to the end at human pace).
   useEffect(() => {
-    if (!animate && lenRef.current >= content.length) {
+    if ((!animate || forceComplete) && lenRef.current >= content.length) {
       // Past message rendered for the first time — snap.
       setRevealed(content)
       return
@@ -200,11 +219,17 @@ export const StreamSegments = memo(function StreamSegments({
           if (seg.type === "text") {
             const isTail = i === lastTextIdx
             const animate = isStreaming && isTail
+            // Non-tail text segments must snap to full immediately so we
+            // don't end up with two typewriters running in parallel when
+            // the agent emits a second text block (e.g. "I'll do X" →
+            // tool → "Done"). Only the current tail gets the human-paced
+            // reveal; everything before it is already history.
             rendered.push(
               <div key={i} className={s.textSegment}>
                 <TypewriterMarkdown
                   content={seg.content}
                   animate={animate}
+                  forceComplete={!isTail}
                   onCaughtUp={isTail ? onCaughtUp : undefined}
                 />
               </div>
